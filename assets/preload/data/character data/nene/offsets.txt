@@ -1,3 +1,0 @@
-danceLeft 0 0
-danceRight 0 0
-laughCutscene 0 0

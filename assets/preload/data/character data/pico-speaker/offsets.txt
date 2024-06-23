@@ -1,5 +1,0 @@
-shoot1 590 730
-shoot2 590 730
-shoot3 590 730
-shoot4 590 730
-idle 590 730

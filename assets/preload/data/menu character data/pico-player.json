@@ -1,9 +1,0 @@
-{
-  "Animation_Name": "idle",
-  "Animation_Looped": true,
-  "FPS": 24,
-  "Size": 0.9,
-  "Offsets": [0, 0],
-  "File_Name": "default/pico-player",
-  "Flipped": false
-}

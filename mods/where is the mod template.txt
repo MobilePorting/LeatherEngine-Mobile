@@ -1,3 +1,0 @@
-the mod template has moved to the ingame toolbox!
-you can create a new mod with the menu there.
-if you cant find the toolbox turn on developer mode in options.

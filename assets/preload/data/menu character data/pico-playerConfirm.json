@@ -1,9 +1,0 @@
-{
-  "Animation_Name": "confirm",
-  "Animation_Looped": false,
-  "FPS": 24,
-  "Size": 1,
-  "Offsets": [25, -2],
-  "File_Name": "default/pico-player",
-  "Flipped": false
-}

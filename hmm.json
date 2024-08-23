@@ -3,7 +3,7 @@
     {
       "name": "discord_rpc",
       "type": "git",
-      "ref": "master",
+      "ref": null,
       "url": "https://github.com/Aidan63/linc_discord-rpc"
     },
     {
@@ -13,34 +13,32 @@
     },
     {
       "name": "flixel",
-      "type": "haxelib",
-      "version": null
+      "type": "git",
+      "ref": null,
+      "url": "https://github.com/HaxeFlixel/flixel"
     },
     {
       "name": "flixel-addons",
-      "type": "haxelib",
-      "version": null
-    },
-    {
-      "name": "flixel-tools",
-      "type": "haxelib",
-      "version": null
+      "type": "git",
+      "ref": null,
+      "url": "https://github.com/HaxeFlixel/flixel-addons"
     },
     {
       "name": "flixel-ui",
-      "type": "haxelib",
-      "version": null
+      "type": "git",
+      "ref": null,
+      "url": "https://github.com/HaxeFlixel/flixel-ui"
     },
     {
       "name": "flxanimate",
       "type": "git",
-      "ref": "master",
+      "ref": null,
       "url": "https://github.com/Vortex2Oblivion/flxanimate"
     },
     {
       "name": "fnf-modcharting-tools",
       "type": "git",
-      "ref": "main",
+      "ref": null,
       "url": "https://github.com/MobilePorting/FNF-Modcharting-Tools-Mobile"
     },
     {
@@ -52,25 +50,31 @@
     {
       "name": "hscript-improved",
       "type": "git",
-      "ref": "master",
+      "ref": null,
       "url": "https://github.com/FNF-CNE-Devs/hscript-improved"
     },
     {
       "name": "hxNoise",
       "type": "git",
-      "ref": "master",
+      "ref": null,
       "url": "https://github.com/whuop/hxNoise"
+    },
+    {
+      "name": "thx.core",
+      "type": "git",
+      "ref": null,
+      "url": "https://github.com/fponticelli/thx.core"
     },
     {
       "name": "thx.semver",
       "type": "git",
-      "ref": "master",
+      "ref": null,
       "url": "https://github.com/fponticelli/thx.semver"
     },
     {
       "name": "hxcpp",
       "type": "git",
-      "ref": "master",
+      "ref": null,
       "url": "https://github.com/mcagabe19-stuff/hxcpp"
     },
     {
@@ -86,13 +90,13 @@
     {
       "name": "lime",
       "type": "git",
-      "ref": "develop",
+      "ref": null,
       "url": "https://github.com/mcagabe19-stuff/lime"
     },
     {
       "name": "linc_luajit",
       "type": "git",
-      "ref": "main",
+      "ref": null,
       "url": "https://github.com/mcagabe19-stuff/linc_luajit-legacy"
     },
     {
@@ -103,19 +107,19 @@
     {
       "name": "scriptless-polymod",
       "type": "git",
-      "ref": "master",
+      "ref": null,
       "url": "https://github.com/swordcube/scriptless-polymod"
     },
     {
       "name": "jsonpath",
       "type": "git",
-      "ref": "main",
+      "ref": null,
       "url": "https://github.com/EliteMasterEric/jsonpath"
     },
     {
       "name": "jsonpatch",
       "type": "git",
-      "ref": "master",
+      "ref": null,
       "url": "https://github.com/EliteMasterEric/jsonpatch"
     }
   ]

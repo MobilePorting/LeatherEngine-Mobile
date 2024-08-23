@@ -766,7 +766,7 @@ class FlxInputText extends FlxText
 					caret.makeGraphic(cw, ch, caretC, false, caretKey);
 					caret.offset.x = caret.offset.y = 0;
 
-				case SHADOW:
+				case SHADOW, SHADOW_XY:
 					// Shadow offset to the lower-right
 					cw += Std.int(borderSize);
 					ch += Std.int(borderSize); // expand canvas on one side for shadow

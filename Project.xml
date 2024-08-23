@@ -130,6 +130,7 @@
 	<certificate path="key.keystore" password="leatherengine" alias="leatherport" alias-password="leatherengine" if="android" unless="debug" />
 
 	<!--<haxedef name="HXCPP_GC_BIG_BLOCKS" />-->
+	<haxedef name="HXCPP_GC_GENERATIONAL" />
 
 	<icon path="art/icon.png" />
 </project>

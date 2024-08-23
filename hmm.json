@@ -105,6 +105,18 @@
       "type": "git",
       "ref": "master",
       "url": "https://github.com/swordcube/scriptless-polymod"
+    },
+    {
+      "name": "jsonpath",
+      "type": "git",
+      "ref": "main",
+      "url": "https://github.com/EliteMasterEric/jsonpath"
+    },
+    {
+      "name": "jsonpatch",
+      "type": "git",
+      "ref": "main",
+      "url": "https://github.com/EliteMasterEric/jsonpatch"
     }
   ]
 }

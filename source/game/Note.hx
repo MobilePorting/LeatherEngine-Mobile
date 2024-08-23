@@ -12,6 +12,7 @@ import flixel.FlxG;
 import flixel.FlxSprite;
 import flixel.addons.effects.FlxSkewedSprite;
 import flixel.graphics.frames.FlxAtlasFrames;
+import flixel.math.FlxMath;
 
 using StringTools;
 
@@ -157,26 +158,23 @@ class Note extends FlxSkewedSprite {
 		animation.play("default");
 
 		if (!PlayState.instance.arrow_Configs.exists(arrow_Type)) {
-			if (PlayState.instance.types.contains(arrow_Type)){
-				if(Assets.exists(Paths.txt("ui skins/" + song.ui_Skin + "/" + arrow_Type))){
+			if (PlayState.instance.types.contains(arrow_Type)) {
+				if (Assets.exists(Paths.txt("ui skins/" + song.ui_Skin + "/" + arrow_Type))) {
 					PlayState.instance.arrow_Configs.set(arrow_Type, CoolUtil.coolTextFile(Paths.txt("ui skins/" + song.ui_Skin + "/" + arrow_Type)));
-				}
-				else{
+				} else {
 					PlayState.instance.arrow_Configs.set(arrow_Type, CoolUtil.coolTextFile(Paths.txt("ui skins/" + song.ui_Skin + "/default")));
 				}
-			}
-			else{
-				if(Assets.exists(Paths.txt("ui skins/default/" + arrow_Type))){
+			} else {
+				if (Assets.exists(Paths.txt("ui skins/default/" + arrow_Type))) {
 					PlayState.instance.arrow_Configs.set(arrow_Type, CoolUtil.coolTextFile(Paths.txt("ui skins/default/" + arrow_Type)));
-				}
-				else{
+				} else {
 					PlayState.instance.arrow_Configs.set(arrow_Type, CoolUtil.coolTextFile(Paths.txt("ui skins/default/default")));
 				}
 			}
 
-			PlayState.instance.type_Configs.set(arrow_Type, Assets.exists(Paths.txt("arrow types/" + arrow_Type)) ? 
-			CoolUtil.coolTextFile(Paths.txt("arrow types/" + arrow_Type)) : 
-			CoolUtil.coolTextFile(Paths.txt("arrow types/default")));
+			PlayState.instance.type_Configs.set(arrow_Type,
+				Assets.exists(Paths.txt("arrow types/" + arrow_Type)) ? CoolUtil.coolTextFile(Paths.txt("arrow types/" +
+					arrow_Type)) : CoolUtil.coolTextFile(Paths.txt("arrow types/default")));
 			PlayState.instance.setupNoteTypeScript(arrow_Type);
 		}
 
@@ -207,17 +205,8 @@ class Note extends FlxSkewedSprite {
 			prevNoteStrumtime = prevNote.strumTime;
 			prevNoteIsSustainNote = prevNote.isSustainNote;
 
-			if (!song.ui_Skin.contains("pixel"))
-				x += width / 2;
-
 			animation.play("holdend");
 			updateHitbox();
-
-			if (!song.ui_Skin.contains("pixel"))
-				x -= width / 2;
-
-			if (song.ui_Skin.contains("pixel"))
-				x += 30;
 
 			if (prevNote.isSustainNote) {
 				if (prevNote.animation != null)
@@ -254,6 +243,16 @@ class Note extends FlxSkewedSprite {
 			colorSwap.g = noteColor[1];
 			colorSwap.b = noteColor[2];
 		}
+	}
+
+	/**
+	 * Calculates the Y value of a note.
+	 * @param note the note to calculate
+	 * @return The Y value. NOTE: Will return the negative value if downscroll is enabled.
+	 */
+	public static function calculateY(note:Note):Float {
+		return (Options.getData("downscroll") ? 1 : -1) * (0.45 * (Conductor.songPosition - note.strumTime) * FlxMath.roundDecimal(PlayState.instance.speed,
+			2));
 	}
 
 	override function update(elapsed:Float) {
@@ -301,7 +300,6 @@ class Note extends FlxSkewedSprite {
 			}
 		}
 	}
-
 }
 
 typedef NoteType = {

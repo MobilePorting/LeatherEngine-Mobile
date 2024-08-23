@@ -16,7 +16,7 @@ import lime.utils.Assets;
 import toolbox.StageMakingState;
 import toolbox.util.NewModState;
 
-class ToolboxPlaceholder extends states.MusicBeatState {
+class ToolboxPlaceholder extends MusicBeatState {
 	var curSelected:Int = 0;
 	var ui_Skin:Null<String>;
 
@@ -112,8 +112,8 @@ class ToolboxPlaceholder extends states.MusicBeatState {
 		super.update(elapsed);
 
 		if (!inMenu) {
-			if (-1 * Math.floor(FlxG.mouse.wheel) != 0) {
-				curSelected -= 1 * Math.floor(FlxG.mouse.wheel);
+			if (-Math.floor(FlxG.mouse.wheel) != 0) {
+				curSelected -= Math.floor(FlxG.mouse.wheel);
 				FlxG.sound.play(Paths.sound('scrollMenu'), 0.4);
 			}
 

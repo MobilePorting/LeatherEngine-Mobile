@@ -11,14 +11,12 @@ import states.PlayState;
 import flixel.FlxSprite;
 import flixel.addons.effects.FlxSkewedSprite;
 
-
 using StringTools;
 
 /*
 	credit to psych engine devs (sorry idk who made this originally, all ik is that srperez modified it for shaggy and then i got it from there)
  */
-class StrumNote extends FlxSkewedSprite
-{
+class StrumNote extends FlxSkewedSprite {
 	public var resetAnim:Float = 0;
 
 	private var noteData:Int = 0;
@@ -31,7 +29,7 @@ class StrumNote extends FlxSkewedSprite
 	public var keyCount:Int;
 
 	public var colorSwap:ColorSwap = new ColorSwap();
-	public var noteColor:Array<Int> = [255,0,0];
+	public var noteColor:Array<Int> = [255, 0, 0];
 	public var affectedbycolor:Bool = false;
 
 	public var isPlayer:Float;
@@ -39,10 +37,8 @@ class StrumNote extends FlxSkewedSprite
 	public var jsonData:JsonData;
 
 	public var modAngle:Float = 0;
-	
 
-	public function new(x:Float, y:Float, leData:Int, ?ui_Skin:String, ?ui_settings:Array<String>, ?mania_size:Array<String>, ?keyCount:Int, ?isPlayer:Float)
-	{
+	public function new(x:Float, y:Float, leData:Int, ?ui_Skin:String, ?ui_settings:Array<String>, ?mania_size:Array<String>, ?keyCount:Int, ?isPlayer:Float) {
 		if (ui_Skin == null)
 			ui_Skin = PlayState.SONG.ui_Skin;
 
@@ -63,8 +59,8 @@ class StrumNote extends FlxSkewedSprite
 		this.keyCount = keyCount;
 		this.isPlayer = isPlayer;
 
-		if(Assets.exists(Paths.json("ui skins/" + ui_Skin + "/config"))){
-			jsonData = Json.parse(Assets.getText(Paths.json("ui skins/" + ui_Skin + "/config")));	
+		if (Assets.exists(Paths.json("ui skins/" + ui_Skin + "/config"))) {
+			jsonData = Json.parse(Assets.getText(Paths.json("ui skins/" + ui_Skin + "/config")));
 			for (value in jsonData.values) {
 				this.affectedbycolor = value.affectedbycolor;
 			}
@@ -74,8 +70,8 @@ class StrumNote extends FlxSkewedSprite
 		noteColor = NoteColors.getNoteColor(NoteVariables.Other_Note_Anim_Stuff[keyCount - 1][noteData]);
 		shader = affectedbycolor ? colorSwap.shader : null;
 
-		if(affectedbycolor && PlayState.instance != null && colorSwap != null){
-			if (noteColor != null){
+		if (affectedbycolor && PlayState.instance != null && colorSwap != null) {
+			if (noteColor != null) {
 				colorSwap.r = noteColor[0];
 				colorSwap.g = noteColor[1];
 				colorSwap.b = noteColor[2];
@@ -83,15 +79,12 @@ class StrumNote extends FlxSkewedSprite
 		}
 	}
 
-	override function update(elapsed:Float)
-	{
+	override function update(elapsed:Float) {
 		angle = modAngle;
-		if (resetAnim > 0)
-		{
+		if (resetAnim > 0) {
 			resetAnim -= elapsed;
 
-			if (resetAnim <= 0)
-			{
+			if (resetAnim <= 0) {
 				playAnim('static');
 				resetAnim = 0;
 			}
@@ -100,38 +93,29 @@ class StrumNote extends FlxSkewedSprite
 		super.update(elapsed);
 	}
 
-	public function playAnim(anim:String, ?force:Bool = false)
-	{
+	public function playAnim(anim:String, ?force:Bool = false) {
 		animation.play(anim, force);
 		// updateHitbox();
 		centerOrigin();
 
-		if (anim == "static")
-		{
+		if (anim == "static") {
 			colorSwap.r = 255;
 			colorSwap.g = 0;
 			colorSwap.b = 0;
 
 			swagWidth = width;
-		}
-		else
-		{
+		} else {
 			colorSwap.r = noteColor[0];
 			colorSwap.g = noteColor[1];
 			colorSwap.b = noteColor[2];
 		}
 
-		if (!ui_Skin.contains("pixel"))
-		{
-			offset.x = frameWidth / 2;
-			offset.y = frameHeight / 2;
+		offset.x = frameWidth / 2;
+		offset.y = frameHeight / 2;
 
-			var scale:Float = Std.parseFloat(ui_settings[0]) * (Std.parseFloat(ui_settings[2]) - (Std.parseFloat(mania_size[keyCount - 1])));
+		var scale:Float = Std.parseFloat(ui_settings[0]) * (Std.parseFloat(ui_settings[2]) - (Std.parseFloat(mania_size[keyCount - 1])));
 
-			offset.x -= 156 * scale / 2;
-			offset.y -= 156 * scale / 2;
-		}
-		else
-			centerOffsets();
+		offset.x -= 156 * scale / 2;
+		offset.y -= 156 * scale / 2;
 	}
 }

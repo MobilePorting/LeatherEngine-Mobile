@@ -9,6 +9,8 @@ import states.PlayState;
 import flixel.FlxG;
 import game.Conductor;
 import game.StageGroup;
+import game.Character;
+import flixel.util.FlxColor;
 
 class EventHandeler {
 	public static function processEvent(game:PlayState, event:Array<Dynamic>) {
@@ -27,18 +29,18 @@ class EventHandeler {
 
 				switch (char) {
 					case 0:
-						boyfriend.playAnim("hey", true);
-						gf.playAnim("cheer", true);
+						PlayState.boyfriend.playAnim("hey", true);
+						PlayState.gf.playAnim("cheer", true);
 					case 1:
-						boyfriend.playAnim("hey", true);
+						PlayState.boyfriend.playAnim("hey", true);
 					case 2:
-						gf.playAnim("cheer", true);
+						PlayState.gf.playAnim("cheer", true);
 				}
 			case "set gf speed":
 				if (Std.parseInt(event[2]) != null)
-					gfSpeed = Std.parseInt(event[2]);
+					PlayState.instance.gfSpeed = Std.parseInt(event[2]);
 			case "character will idle":
-				var char = getCharFromEvent(event[2]);
+				var char = PlayState.getCharFromEvent(event[2]);
 
 				var funny = Std.string(event[3]).toLowerCase() == "true";
 
@@ -48,15 +50,15 @@ class EventHandeler {
 				var hudCamZoomThing:Float = Std.parseFloat(event[3]);
 
 				if (Math.isNaN(defaultCamZoomThing))
-					defaultCamZoomThing = defaultCamZoom;
+					defaultCamZoomThing = PlayState.instance.defaultCamZoom;
 
 				if (Math.isNaN(hudCamZoomThing))
 					hudCamZoomThing = 1;
 
-				defaultCamZoom = defaultCamZoomThing;
-				defaultHudCamZoom = hudCamZoomThing;
+				PlayState.instance.defaultCamZoom = defaultCamZoomThing;
+				PlayState.instance.defaultHudCamZoom = hudCamZoomThing;
 			case "change character alpha":
-				var char = getCharFromEvent(event[2]);
+				var char = PlayState.getCharFromEvent(event[2]);
 
 				var alphaVal:Float = Std.parseFloat(event[3]);
 
@@ -65,7 +67,7 @@ class EventHandeler {
 
 				char.alpha = alphaVal;
 			case "play character animation":
-				var character:Character = getCharFromEvent(event[2]);
+				var character:Character = PlayState.getCharFromEvent(event[2]);
 
 				var anim:String = "idle";
 
@@ -80,7 +82,7 @@ class EventHandeler {
 					time = 1;
 
 				if (Options.getData("flashingLights"))
-					camGame.flash(FlxColor.fromString(event[2].toLowerCase()), time);
+					PlayState.instance.camGame.flash(FlxColor.fromString(event[2].toLowerCase()), time);
 			case "camera fade":
 				var time = Std.parseFloat(event[3]);
 
@@ -88,7 +90,7 @@ class EventHandeler {
 					time = 1;
 
 				if (Options.getData("flashingLights"))
-					camGame.fade(FlxColor.fromString(event[2].toLowerCase()), time);
+					PlayState.instance.camGame.fade(FlxColor.fromString(event[2].toLowerCase()), time);
 			#end
 			case "add camera zoom":
 				if (game.cameraZooms && ((FlxG.camera.zoom < 1.35 && game.camZooming) || !game.camZooming)) {
@@ -303,8 +305,7 @@ class EventHandeler {
 
 				// preload numbers
 				for (i in 0...10)
-					game.uiMap.set(Std.string(i),
-						FlxGraphic.fromAssetKey(Paths.image("ui skins/" + PlayState.SONG.ui_Skin + "/numbers/num" + Std.string(i))));
+					game.uiMap.set(Std.string(i), FlxGraphic.fromAssetKey(Paths.image("ui skins/" + PlayState.SONG.ui_Skin + "/numbers/num" + Std.string(i))));
 				game.timeBar = new TimeBar(PlayState.SONG, PlayState.storyDifficultyStr);
 
 				PlayState.playerStrums.clear();

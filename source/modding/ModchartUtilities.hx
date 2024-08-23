@@ -341,7 +341,6 @@ class ModchartUtilities {
 			crochet: Conductor.crochet,
 			stepCrochet: Conductor.stepCrochet,
 			songPosition: Conductor.songPosition,
-			lastSongPos: Conductor.lastSongPos,
 			offset: Conductor.offset,
 			safeFrames: Conductor.safeFrames,
 			safeZoneOffset: Conductor.safeZoneOffset,

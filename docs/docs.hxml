@@ -14,12 +14,18 @@
 
 -cp source
 
+--define hscript
 --define polymod
 --define LUA_ALLOWED
 --define VIDEOS_ALLOWED
 --define MODDING_ALLOWED
 --define MODCHARTING_TOOLS
 --define LEATHER
+--define FLX_NO_HEALTH
+--define FLX_NO_DEBUG
+--define FLX_NO_POINT_POOL
+--define CUSTOM_CLASSES
+--define message.reporting pretty
 
 --macro lime._internal.macros.DefineMacro.run()
 --macro openfl.utils._internal.ExtraParamsMacro.include()
@@ -40,3 +46,4 @@
 --cpp docs-bin/
 
 -dce no
+

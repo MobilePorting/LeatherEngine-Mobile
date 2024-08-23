@@ -17,11 +17,22 @@ typedef TimeScaleChangeEvent = {
 }
 
 class Conductor {
+	/**
+	 * The BPM (Beats Per Minute) of the current song.
+	 */
 	public static var bpm:Float = 100;
-	public static var crochet:Float = ((60 / bpm) * 1000); // beats in milliseconds
-	public static var stepCrochet:Float = crochet / 4; // steps in milliseconds
+	/**
+	 * Beats in milliseconds
+	 */
+	public static var crochet:Float = ((60 / bpm) * 1000);
+	/**
+	 * Steps in milliseconds
+	 */
+	public static var stepCrochet:Float = crochet / 4;
+	/**
+	 * The position of the song in milliseconds.
+	 */
 	public static var songPosition:Float;
-	public static var lastSongPos:Float;
 	public static var offset:Float = 0;
 
 	public static var safeFrames:Int = 10;

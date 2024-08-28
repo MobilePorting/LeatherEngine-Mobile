@@ -8,6 +8,9 @@ Step 3. [Install HaxeFlixel](https://haxeflixel.com/documentation/install-haxefl
 
 Step 4. Run these commands to install the libraries required:
 
+# NOTE:
+If a library asks if you would like to switch to a specific version, just say no
+
 ```
 haxelib install lime
 haxelib install openfl
@@ -28,7 +31,6 @@ haxelib git thx.semver https://github.com/fponticelli/thx.semver.git
 haxelib git jsonpath https://github.com/EliteMasterEric/jsonpath
 haxelib git jsonpatch https://github.com/EliteMasterEric/jsonpatch
 haxelib git funkin.vis https://github.com/FNF-CNE-Devs/funkVis grig-test
-haxelib git grig.audio https://gitlab.com/haxe-grig/grig.audio
 haxelib git hxcpp https://github.com/HaxeFoundation/hxcpp
 haxelib install hxcpp-debug-server
 
@@ -38,7 +40,7 @@ Dependencies for compiling:
 
 ## Windows Only
 
-Install Visual Studio Community 2019, and while installing instead of selecting the normal options, only select these components in the 'individual components' instead (or the closest equivalents).
+Install [Visual Studio](https://visualstudio.microsoft.com/), and while installing instead of selecting the normal options, only select these components in the 'individual components' instead (or the closest equivalents).
 
 ```txt
 * MSVC v142 - VS 2019 C++ x64/x86 build tools
@@ -62,3 +64,12 @@ sudo pacman -S luajit
 ```
 
 Step 5. Run `lime test [platform]` in the project directory while replacing '[platform]' with your build target (usually `html5`, `windows`, `linux`, `mac`, or whatever platform you are building for).
+
+# NOTE:
+If you are having issues when compiling due to a library giving you an error, try removing the library with
+```
+haxelib remove library
+```
+replacing library with the name of the library you would like to remove
+and then re install it with the commands in step 4
+

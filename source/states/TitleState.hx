@@ -341,7 +341,7 @@ class TitleState extends MusicBeatState {
 
 			call("checkForUpdate");
 			new FlxTimer().start(2, (tmr:FlxTimer) -> {
-				var http:Http = new Http("https://raw.githubusercontent.com/Vortex2Oblivion/LeatherEngine-Extended-Support/main/version.txt");
+				var http:Http = new Http("https://raw.githubusercontent.com/MobilePorting/LeatherEngine-LTS-Mobile/main/version.txt");
 				http.onData = (data:String) -> {
 					data = 'v' + data;
 					trace(data);

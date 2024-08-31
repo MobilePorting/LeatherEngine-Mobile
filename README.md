@@ -1,4 +1,4 @@
-# Leather Engine
+# Leather Engine Mobile
 
 ![](https://img.shields.io/github/repo-size/MobilePorting/LeatherEngine-LTS-Mobile) ![](https://badgen.net/github/open-issues/MobilePorting/LeatherEngine-LTS-Mobile) ![](https://badgen.net/badge/license/GPL-3.0/green)
 [![CI build](https://github.com/MobilePorting/LeatherEngine-LTS-Mobile/actions/workflows/main.yml/badge.svg)](https://github.com/MobilePorting/LeatherEngine-LTS-Mobile/actions/workflows/main.yml)

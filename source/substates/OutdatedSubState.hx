@@ -47,7 +47,7 @@ class OutdatedSubState extends MusicBeatState {
 		super.update(elapsed);
 
 		if (controls.ACCEPT) {
-			CoolUtil.openURL("https://github.com/Vortex2Oblivion/LeatherEngine-LTS");
+			CoolUtil.openURL("https://github.com/MobilePorting/LeatherEngine-LTS-Mobile");
 		}
 
 		if (controls.BACK) {

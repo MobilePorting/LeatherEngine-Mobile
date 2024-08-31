@@ -16,7 +16,7 @@ using StringTools;
  * A storage utility class for mobile platforms.
  * Provides methods for handling storage directories, creating directories, saving content, and requesting permissions for android.
  * 
- * @author Mihai Alexandru (M.A. Jigsaw)
+ * @author Mihai Alexandru (M.A. Jigsaw) and Lily Ross (mcagabe19)
  */
 class SUtil {
 	#if sys
@@ -28,17 +28,14 @@ class SUtil {
 	/**
 	 * Gets the storage directory based on the platform and optional forced storage type.
 	 * 
-	 * @param forcedType The optional forced storage type.
 	 * @return The path to the storage directory.
 	 */
-	public static function getStorageDirectory(?forcedType:Null<String>):String {
+	public static function getStorageDirectory():String {
 		var daPath:String = Sys.getCwd();
 		#if android
 		if (!FileSystem.exists(rootDir + 'storagetype.txt'))
 			File.saveContent(rootDir + 'storagetype.txt', Options.getData("storageType"));
 		var curStorageType:String = File.getContent(rootDir + 'storagetype.txt');
-		if (forcedType != null)
-			curStorageType = forcedType;
 		daPath = switch (curStorageType) {
 			case "EXTERNAL": AndroidEnvironment.getExternalStorageDirectory() + '/.' + lime.app.Application.current.meta.get('file');
 			case "OBB": android.content.Context.getObbDir();
@@ -96,16 +93,18 @@ class SUtil {
 	 * @param fileExtension The extension of the file. Defaults to '.json'.
 	 * @param fileData The content to save in the file. Defaults to a placeholder string.
 	 */
-	public static function saveContent(fileName:String = 'file', fileExtension:String = '.json',
-			fileData:String = 'You forgor to add somethin\' in yo code :3'):Void {
-		try {
+	public static function saveContent(fileName:String, fileData:String):Void
+	{
+		try
+		{
 			if (!FileSystem.exists('saves'))
 				FileSystem.createDirectory('saves');
 
-			File.saveContent('saves/' + fileName + fileExtension, fileData);
-			showPopUp(fileName + " file has been saved.", "Success!");
-		} catch (e:haxe.Exception)
-			CoolUtil.coolError('File couldn\'t be saved. (${e.message})');
+			File.saveContent('saves/$fileName', fileData);
+			showPopUp('$fileName has been saved.', "Success!");
+		}
+		catch (e:haxe.Exception)
+			CoolUtil.coolError('$fileName couldn\'t be saved. (${e.message})');
 	}
 
 	#if android
@@ -132,7 +131,6 @@ class SUtil {
 		}
 	}
 	#end
-
 	#end
 
 	/**

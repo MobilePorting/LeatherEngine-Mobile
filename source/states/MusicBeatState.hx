@@ -87,6 +87,7 @@ class MusicBeatState extends #if MODCHARTING_TOOLS modcharting.ModchartMusicBeat
 
 		hitbox = new FlxHitbox(ammo, Std.int(FlxG.width / ammo), FlxG.height);
 		hitbox.visible = visible;
+		hitbox.screenCenter();
 		add(hitbox);
 	}
 

@@ -76,6 +76,7 @@ class MusicBeatSubstate extends FlxSubState
 
 		hitbox = new FlxHitbox(ammo, Std.int(FlxG.width / ammo), FlxG.height);
 		hitbox.visible = visible;
+		hitbox.screenCenter();
 		add(hitbox);
 	}
 

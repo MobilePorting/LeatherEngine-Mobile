@@ -6,7 +6,6 @@ import sys.io.File;
 import sys.FileSystem;
 import flixel.FlxG;
 import flixel.FlxBasic;
-
 import hscript.*;
 
 /**
@@ -14,8 +13,7 @@ import hscript.*;
 
 	@author Leather128
 **/
-class HScript
-{
+class HScript {
 	/**
 		Parses the HScript.
 
@@ -51,20 +49,15 @@ class HScript
 	**/
 	public var create_post:Bool = false;
 
-	public function new(hscript_path:String)
-	{
+	public function new(hscript_path:String) {
 		trace('Loading script at path \'${hscript_path}\'');
 		// parser settings
 		parser.allowJSON = true;
 		parser.allowTypes = true;
 		parser.allowMetadata = true;
-		
+
 		// load text
-		program = parser.parseString(
-			FileSystem.exists(hscript_path) ?
-			File.getContent(hscript_path) :
-			Assets.getText(hscript_path)
-		);
+		program = parser.parseString(FileSystem.exists(hscript_path) ? File.getContent(hscript_path) : Assets.getText(hscript_path));
 
 		set_default_vars();
 
@@ -75,34 +68,27 @@ class HScript
 	public inline function update(elapsed:Float)
 		call("update", [elapsed]);
 
-	public function call(func:String, ?args:Array<Dynamic>)
-	{
-		if (interp.variables.exists(func))
-		{
+	public function call(func:String, ?args:Array<Dynamic>) {
+		if (interp.variables.exists(func)) {
 			var real_func = interp.variables.get(func);
 
-			try
-			{
+			try {
 				if (args == null)
 					real_func();
 				else
 					Reflect.callMethod(null, real_func, args);
-			}
-			catch (e)
-			{
+			} catch (e) {
 				trace(e.details(), ERROR);
 				trace("ERROR Caused in " + func + " with " + Std.string(args) + " args", ERROR);
 			}
 		}
 
-		for (other_script in other_scripts)
-		{
+		for (other_script in other_scripts) {
 			other_script.call(func, args);
 		}
 	}
 
-	public function set_default_vars()
-	{
+	public function set_default_vars() {
 		// global class shit
 
 		// haxeflixel classes
@@ -151,9 +137,9 @@ class HScript
 		interp.variables.set('ModList', modding.ModList);
 		#end
 
-		//modchart tools stuff
+		// modchart tools stuff
 		#if MODCHARTING_TOOLS
-		if (FlxG.state == PlayState.instance){
+		if (FlxG.state == PlayState.instance) {
 			interp.variables.set('PlayfieldRenderer', modcharting.PlayfieldRenderer);
 			interp.variables.set('ModchartUtil', modcharting.ModchartUtil);
 			interp.variables.set('Modifier', modcharting.Modifier);
@@ -164,34 +150,29 @@ class HScript
 		#end
 		// function shits
 
-	    interp.variables.set("import", function(class_name:String) {
+		interp.variables.set("import", function(class_name:String) {
 			var classes = class_name.split(".");
-	
-			if(Type.resolveClass(class_name) != null)
+
+			if (Type.resolveClass(class_name) != null)
 				interp.variables.set(classes[classes.length - 1], Type.resolveClass(class_name));
-			else if(Type.resolveEnum(class_name) != null)
-			{
+			else if (Type.resolveEnum(class_name) != null) {
 				var enum_new = {};
 				var good_enum = Type.resolveEnum(class_name);
-	
-				for(constructor in good_enum.getConstructors())
-				{
+
+				for (constructor in good_enum.getConstructors()) {
 					Reflect.setField(enum_new, constructor, good_enum.createByName(constructor));
 				}
-	
+
 				interp.variables.set(classes[classes.length - 1], enum_new);
-			}
-			else
+			} else
 				trace(class_name + " isn't a valid class or enum!", WARNING);
 		});
 
-		interp.variables.set("trace", function(value:Dynamic)
-		{
+		interp.variables.set("trace", function(value:Dynamic) {
 			trace(value);
 		});
 
-		interp.variables.set("load", function(script_path:String)
-		{
+		interp.variables.set("load", function(script_path:String) {
 			var new_script:HScript = new HScript(script_path);
 			if (create_post)
 				new_script.call("createPost");
@@ -201,8 +182,7 @@ class HScript
 			return other_scripts.length - 1;
 		});
 
-		interp.variables.set("unload", function(script_index:Int)
-		{
+		interp.variables.set("unload", function(script_index:Int) {
 			if (other_scripts.length - 1 >= script_index)
 				other_scripts.remove(other_scripts[script_index]);
 		});
@@ -214,8 +194,7 @@ class HScript
 		interp.variables.set("gf", states.PlayState.gf);
 		interp.variables.set("dad", states.PlayState.dad);
 
-		interp.variables.set("removeStage", function()
-		{
+		interp.variables.set("removeStage", function() {
 			states.PlayState.instance.stage.stage_Objects = [];
 
 			states.PlayState.instance.stage.infrontOfGFSprites.clear();
@@ -223,11 +202,8 @@ class HScript
 			states.PlayState.instance.stage.clear();
 		});
 
-		interp.variables.set("add", function(object:FlxBasic)
-			{
-				FlxG.state.add(object);
-			});
-	
-
+		interp.variables.set("add", function(object:FlxBasic) {
+			FlxG.state.add(object);
+		});
 	}
 }

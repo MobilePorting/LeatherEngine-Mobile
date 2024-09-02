@@ -91,6 +91,7 @@
 	<haxelib name="hxNoise"/>
 	<haxelib name="fnf-modcharting-tools" url="https://github.com/EdwhakKB/FNF-Modcharting-Tools" unless="hl" />
 	<haxelib name="funkin.vis" />
+	<haxelib name="grig.audio" />
 	<haxelib name="extension-androidtools" if="android" />
 
 	<!-- Haxedefines -->
@@ -98,7 +99,6 @@
 	<haxedef name="message.reporting" value="pretty" />
 
 	<haxedef name="FLX_NO_FOCUS_LOST_SCREEN" />
-	<haxedef name="FLX_NO_POINT_POOL" />
 	<haxedef name="FLX_NO_DEBUG" unless="debug" />
 	<haxedef name="FLX_NO_HEALTH" /> <!--Remove dumb health variable from FlxSprite -->
 

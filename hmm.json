@@ -44,13 +44,19 @@
     {
       "name": "funkin.vis",
       "type": "git",
-      "ref": "main",
-      "url": "https://github.com/FNF-CNE-Devs/funkVis"
+      "ref": null,
+      "url": "https://github.com/FunkinCrew/funkVis"
+    },
+    {
+      "name": "grig.audio",
+      "type": "git",
+      "ref": null,
+      "url": "https://gitlab.com/haxe-grig/grig.audio"
     },
     {
       "name": "hscript-improved",
       "type": "git",
-      "ref": null,
+      "ref": "codename-dev",
       "url": "https://github.com/FNF-CNE-Devs/hscript-improved"
     },
     {
@@ -108,7 +114,7 @@
       "name": "scriptless-polymod",
       "type": "git",
       "ref": null,
-      "url": "https://github.com/swordcube/scriptless-polymod"
+      "url": "https://github.com/Vortex2Oblivion/scriptless-polymod"
     },
     {
       "name": "jsonpath",

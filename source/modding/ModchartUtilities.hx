@@ -160,7 +160,9 @@ class ModchartUtilities {
 	}
 
 	function callLua(func_name:String, args:Array<Dynamic>, ?type:String):Dynamic {
-		functions_called.push(func_name);
+		if(!functions_called.contains(func_name))
+			functions_called.push(func_name);
+		
 		var result:Any = null;
 
 		Lua.getglobal(lua, func_name);

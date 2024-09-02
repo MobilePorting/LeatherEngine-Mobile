@@ -42,25 +42,6 @@ class StageGroup extends FlxGroup {
 
 	public var stage_Objects:Array<Array<Dynamic>> = [];
 
-	// PHILLY STUFF
-	private var phillyCityLights:FlxTypedGroup<FlxSprite>;
-	private var phillyTrain:FlxSprite;
-	private var trainSound:FlxSound;
-	private var trainMoving:Bool = false;
-	private var startedMoving:Bool = false;
-	private var trainFinishing:Bool = false;
-	private var trainFrameTiming:Float = 0;
-	private var trainCars:Int = 8;
-	private var trainCooldown:Int = 0;
-	private var curLight:Int = 0;
-
-	var stage_script:HScript;
-
-	// MALL STUFF
-	private var santa:FlxSprite;
-	private var upperBoppers:FlxSprite;
-	private var bottomBoppers:FlxSprite;
-
 	// SCHOOL STUFF
 	private var bgGirls:BackgroundGirls;
 
@@ -258,7 +239,8 @@ class StageGroup extends FlxGroup {
 							for (Object in stage_Data.objects) {
 								var Sprite = new FlxSprite(Object.position[0], Object.position[1]);
 
-								Sprite.shader = colorSwap.shader;
+								if (Options.getData("shaders"))
+									Sprite.shader = colorSwap.shader;
 
 								if (Object.color != null && Object.color != [])
 									Sprite.color = FlxColor.fromRGB(Object.color[0], Object.color[1], Object.color[2]);
@@ -294,10 +276,9 @@ class StageGroup extends FlxGroup {
 
 									if (Object.start_Animation != "" && Object.start_Animation != null && Object.start_Animation != "null")
 										Sprite.animation.play(Object.start_Animation);
-								} else if(Object.file_Name.startsWith('#')){
+								} else if (Object.file_Name.startsWith('#')) {
 									Sprite.makeGraphic(Std.int(Object.scale), Std.int(Object.scale), FlxColor.fromString(Object.file_Name));
-								}
-								else
+								} else
 									Sprite.loadGraphic(Paths.image(stage + "/" + Object.file_Name, "stages"));
 
 								if (Object.uses_Frame_Width)
@@ -324,16 +305,16 @@ class StageGroup extends FlxGroup {
 									add(Sprite);
 							}
 						}
-					if (Assets.exists(Paths.hx('data/stage data/${stage}'))) {
-						if (FlxG.state is PlayState) {
-							stage_script = new HScript(Paths.hx('data/stage data/${stage}'));
-							for (object in stage_Objects){
-								stage_script.interp.variables.set(object[0], object[1]);
+						if (Assets.exists(Paths.hx('data/stage data/${stage}'))) {
+							if (FlxG.state is PlayState) {
+								var script:HScript = new HScript(Paths.hx('data/stage data/${stage}'));
+								for (object in stage_Objects){
+									script.interp.variables.set(object[0], object[1]);
+								}
+								PlayState.instance.scripts.push(script);
 							}
-							PlayState.instance.scripts.push(stage_script);
 						}
 					}
-				}
 			}
 		}
 	}
@@ -341,7 +322,7 @@ class StageGroup extends FlxGroup {
 	public function createLuaStuff() {
 		#if (linc_luajit && polymod)
 		if (stage_Data != null && stage_Data.scriptName != null && Assets.exists(Paths.lua("stage data/" + stage_Data.scriptName)))
-				stageScript = new ModchartUtilities(PolymodAssets.getPath(Paths.lua("stage data/" + stage_Data.scriptName)));
+			stageScript = new ModchartUtilities(PolymodAssets.getPath(Paths.lua("stage data/" + stage_Data.scriptName)));
 		#end
 	}
 
@@ -354,7 +335,7 @@ class StageGroup extends FlxGroup {
 
 		if (p2 == null)
 			p2 = PlayState.dad;
- 
+
 		p1.setPosition((player_1_Point.x - (p1.width / 2)) + p1.positioningOffset[0], (player_1_Point.y - p1.height) + p1.positioningOffset[1]);
 		gf.setPosition((gf_Point.x - (gf.width / 2)) + gf.positioningOffset[0], (gf_Point.y - gf.height) + gf.positioningOffset[1]);
 		p2.setPosition((player_2_Point.x - (p2.width / 2)) + p2.positioningOffset[0], (player_2_Point.y - p2.height) + p2.positioningOffset[1]);
@@ -445,7 +426,6 @@ class StageGroup extends FlxGroup {
 		}
 	}
 
-
 	// LUA SHIT LOL
 
 	override public function destroy() {
@@ -465,16 +445,14 @@ class StageGroup extends FlxGroup {
 	 * @param prop 
 	 * @return FlxSprite
 	 */
-	function getNamedProp(prop:String):FlxSprite{
-		for (object in stage_Objects){
-			if(object[0] == prop){
+	public function getNamedProp(prop:String):FlxSprite {
+		for (object in stage_Objects) {
+			if (object[0] == prop) {
 				return object[1];
 			}
 		}
 		return null;
 	}
-
-
 }
 
 typedef StageData = {

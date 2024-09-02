@@ -51,8 +51,6 @@ function create():Void
 	    FlxG.camera.filters = [rainShaderFilter];
     }
 
-	resetCar(true, true);
-	resetStageValues();
 }
 
 function createPost(){
@@ -84,10 +82,11 @@ function createPost(){
 * Resets every value of a car and hides it from view.
 */
 function resetCar(left:Bool, right:Bool){
+    if(PlayState.instance.stage == null) return;
     if(left){
         carWaiting = false;
         carInterruptable = true;
-        var cars = phillyCars;
+        var cars = PlayState.instance.stage.getNamedProp("phillyCars");
         if (cars != null) {
             FlxTween.cancelTweensOf(cars);
             cars.x = 1200;
@@ -122,6 +121,8 @@ function createStage()
 	PlayState.instance.stage.add(scrollingSky);
     addProp(phillyTraffic_lightmap, 'phillyTraffic_lightmap');
     addProp(phillyHighwayLights_lightmap, 'phillyHighwayLights_lightmap');
+    resetCar(true, true);
+	resetStageValues();
 }
 function onDestroy() {
     trace('Cancelling car tweens weee');

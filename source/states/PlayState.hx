@@ -932,21 +932,14 @@ class PlayState extends MusicBeatState {
 		if (Options.getData("downscroll"))
 			healthBarPosY = 60;
 
-		// global scripts yay.
+		// Handels the loading of all scripts
 		var foldersToCheck:Array<String> = [
 			'assets/data/scripts/global/',
 			'assets/data/scripts/local/',
 			'mods/${Options.getData("curMod")}/data/scripts/local/',
-			'mods/${Options.getData("curMod")}/data/song data/${curSong.toLowerCase()}/'
+			'mods/${Options.getData("curMod")}/data/song data/${curSong.toLowerCase()}/',
+			PolymodAssets.getPath('data/scripts/global/')
 		];
-
-		// Loop through all active mods and add them to the list of folders to check.
-		for (mod in ModList.getActiveMods(PolymodHandler.metadataArrays)) {
-			var modPath:String = 'mods/$mod/data/scripts/global/';
-			if (FileSystem.exists(modPath)) {
-				foldersToCheck.push(modPath);
-			}
-		}
 
 		for (folder in foldersToCheck) {
 			if (FileSystem.exists(folder)) {
@@ -963,6 +956,7 @@ class PlayState extends MusicBeatState {
 			}
 		}
 
+		// TODO: Deprecate and convert this to new script system on script load.
 		#if LUA_ALLOWED
 		if (Assets.exists(Paths.lua("modcharts/" + PlayState.SONG.modchartPath))) {
 			luaScriptArray.push(new ModchartUtilities(PolymodAssets.getPath(Paths.lua("modcharts/" + PlayState.SONG.modchartPath))));
@@ -1089,7 +1083,8 @@ class PlayState extends MusicBeatState {
 
 			switch (cutscene.type.toLowerCase()) {
 				case "script":
-					var cutscene = new HScript(Paths.hx('data/${cutscene.scriptPath}'));
+					var cutscene:HScript = new HScript(Paths.hx('data/${cutscene.scriptPath}'));
+					
 					for (object in stage.stage_Objects) {
 						cutscene.interp.variables.set(object[0], object[1]);
 					}
@@ -1201,13 +1196,12 @@ class PlayState extends MusicBeatState {
 
 					switch (cutscene.type.toLowerCase()) {
 						case "script":
-							var cutscene = new HScript(Paths.hx('data/${cutscene.scriptPath}'));
+							var cutscene:HScript = new HScript(Paths.hx('data/${cutscene.scriptPath}'));
 							for (object in stage.stage_Objects) {
 								cutscene.interp.variables.set(object[0], object[1]);
 							}
 							scripts.push(cutscene);
 							cutscene.call("startCutscene");
-
 						case "video":
 							startVideo(cutscene.videoPath, cutscene.videoExt, endSongVar);
 
@@ -1270,13 +1264,12 @@ class PlayState extends MusicBeatState {
 
 			switch (cutscene.type.toLowerCase()) {
 				case "script":
-					var cutscene = new HScript(Paths.hx('data/${cutscene.scriptPath}'));
+					var cutscene:HScript = new HScript(Paths.hx('data/${cutscene.scriptPath}'));
 					for (object in stage.stage_Objects) {
 						cutscene.interp.variables.set(object[0], object[1]);
 					}
 					scripts.push(cutscene);
 					cutscene.call("startCutscene");
-
 				case "video":
 					startVideo(cutscene.videoPath, cutscene.videoExt, endSongVar);
 
@@ -2683,13 +2676,12 @@ class PlayState extends MusicBeatState {
 
 				switch (cutscene.type.toLowerCase()) {
 					case "script":
-						var cutscene = new HScript(Paths.hx('data/${cutscene.scriptPath}'));
+						var cutscene:HScript = new HScript(Paths.hx('data/${cutscene.scriptPath}'));
 						for (object in stage.stage_Objects) {
 							cutscene.interp.variables.set(object[0], object[1]);
 						}
 						scripts.push(cutscene);
 						cutscene.call("startCutscene");
-
 					case "video":
 						startVideo(cutscene.videoPath, cutscene.videoExt, true);
 

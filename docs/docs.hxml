@@ -9,7 +9,13 @@
 -L scriptless-polymod 
 -L hxvlc
 -L funkin.vis
+-L grig.audio
+-L discord_rpc 
 -L linc_luajit
+-L jsonpath
+-L jsonpatch
+-L thx.core
+-L thx.semver
 
 -cp source
 

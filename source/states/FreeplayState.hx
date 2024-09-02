@@ -1,6 +1,6 @@
 package states;
 
-#if sys
+#if (target.threaded)
 import sys.thread.Thread;
 #end
 #if DISCORD_ALLOWED
@@ -80,8 +80,10 @@ class FreeplayState extends MusicBeatState {
 	// thx psych engine devs
 	var colorTween:FlxTween;
 
-	public var loading_songs:#if cpp Thread #else Dynamic #end;
+	#if (target.threaded)
+	public var loading_songs:Thread;
 	public var stop_loading_songs:Bool = false;
+	#end
 
 	var ui_Skin:Null<String>;
 	var lastSelectedSong:Int = -1;
@@ -210,7 +212,7 @@ class FreeplayState extends MusicBeatState {
 		speedText.font = scoreText.font;
 		speedText.alignment = RIGHT;
 
-		#if cpp
+		#if (target.threaded)
 		if (!Options.getData("loadAsynchronously") || !Options.getData("healthIcons")) {
 		#end
 			for (i in 0...songs.length) {
@@ -226,7 +228,7 @@ class FreeplayState extends MusicBeatState {
 					add(icon);
 				}
 			}
-		#if cpp
+		#if (target.threaded)
 		}
 		else {
 			loading_songs = Thread.create(function() {
@@ -409,7 +411,7 @@ class FreeplayState extends MusicBeatState {
 				if (FlxG.sound.music.active && FlxG.sound.music.playing)
 					FlxG.sound.music.pitch = 1;
 
-				#if cpp
+				#if (target.threaded)
 				stop_loading_songs = true;
 				#end
 
@@ -474,7 +476,7 @@ class FreeplayState extends MusicBeatState {
 					PlayState.storyWeek = songs[curSelected].week;
 
 					if (Assets.exists(Paths.inst(PlayState.SONG.song, curDiffString.toLowerCase()))) {
-						#if cpp
+						#if (target.threaded)
 						stop_loading_songs = true;
 						#end
 

@@ -103,7 +103,7 @@ class CharacterCreator extends MusicBeatState {
 
 		FlxG.camera = charCam;
 
-		if (FlxG.sound?.music.active)
+		if (FlxG.sound.music != null && FlxG.sound.music.active)
 			FlxG.sound.music.stop();
 
 		reloadStage();

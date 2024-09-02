@@ -124,11 +124,12 @@ class MusicBeatSubstate extends FlxSubState
 		if(FlxG.stage != null)
 			FlxG.stage.frameRate = flixel.math.FlxMath.bound(Options.getData("maxFPS"), 0.1, 1000);
 
-		if(!Options.getData("antialiasing"))
-		{
+		if (!Options.getData("antialiasing")) {
 			forEachAlive(function(basic:FlxBasic) {
-				if(Std.isOfType(basic, FlxSprite))
-					Reflect.setProperty(basic, "antialiasing", false);
+				if (!(basic is FlxSprite)) {
+					return;
+				}
+				cast(basic, FlxSprite).antialiasing = false;
 			}, true);
 		}
 

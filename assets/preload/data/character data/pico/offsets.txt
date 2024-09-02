@@ -8,3 +8,7 @@ singDOWNmiss -35 -43
 singRIGHT -79 -13
 singLEFT 59 -1
 singUPmiss -19 58
+intro1 60 0
+intro2 -260 230
+cock 0 0
+shoot -300 250

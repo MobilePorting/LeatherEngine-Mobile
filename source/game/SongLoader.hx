@@ -98,7 +98,7 @@ class SongLoader {
 		var notes:Array<FNFCNote> = cast Reflect.field(song.notes, difficulty);
 		for (note in notes) {
 			// [time, dir, length, type]
-			section.sectionNotes.push([note.t, note.d, note.l, note.k != null ? note.k : 'default']);
+			section.sectionNotes.push([note.t, note.d, note.l, 0, note.k ?? 'default']);
 		}
 
 		// engine specific shit

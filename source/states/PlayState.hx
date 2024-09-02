@@ -936,6 +936,7 @@ class PlayState extends MusicBeatState {
 		var foldersToCheck:Array<String> = [
 			'assets/data/scripts/global/',
 			'assets/data/scripts/local/',
+			'assets/data/song data/${curSong.toLowerCase()}/',
 			'mods/${Options.getData("curMod")}/data/scripts/local/',
 			'mods/${Options.getData("curMod")}/data/song data/${curSong.toLowerCase()}/',
 			PolymodAssets.getPath('data/scripts/global/')
@@ -2583,6 +2584,7 @@ class PlayState extends MusicBeatState {
 	}
 
 	public function turnChange(char:String) {
+		call("turnChange", [char]);
 		switch (char) {
 			case 'dad':
 				var midPos:FlxPoint = dad.getMainCharacter().getMidpoint();
@@ -2654,8 +2656,6 @@ class PlayState extends MusicBeatState {
 
 				call("playerOneTurn", []);
 		}
-
-		call("turnChange", [char]);
 	}
 
 	function endSong():Void {

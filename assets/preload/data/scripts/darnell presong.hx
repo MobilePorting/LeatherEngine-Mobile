@@ -28,14 +28,6 @@ function startCutscene(){
 	newCan.visible = false;
 	PlayState.instance.add(newCan);
 
-	bf.frames.addAtlas(Paths.getSparrowAtlas('characters/Pico_Intro', 'shared'));
-	bf.frames.addAtlas(Paths.getSparrowAtlas('characters/Pico_Shooting', 'shared'));
-	bf.animation.addByPrefix('intro1', "Pico Gets Pissed0", 24, false);
-	bf.animation.addByPrefix('intro2', "shoot and return0", 24, false);
-	bf.animation.addByPrefix('cock', "Pico Reload0", 24, false);
-	bf.addOffset('intro1', 60, 0);
-	bf.addOffset('intro2', -260, 230);
-	bf.addOffset('cock', 0, 0);
 	bf.playAnim('intro1', true);
 
 	// camera sets up, pico does his animation showing him pissed

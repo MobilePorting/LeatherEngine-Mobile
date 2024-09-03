@@ -103,7 +103,7 @@
       "name": "linc_luajit",
       "type": "git",
       "ref": null,
-      "url": "https://github.com/mcagabe19-stuff/linc_luajit-legacy"
+      "url": "https://github.com/mcagabe19-stuff/linc_luajit-rewriten"
     },
     {
       "name": "openfl",

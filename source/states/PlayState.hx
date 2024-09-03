@@ -1239,13 +1239,16 @@ class PlayState extends MusicBeatState {
 		var video_handler:FlxVideo = new FlxVideo();
 
 		video_handler.onEndReached.add(function() {
+			video_handler.dispose();
+			FlxG.removeChild(video_handler);
 			bruhDialogue(endSongVar);
-			return;
 		}, true);
 		video_handler.onEndReached.add(video_handler.dispose);
-		video_handler.load(PolymodAssets.getPath(Paths.video(name, ext)));
+		if (video_handler.load(PolymodAssets.getPath(Paths.video(name, ext))))
+			FlxTimer.wait(0.001, () -> video_handler.play());
 		video_handler.play();
 		video_handler.mute = false;
+		FlxG.addChildBelowMouse(video_handler);
 		#else
 		bruhDialogue(endSongVar);
 		trace("Videos aren't supported on this platform!", ERROR);

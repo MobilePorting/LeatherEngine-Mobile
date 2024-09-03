@@ -110,12 +110,8 @@ class StrumNote extends FlxSkewedSprite {
 			colorSwap.b = noteColor[2];
 		}
 
-		offset.x = frameWidth / 2;
-		offset.y = frameHeight / 2;
-
 		var scale:Float = Std.parseFloat(ui_settings[0]) * (Std.parseFloat(ui_settings[2]) - (Std.parseFloat(mania_size[keyCount - 1])));
 
-		offset.x -= 156 * scale / 2;
-		offset.y -= 156 * scale / 2;
+		centerOffsets();
 	}
 }

@@ -126,13 +126,13 @@ class Note extends FlxSkewedSprite {
 			if (Assets.exists(Paths.image('ui skins/' + song.ui_Skin + "/arrows/" + arrow_Type, 'shared'))) {
 				frames = Paths.getSparrowAtlas('ui skins/' + song.ui_Skin + "/arrows/" + arrow_Type, 'shared');
 			} else {
-				frames = Paths.getSparrowAtlas('ui skins/default/arrows/default', 'shared');
+				frames = Paths.getSparrowAtlas('ui skins/${song.ui_Skin}/arrows/default', 'shared');
 			}
 		} else {
 			if (Assets.exists(Paths.image("ui skins/default/arrows/" + arrow_Type, 'shared'))) {
 				frames = Paths.getSparrowAtlas("ui skins/default/arrows/" + arrow_Type, 'shared');
 			} else {
-				frames = Paths.getSparrowAtlas("ui skins/default/arrows/default", 'shared');
+				frames = Paths.getSparrowAtlas('ui skins/${song.ui_Skin}/arrows/default', 'shared');
 			}
 		}
 

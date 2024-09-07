@@ -2241,7 +2241,7 @@ class ChartingState extends MusicBeatState {
 				gamingName = "events";
 
 			#if mobile
-			SUtil.saveContent(gamingName, '.json', data.trim());
+			SUtil.saveContent('$gamingName.json', data.trim());
 			#else
 			_file.save(data.trim(), gamingName + ".json");
 			#end

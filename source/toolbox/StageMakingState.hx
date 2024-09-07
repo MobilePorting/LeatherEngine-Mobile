@@ -889,7 +889,7 @@ class StageMakingState extends MusicBeatState {
 
 		if ((data != null) && (data.length > 0)) {
 			#if mobile
-			SUtil.saveContent(stage_Name, '.json', data.trim());
+			SUtil.saveContent('$stage_Name.json', data.trim());
 			#else
 			_file = new FileReference();
 			_file.addEventListener(Event.COMPLETE, onSaveComplete);

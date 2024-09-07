@@ -37,10 +37,6 @@ class Main extends Sprite {
 
 		utilities.CrashHandler.init();
 
-		#if cpp
-		untyped __global__.__hxcpp_set_critical_error_handler(onCrash); //this is important i guess?
-		#end
-
 		CoolUtil.haxe_trace = Log.trace;
 		Log.trace = CoolUtil.haxe_print;
 

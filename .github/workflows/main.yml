@@ -27,15 +27,15 @@ jobs:
 
       - name: Compile (Windows)
         if: startsWith(matrix.os, 'windows')
-        run: haxelib run lime build windows -D officialBuild
+        run: haxelib run lime build windows
 
       - name: Compile (Linux)
         if: startsWith(matrix.os, 'ubuntu')
-        run: haxelib run lime build linux -D officialBuild
+        run: haxelib run lime build linux
 
       - name: Compile (macOS)
         if: startsWith(matrix.os, 'macos')
-        run: haxelib run lime build mac -D officialBuild
+        run: haxelib run lime build mac
 
       - name: Upload Artifact (Windows)
         if: startsWith(matrix.os, 'windows')
@@ -98,11 +98,11 @@ jobs:
 
       - name: Compile (Android)
         if: startsWith(matrix.os, 'ubuntu')
-        run: haxelib run lime build android -D officialBuild
+        run: haxelib run lime build android -ONLY_ARMV7
 
       - name: Compile (iOS)
         if: startsWith(matrix.os, 'macos')
-        run: haxelib run lime build ios -nosign -D officialBuild
+        run: haxelib run lime build ios -nosign
 
       - name: Make Ipa
         if: startsWith(matrix.os, 'macos')

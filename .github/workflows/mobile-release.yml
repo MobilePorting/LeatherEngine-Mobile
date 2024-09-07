@@ -31,11 +31,11 @@ jobs:
 
       - name: Compile (Android)
         if: startsWith(matrix.os, 'ubuntu')
-        run: haxelib run lime build android -D officialBuild
+        run: haxelib run lime build android -final
 
       - name: Compile (iOS)
         if: startsWith(matrix.os, 'macos')
-        run: haxelib run lime build ios -nosign -D officialBuild
+        run: haxelib run lime build ios -final -nosign
 
       - name: Make Ipa And Zip For Release
         if: startsWith(matrix.os, 'macos')

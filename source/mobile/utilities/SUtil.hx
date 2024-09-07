@@ -31,14 +31,17 @@ class SUtil {
 	/**
 	 * Gets the storage directory based on the platform and optional forced storage type.
 	 * 
+	 * @param forcedType The optional forced storage type.
 	 * @return The path to the storage directory.
 	 */
-	public static function getStorageDirectory():String {
+	 public static function getStorageDirectory(?forcedType:Null<String>):String {
 		var daPath:String = Sys.getCwd();
 		#if android
 		if (!FileSystem.exists(rootDir + 'storagetype.txt'))
 			File.saveContent(rootDir + 'storagetype.txt', Options.getData("storageType"));
 		var curStorageType:String = File.getContent(rootDir + 'storagetype.txt');
+		if (forcedType != null)
+			curStorageType = forcedType;
 		daPath = switch (curStorageType) {
 			case "EXTERNAL": AndroidEnvironment.getExternalStorageDirectory() + '/.' + lime.app.Application.current.meta.get('file');
 			case "OBB": android.content.Context.getObbDir();
@@ -137,7 +140,7 @@ class SUtil {
 		}
 		catch (e:Dynamic)
 		{
-			showPopUp('Please create folder to\n' + SUtil.getStorageDirectory(true) + '\nPress OK to close the game', 'Error!');
+			showPopUp('Please create folder to\n' + SUtil.getStorageDirectory() + '\nPress OK to close the game', 'Error!');
 			LimeSystem.exit(1);
 		}
 	}

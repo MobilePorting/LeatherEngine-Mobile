@@ -37,7 +37,6 @@ class PauseSubState extends MusicBeatSubstate {
 	var pauseCamera:FlxCamera = new FlxCamera();
 
 	var curTime:Float = Math.max(0, Conductor.songPosition);
-	var skipTimeTracker:Alphabet;
 
 	public function new() {
 		super();

@@ -155,9 +155,9 @@ class UISkinSelect extends MusicBeatSubstate
 
         Note.swagWidth = 160 * 0.7;
 
-        var arrow_Tex:FlxAtlasFrames;
-
-        arrow_Tex = Paths.getSparrowAtlas('ui skins/' + ui_Skin + "/arrows/default", 'shared');
+        var arrow_Tex:FlxAtlasFrames = Assets.exists('assets/shared/images/ui skins/$ui_Skin/arrows/strums.png') ? 
+        Paths.getSparrowAtlas('ui skins/' + ui_Skin + "/arrows/strums", 'shared') :
+        Paths.getSparrowAtlas('ui skins/' + ui_Skin + "/arrows/default", 'shared'); 
 
 		for (i in 0...key_Count)
         {

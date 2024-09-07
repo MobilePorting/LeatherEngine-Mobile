@@ -1671,7 +1671,7 @@ class PlayState extends MusicBeatState {
 				var sustainGroup:Array<Note> = [];
 
 				for (susNote in 0...Math.floor(swagNote.sustainLength / Std.int(Conductor.stepCrochet))) {
-					oldNote = unspawnNotes[Std.int(unspawnNotes.length - 1)];
+					oldNote = unspawnNotes[unspawnNotes.length - 1];
 
 					var sustainNote:Note = new Note(daStrumTime + (Conductor.stepCrochet * susNote) + Conductor.stepCrochet, noteData, oldNote, true, char,
 						songNotes[4], null, chars, gottaHitNote);

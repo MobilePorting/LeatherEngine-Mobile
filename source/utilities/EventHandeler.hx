@@ -222,17 +222,17 @@ class EventHandeler {
 					game.addBgStuff();
 				}
 			case "change keycount":
-				var toChange:Int = Std.parseInt(event[2]);
-				var toChangeAlt:Int = Std.parseInt(event[3]);
-				if (toChange < 1 || Math.isNaN(toChange))
-					toChange = 1;
+				var newPlayerKeyCount:Int = Std.parseInt(event[2]);
+				var newKeyCount:Int = Std.parseInt(event[3]);
+				if (newPlayerKeyCount < 1 || Math.isNaN(newPlayerKeyCount))
+					newPlayerKeyCount = 1;
 
-				if (toChangeAlt < 1 || Math.isNaN(toChangeAlt))
-					toChangeAlt = 1;
+				if (newKeyCount < 1 || Math.isNaN(newKeyCount))
+					newKeyCount = 1;
 
-				final reloadHitbox:Bool = (PlayState.SONG.playerKeyCount != toChange);
-				PlayState.SONG.keyCount = toChangeAlt;
-				PlayState.SONG.playerKeyCount = toChange;
+				final reloadHitbox:Bool = (PlayState.SONG.playerKeyCount != newPlayerKeyCount);
+				PlayState.SONG.keyCount = newKeyCount;
+				PlayState.SONG.playerKeyCount = newPlayerKeyCount;
 				PlayState.playerStrums.clear();
 				PlayState.enemyStrums.clear();
 				PlayState.strumLineNotes.clear();
@@ -251,6 +251,8 @@ class EventHandeler {
 					}
 				}
 				#if LUA_ALLOWED
+				game.setLuaVar("playerKeyCount", newPlayerKeyCount);
+				game.setLuaVar("keyCount", newKeyCount);
 				for (i in 0...PlayState.strumLineNotes.length) {
 					var member = PlayState.strumLineNotes.members[i];
 

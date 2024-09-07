@@ -9,7 +9,7 @@ typedef SwagSong = SongLoader.SongData;
  * Compatibility class for fnf-modcharting-tools.
 **/
 class Song {
-	public static function loadFromJson(name:String):SwagSong {
-		return SongLoader.loadFromJson(name, name);
+	public static function loadFromJson(name:String, ?folder:String):SwagSong {
+		return SongLoader.loadFromJson(name, folder ?? name);
 	}
 }

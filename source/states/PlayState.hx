@@ -1243,7 +1243,6 @@ class PlayState extends MusicBeatState {
 			FlxG.removeChild(video_handler);
 			bruhDialogue(endSongVar);
 		}, true);
-		video_handler.onEndReached.add(video_handler.dispose);
 		if (video_handler.load(PolymodAssets.getPath(Paths.video(name, ext))))
 			FlxTimer.wait(0.001, () -> video_handler.play());
 		video_handler.play();

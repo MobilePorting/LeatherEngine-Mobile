@@ -460,6 +460,7 @@ class FlxInputText extends FlxText
 			// Enter
 			else if (key == 13)
 			{
+				FlxG.stage.window.textInputEnabled = false;
 				onChange(ENTER_ACTION);
 			}
 			// Actually add some text

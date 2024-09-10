@@ -1073,6 +1073,7 @@ class ModchartUtilities {
 			if (camList.length > 0) {
 				PlayState.strumLineNotes.cameras = camList;
 				PlayState.instance.notes.cameras = camList;
+				PlayState.instance.noteBG.camera = camList[0];
 			}
 		});
 

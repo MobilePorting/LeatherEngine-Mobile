@@ -104,7 +104,7 @@ class PlayState extends MusicBeatState {
 
 	/**
 		`Array` of all the songs that you are going
-		to play next in Story Mode as `Strings`.
+		to play next in Story Mode as `String`.
 	**/
 	public static var storyPlaylist:Array<String> = [];
 
@@ -368,7 +368,7 @@ class PlayState extends MusicBeatState {
 
 		@author ninjamuffin99 probably
 	**/
-	public static var daPixelZoom:Float = 6;
+	@:noCompletion public static var daPixelZoom:Float = 6;
 
 	/**
 		Whether or not you are currently in a cutscene.
@@ -498,22 +498,22 @@ class PlayState extends MusicBeatState {
 	public var hitSoundString:String = Options.getData("hitsound");
 
 	/**
-		`Map` of `Strings` to `Boyfriends` for changing `bf`'s character.
+		`Map` of `String` to `Boyfriend` for changing `bf`'s character.
 	**/
 	public var bfMap:Map<String, Boyfriend> = [];
 
 	/**
-		`Map` of `Strings` to `Characters` for changing `gf`'s character.
+		`Map` of `String` to `Character` for changing `gf`'s character.
 	**/
 	public var gfMap:Map<String, Character> = [];
 
 	/**
-		`Map` of `Strings` to `Characters` for changing `dad`'s character.
+		`Map` of `String` to `Character` for changing `dad`'s character.
 	**/
 	public var dadMap:Map<String, Character> = [];
 
 	/**
-		`Map` of `Strings` to `StageGroups` for changing the `stage`.
+		`Map` of `String` to `StageGroup` for changing the `stage`.
 	**/
 	public var stageMap:Map<String, StageGroup> = [];
 
@@ -544,7 +544,7 @@ class PlayState extends MusicBeatState {
 
 	#if LUA_ALLOWED
 	/**
-		`Map` of `Strings` to Lua Modcharts used for custom events.
+		`Map` of `String` to `ModchartUtilities` used for custom events.
 	**/
 	public var event_luas:Map<String, ModchartUtilities> = [];
 
@@ -622,7 +622,7 @@ class PlayState extends MusicBeatState {
 
 		// if we have a hitsound, preload it nerd
 		if (hitSoundString != "none")
-			hitsound = FlxG.sound.load(Paths.sound("hitsounds/" + Std.string(hitSoundString).toLowerCase()));
+			hitsound = FlxG.sound.load(Paths.sound("hitsounds/" + hitSoundString.toLowerCase()));
 
 		// set the character we playing as
 		switch (Options.getData("playAs")) {

@@ -138,7 +138,7 @@ class StageGroup extends FlxGroup {
 						bgGirls = new BackgroundGirls(-100, 190);
 						bgGirls.scrollFactor.set(0.9, 0.9);
 
-						bgGirls.setGraphicSize(Std.int(bgGirls.width * PlayState.daPixelZoom));
+						bgGirls.setGraphicSize(Std.int(bgGirls.width * 6));
 						bgGirls.updateHitbox();
 						add(bgGirls);
 					}
@@ -207,7 +207,7 @@ class StageGroup extends FlxGroup {
 
 						bgGirls.getScared();
 
-						bgGirls.setGraphicSize(Std.int(bgGirls.width * PlayState.daPixelZoom));
+						bgGirls.setGraphicSize(Std.int(bgGirls.width * 6));
 						bgGirls.updateHitbox();
 						add(bgGirls);
 

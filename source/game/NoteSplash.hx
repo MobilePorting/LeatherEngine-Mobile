@@ -71,13 +71,12 @@ class NoteSplash extends FlxSprite {
 		if (target != null) {
 			x = target.x - (target.width / 1.5);
 			y = target.y - (target.height / 1.5);
-
 			color = target.color;
-
 			flipX = target.flipX;
 			flipY = target.flipY;
-
 			angle = target.angle;
+			alpha = target.alpha;
+			visible = target.visible;
 		}
 
 		super.update(elapsed);

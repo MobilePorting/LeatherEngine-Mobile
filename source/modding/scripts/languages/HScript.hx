@@ -115,6 +115,13 @@ class HScript {
 		interp.variables.set("FlxSpriteGroup", flixel.group.FlxSpriteGroup);
 		interp.variables.set("FlxAnimate", flxanimate.FlxAnimate);
 		interp.variables.set("FlxAtlasSprite", game.graphics.FlxAtlasSprite);
+		interp.variables.set("Map", haxe.ds.StringMap);
+		interp.variables.set("StringMap", haxe.ds.StringMap);
+		interp.variables.set("IntMap", haxe.ds.IntMap);
+		interp.variables.set("EnumValueMap", haxe.ds.EnumValueMap);
+		interp.variables.set("ObjectMap", haxe.ds.ObjectMap);
+
+
 
 		// game classes
 		interp.variables.set("PlayState", states.PlayState);

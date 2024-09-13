@@ -125,6 +125,7 @@
 	<haxedef name="HXCPP_CHECK_POINTER" if="release" />
 	<haxedef name="HXCPP_STACK_LINE" if="release" />
 	<haxedef name="HXCPP_STACK_TRACE" if="release" />
+	<haxedef name="HXCPP_CATCH_SEGV" if="release" />
 
 	<!-- Do whatever you want I'm tired uninstall and install everytime -->
 	<certificate path="key.keystore" password="leatherengine" alias="leatherport" alias-password="leatherengine" if="android" unless="debug" />

@@ -379,11 +379,11 @@ class ResultsSubstate extends MusicBeatSubstate {
 			}
 		});
 
-		new FlxTimer().start(rank.getBFDelay(), _ -> {
+		new FlxTimer().start(rank.getBFDelay() ?? 1, _ -> {
 			afterRankTallySequence();
 		});
 
-		new FlxTimer().start(rank.getFlashDelay(), _ -> {
+		new FlxTimer().start(rank.getFlashDelay() ?? 1, _ -> {
 			displayRankText();
 		});
 
@@ -615,79 +615,71 @@ class ResultsSubstate extends MusicBeatSubstate {
 	function afterRankTallySequence():Void {
 		showSmallClearPercent();
 
+		trace(rank);
+
 		switch (rank) {
 			case PERFECT | PERFECT_GOLD:
-				try {
-					if (bfPerfect == null) {
-						trace("Could not build PERFECT animation!", ERROR);
+				if (bfPerfect == null) {
+					trace("Could not build PERFECT animation!", ERROR);
+				} else {
+					bfPerfect.visible = true;
+					bfPerfect.playAnimation('');
+				}
+				new FlxTimer().start(106 / 24, _ -> {
+					if (heartsPerfect == null) {
+						trace("Could not build heartsPerfect animation!", ERROR);
 					} else {
-						bfPerfect.visible = true;
-						bfPerfect.playAnimation('');
+						heartsPerfect.visible = true;
+						heartsPerfect.playAnimation('');
 					}
-					new FlxTimer().start(106 / 24, _ -> {
-						if (heartsPerfect == null) {
-							trace("Could not build heartsPerfect animation!", ERROR);
-						} else {
-							heartsPerfect.visible = true;
-							heartsPerfect.playAnimation('');
-						}
-					});
-				} catch (e) {}
+				});
 			case EXCELLENT:
-				try {
-					if (bfExcellent == null) {
-						trace("Could not build EXCELLENT animation!", ERROR);
-					} else {
-						bfExcellent.visible = true;
-						bfExcellent.playAnimation('');
-					}
-				} catch (e) {}
+				if (bfExcellent == null) {
+					trace("Could not build EXCELLENT animation!", ERROR);
+				} else {
+					bfExcellent.visible = true;
+					bfExcellent.playAnimation('');
+				}
 			case GREAT:
-				try {
-					if (bfGreat == null) {
-						trace("Could not build GREAT animation!", ERROR);
-					} else {
-						bfGreat.visible = true;
-						bfGreat.playAnimation('');
-					}
+				if (bfGreat == null) {
+					trace("Could not build GREAT animation!", ERROR);
+				} else {
+					bfGreat.visible = true;
+					bfGreat.playAnimation('');
+				}
 
-					new FlxTimer().start(6 / 24, _ -> {
-						if (gfGreat == null) {
-							trace("Could not build GREAT animation for gf!", ERROR);
+				new FlxTimer().start(6 / 24, _ -> {
+					if (gfGreat == null) {
+						trace("Could not build GREAT animation for gf!", ERROR);
+					} else {
+						gfGreat.visible = true;
+						gfGreat.playAnimation('');
+					}
+				});
+			case SHIT:
+				if (bfShit == null) {
+					trace("Could not build SHIT animation!", ERROR);
+				} else {
+					bfShit.visible = true;
+					bfShit.playAnimation('Intro');
+				}
+			case GOOD:
+				if (bfGood == null) {
+					bfGood = new FlxSprite(640, -200);
+					trace("Could not build GOOD animation!", ERROR);
+				} else {
+					bfGood.animation.play('fall');
+					bfGood.visible = true;
+					new FlxTimer().start((1 / 24) * 22, _ -> {
+						// plays about 22 frames (at 24fps timing) after bf spawns in
+						if (gfGood != null) {
+							gfGood.animation.play('clap', true);
+							gfGood.visible = true;
 						} else {
-							gfGreat.visible = true;
-							gfGreat.playAnimation('');
+							trace("Could not build GOOD animation!", ERROR);
 						}
 					});
-				} catch (e) {}
-			case SHIT:
-				try {
-					if (bfShit == null) {
-						trace("Could not build SHIT animation!", ERROR);
-					} else {
-						bfShit.visible = true;
-						bfShit.playAnimation('Intro');
-					}
-				} catch (e) {}
-			case GOOD:
-				try {
-					if (bfGood == null) {
-						bfGood = new FlxSprite(640, -200);
-						trace("Could not build GOOD animation!", ERROR);
-					} else {
-						bfGood.animation.play('fall');
-						bfGood.visible = true;
-						new FlxTimer().start((1 / 24) * 22, _ -> {
-							// plays about 22 frames (at 24fps timing) after bf spawns in
-							if (gfGood != null) {
-								gfGood.animation.play('clap', true);
-								gfGood.visible = true;
-							} else {
-								trace("Could not build GOOD animation!", ERROR);
-							}
-						});
-					}
-				} catch (e) {}
+				}
 			default:
 		}
 	}

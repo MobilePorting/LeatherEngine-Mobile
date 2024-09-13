@@ -1,5 +1,6 @@
 package ui;
 
+import flixel.util.FlxStringUtil;
 import flixel.FlxG;
 import openfl.utils.Assets;
 import openfl.text.TextField;
@@ -24,9 +25,10 @@ class SimpleInfoDisplay extends TextField {
 	public var infoDisplayed:Array<Bool> = [false, false, false, false];
 
 	public var framerate:Int = 0;
+
 	private var framerateTimer:Float = 0.0;
-    private var framesCounted:Int = 0;
-	
+	private var framesCounted:Int = 0;
+
 	public var version:String = CoolUtil.getCurrentVersion();
 	public final os:String = '${LimeSystem.platformName} ${getArch() != 'Unknown' ? getArch() : ''} ${(LimeSystem.platformName == LimeSystem.platformVersion || LimeSystem.platformVersion == null) ? '' : '- ' + LimeSystem.platformVersion}';
 
@@ -37,10 +39,9 @@ class SimpleInfoDisplay extends TextField {
 
 		positionFPS(x, y);
 		selectable = false;
-		defaultTextFormat = new TextFormat(font != null ? font : Assets.getFont(Paths.font("vcr.ttf")).fontName, (font == "_sans" ? 12 : 14),
-        color);
+		defaultTextFormat = new TextFormat(font ?? Assets.getFont(Paths.font("vcr.ttf")).fontName, (font == "_sans" ? 12 : 14), color);
 
-        FlxG.signals.postDraw.add(update);
+		FlxG.signals.postDraw.add(update);
 
 		width = FlxG.width;
 		height = FlxG.height;
@@ -54,31 +55,31 @@ class SimpleInfoDisplay extends TextField {
 
 	private function update():Void {
 		framerateTimer += FlxG.elapsed;
-		
-        if (framerateTimer >= 1) {
+
+		if (framerateTimer >= 1) {
 			framerateTimer = 0;
-			
-            framerate = framesCounted;
-            framesCounted = 0;
-        }
-		
+
+			framerate = framesCounted;
+			framesCounted = 0;
+		}
+
 		framesCounted++;
-		
+
 		if (!visible) {
 			return;
 		}
-		
+
 		text = '';
 		for (i in 0...infoDisplayed.length) {
 			if (!infoDisplayed[i]) {
 				continue;
 			}
-			
+
 			switch (i) {
 				case 0: // FPS
 					text += '${framerate}fps';
 				case 1: // Memory
-					text += '${CoolUtil.formatBytes(Memory.getCurrentUsage())} / ${CoolUtil.formatBytes(Memory.getPeakUsage())}';
+					text += '${FlxStringUtil.formatBytes(Memory.getCurrentUsage())} / ${FlxStringUtil.formatBytes(Memory.getPeakUsage())}';
 				case 2: // Version
 					text += os;
 				case 3: // Console

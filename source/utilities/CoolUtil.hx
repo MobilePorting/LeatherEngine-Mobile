@@ -16,8 +16,7 @@ import lime.utils.Assets;
 import openfl.utils.Function;
 import states.PlayState;
 import ui.logs.Logs;
-
-using StringTools;
+import haxe.Json;
 
 /**
  * Helper class with lots of utilitiy functions.
@@ -368,57 +367,6 @@ class CoolUtil {
 	**/
 	public static var haxe_trace:Function;
 
-	/**
-	 * List of formatting for different byte amounts
-	 * in an array formatted like this:
-	 * 
-	 * [`Format`, `Divisor`]
-	 */
-	public static var byte_formats:Array<Array<Dynamic>> = [
-		["$bytes b", 1.0],
-		["$bytes kib", 1024.0],
-		["$bytes mib", 1048576.0],
-		["$bytes gib", 1073741824.0],
-		["$bytes tib", 1099511627776.0]
-	];
-
-	/**
-	 * Formats `bytes` into a `String`.
-	 * 
-	 * Examples (Input = Output)
-	 * 
-	 * ```
-	 * 1024 = '1 kib'
-	 * 1536 = '1.5 kib'
-	 * 1048576 = '2 mib'
-	 * ```
-	 * 
-	 * @param bytes Amount of bytes to format and return.
-	 * @param onlyValue (Optional, Default = `false`) Whether or not to only format the value of bytes (ex: `'1.5 mib' -> '1.5'`).
-	 * @param precision (Optional, Default = `2`) The precision of the decimal value of bytes. (ex: `1 -> 1.5, 2 -> 1.53, etc`).
-	 * @return Formatted byte string.
-	 */
-	public static function formatBytes(bytes:Float, onlyValue:Bool = false, precision:Int = 2):String {
-		var formatted_bytes:String = "?";
-
-		for (i in 0...byte_formats.length) {
-			// If the next byte format has a divisor smaller than the current amount of bytes,
-			// and thus not the right format skip it.
-			if (byte_formats.length > i + 1 && byte_formats[i + 1][1] < bytes)
-				continue;
-
-			var format:Array<Dynamic> = byte_formats[i];
-
-			if (!onlyValue)
-				formatted_bytes = StringTools.replace(format[0], "$bytes", Std.string(FlxMath.roundDecimal(bytes / format[1], precision)));
-			else
-				formatted_bytes = Std.string(FlxMath.roundDecimal(bytes / format[1], precision));
-
-			break;
-		}
-
-		return formatted_bytes;
-	}
 
 	public static inline function getCurrentVersion():String {
 		return 'v' + Application.current.meta.get('version');
@@ -441,7 +389,7 @@ class CoolUtil {
 				return exists;
 			}
 
-			var meta:FNFCMetadata = cast haxe.Json.parse(Assets.getText(Paths.json('$songPath/$song-metadata$difficultyExtensionMeta')));
+			var meta:FNFCMetadata = cast Json.parse(Assets.getText(Paths.json('$songPath/$song-metadata$difficultyExtensionMeta')));
 			if (meta.playData.difficulties.contains(difficulty)) {
 				exists = true;
 			}

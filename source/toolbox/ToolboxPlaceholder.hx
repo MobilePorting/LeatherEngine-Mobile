@@ -83,7 +83,7 @@ class ToolboxPlaceholder extends MusicBeatState {
 		LoadPage("Categories");
 
 		if (FlxG.sound.music == null)
-			FlxG.sound.playMusic(MusicUtilities.GetOptionsMenuMusic(), 0.7, true);
+			FlxG.sound.playMusic(MusicUtilities.getOptionsMusic(), 0.7, true);
 
 		addVirtualPad(UP_DOWN, A_B);
 	}

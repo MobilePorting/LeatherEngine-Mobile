@@ -10,8 +10,14 @@ import flixel.tweens.FlxTween;
  * Basically just FlxRuntimeShader but it has tween support
  */
 class CustomShader extends FlxRuntimeShader {
-    public function update(elapsed:Float) {
-		// nothing yet
+    override public function new(?fragmentSource:String, ?vertexSource:String){
+		try{
+			super(fragmentSource, vertexSource);
+		}
+		catch(e){
+			trace(e.details(), ERROR);
+			trace(e, ERROR);
+		}
 	}
 	/**
 	 * Tweens a shader to a value

@@ -2914,9 +2914,9 @@ class ModchartUtilities {
 			}
 		});
 
-		setLuaFunction("createCustomShader", function(id:String, file:String) {
-			var funnyCustomShader:CustomShader = new CustomShader(Assets.getText(Paths.frag(file)), null);
-			lua_Custom_Shaders.set(id, funnyCustomShader);
+		setLuaFunction("createCustomShader", function(id:String, frag:String, ?vert:String) {
+			var _vert:String = Assets.exists(Paths.vert(vert)) ? Assets.getText(Paths.vert(vert)) : null;
+			lua_Custom_Shaders.set(id, new CustomShader(Assets.getText(Paths.frag(frag)), _vert));
 		});
 
 		setLuaFunction("setActorCustomShader", function(id:String, actor:String) {
@@ -3006,7 +3006,7 @@ class ModchartUtilities {
 		});
 
 		setLuaFunction("tweenShader",
-			function(id:String, property:String, value:Float, duration:Float, ?ease:String = "linear", ?startDelay:Float = 0.0, ?onComplete:Dynamic) {
+			function(id:String, property:String, value:Float, duration:Float, ease:String = "linear", startDelay:Float = 0.0, ?onComplete:Dynamic) {
 				var shader:CustomShader = lua_Custom_Shaders.get(id);
 				if (shader != null) {
 					shader.tween(property, value, duration, easeFromString(ease), startDelay, onComplete);
@@ -3016,9 +3016,9 @@ class ModchartUtilities {
 			});
 
 		// dumb vc functions
-		setLuaFunction("initShader", function(id:String, file:String) {
-			var funnyCustomShader:CustomShader = new CustomShader(Assets.getText(Paths.frag(file)), null);
-			lua_Custom_Shaders.set(id, funnyCustomShader);
+		setLuaFunction("initShader", function(id:String, frag:String, ?vert:String) {
+			var _vert:String = Assets.exists(Paths.vert(vert)) ? Assets.getText(Paths.vert(vert)) : null;
+			lua_Custom_Shaders.set(id, new CustomShader(Assets.getText(Paths.frag(frag)), _vert));
 		});
 
 		setLuaFunction("setActorShader", function(actorStr:String, shaderName:String) {
@@ -3038,9 +3038,7 @@ class ModchartUtilities {
 			var actor = getActorByName(actorStr);
 
 			if (actor != null && funnyCustomShader != null) {
-				actor.shader = funnyCustomShader; // use reflect to workaround compiler errors
-
-				// trace('added shader '+shaderName+" to " + actorStr);
+				actor.shader = funnyCustomShader;
 			}
 		});
 
@@ -3077,17 +3075,28 @@ class ModchartUtilities {
 			if (!Options.getData("shaders"))
 				return;
 			var funnyCustomShader:CustomShader = lua_Custom_Shaders.get(id);
-			if (Std.isOfType(value, Float)) {
+			if (value is Float) {
 				funnyCustomShader.setFloat(property, Std.parseFloat(value));
-			} else if (Std.isOfType(value, Bool)) {
+			} else if (value is Bool) {
 				funnyCustomShader.setBool(property, value);
-			} else {
-				funnyCustomShader.setFloatArray(property, value);
+			} else if(value is Array) {
+				if(value[0] is Float){
+					funnyCustomShader.setFloatArray(property, value);
+				}
+				else if (value[0] is Bool){
+					funnyCustomShader.setBoolArray(property, value);
+				}
+				else{
+					funnyCustomShader.setIntArray(property, value);
+				}
+			}
+			else{
+				funnyCustomShader.setInt(property, Std.parseInt(value));
 			}
 		});
 
 		setLuaFunction("tweenShaderProperty",
-			function(id:String, property:String, value:Float, duration:Float, ?ease:String = "linear", ?startDelay:Float = 0.0, ?onComplete:Dynamic) {
+			function(id:String, property:String, value:Float, duration:Float, ease:String = "linear", startDelay:Float = 0.0, ?onComplete:Dynamic) {
 				if (!Options.getData("shaders"))
 					return;
 				var shader:CustomShader = lua_Custom_Shaders.get(id);

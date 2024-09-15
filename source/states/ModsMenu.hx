@@ -72,7 +72,7 @@ class ModsMenu extends MusicBeatState {
 		add(page);
 
 		if (FlxG.sound.music == null)
-			FlxG.sound.playMusic(MusicUtilities.GetOptionsMenuMusic(), 0.7, true);
+			FlxG.sound.playMusic(MusicUtilities.getOptionsMusic(), 0.7, true);
 
 		PolymodHandler.loadModMetadata();
 

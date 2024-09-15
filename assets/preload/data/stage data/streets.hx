@@ -3,7 +3,7 @@ import flixel.addons.display.FlxTiledSprite;
 import flixel.math.FlxPoint;
 
 
-var rainShader:CustomShader = new CustomShader(Assets.getText(Paths.frag("rain")), null, 100);
+var rainShader:CustomShader = new CustomShader(Assets.getText(Paths.frag("rain")));
 var rainShaderFilter:ShaderFilter;
 var blurFilter:BlurFilter = new BlurFilter(6, 6);
 

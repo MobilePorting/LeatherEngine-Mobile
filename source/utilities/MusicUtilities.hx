@@ -5,14 +5,10 @@ class MusicUtilities
 	/**
 	 * This function returns the string path of the current music that should be played (as a replacement for the title screen music)
 	 */
-	public static function GetTitleMusicPath():String
+	public static function getTitleMusic():String
 	{
-		if (Options.getData("oldTitle"))
-			return Paths.music('title');
-		else if (Date.now().getDay() == 5 && Date.now().getHours() >= 18 || Options.getData("nightMusic"))
+		if (Date.now().getDay() == 5 && Date.now().getHours() >= 18 || Options.getData("nightMusic"))
 			return Paths.music('freakyNightMenu');
-		else
-			return Paths.music('freakyMenu');
 
 		return Paths.music('freakyMenu');
 	}
@@ -20,7 +16,7 @@ class MusicUtilities
 	/**
 	 * This function returns the string path of the current options menu music.
 	 */
-	public static inline function GetOptionsMenuMusic():String
+	public static inline function getOptionsMusic():String
 	{
 		return Paths.music('optionsMenu');
 	}

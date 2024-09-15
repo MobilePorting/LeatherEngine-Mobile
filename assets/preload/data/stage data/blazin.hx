@@ -2,7 +2,7 @@ import flixel.addons.display.FlxTiledSprite;
 import utilities.MathUtil;
 
 
-var rainShader:CustomShader = new CustomShader(Assets.getText(Paths.frag("rain")), null, 100);
+var rainShader:CustomShader = new CustomShader(Assets.getText(Paths.frag("rain")));
 var rainShaderFilter:ShaderFilter;
 var scrollingSky:FlxTiledSprite;
 

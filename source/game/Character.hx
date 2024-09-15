@@ -492,7 +492,8 @@ class Character extends FlxSprite {
 	/**
 	 * FOR GF DANCING SHIT
 	 */
-	public function dance(?altAnim:String = '', force:Bool = false) {
+	public function dance(altAnim:String = '', force:Bool = false) {
+		script?.call("dance", [altAnim, force]);
 		if (shouldDance) {
 			if (!debugMode && curCharacter != '' && hasAnims() && (force || (!playFullAnim && !preventDanceForAnim))) {
 				var alt = "";

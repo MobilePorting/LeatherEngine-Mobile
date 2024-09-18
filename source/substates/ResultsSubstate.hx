@@ -846,7 +846,7 @@ class ResultsSubstate extends MusicBeatSubstate {
 			speedOfTween.x -= 0.1;
 		}
 
-		if (controls.PAUSE) {
+		if ((controls.mobileC && FlxG.mouse.justPressed) || controls.PAUSE) {
 			if (FlxG.sound.music != null) {
 				// FlxTween.tween(FlxG.sound.music, {volume: 0}, 0.8);
 				FlxTween.tween(FlxG.sound.music, {pitch: 3}, 0.1, {

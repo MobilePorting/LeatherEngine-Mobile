@@ -210,7 +210,7 @@ class AlphaCharacter extends FlxSprite {
 		super(x, y);
 		this.scaleMult = scaleMult;
 
-		frames = Paths.getSparrowAtlas('alphabet');
+		frames = Paths.getSparrowAtlas('alphabet', "preload", true);
 
 		antialiasing = Options.getData("antialiasing");
 

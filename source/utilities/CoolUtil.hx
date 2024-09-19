@@ -183,13 +183,13 @@ class CoolUtil {
 	public static inline function setWindowIcon(path:String) {
 		#if desktop
 		FlxG.stage.window.setIcon(Image.fromFile(path));
-		#end
+		#end 
 	}
 
 	/**
 	 * Gets the highest number from a list.
 	 * Shoutout to @crinfarr on Discord.
-	 * https://discord.com/channels/162395145352904705/162395145352904705/1157847259858354236
+	 * @seehttps://discord.com/channels/162395145352904705/162395145352904705/1157847259858354236
 	 * @param ...nums 
 	 * @return T
 	 */
@@ -205,7 +205,7 @@ class CoolUtil {
 	/**
 	 * Gets the lowest number from a list.
 	 * Shoutout to @crinfarr on Discord.
-	 * https://discord.com/channels/162395145352904705/162395145352904705/1157847259858354236
+	 * @see https://discord.com/channels/162395145352904705/162395145352904705/1157847259858354236
 	 * @param ...nums 
 	 * @return T
 	 */
@@ -220,8 +220,8 @@ class CoolUtil {
 
 	/**
 	 * Converts rgb values into hsv values.
-	 * See: https://math.stackexchange.com/questions/556341/rgb-to-hsv-color-conversion-algorithm
-	 * See: https://github.com/python/cpython/blob/3.9/Lib/colorsys.py
+	 * @see: https://math.stackexchange.com/questions/556341/rgb-to-hsv-color-conversion-algorithm
+	 * @see: https://github.com/python/cpython/blob/3.9/Lib/colorsys.py
 	 * @param r The red value
 	 * @param g The green value
 	 * @param b The blue value

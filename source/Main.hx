@@ -40,7 +40,7 @@ class Main extends Sprite {
 		CoolUtil.haxe_trace = Log.trace;
 		Log.trace = CoolUtil.haxe_print;
 
-		game = new FlxGame(#if mobile 1280, 720 #else 0, 0 #end, TitleState, 60, 60, true);
+		game = new FlxGame(#if mobile 1280, 720 #else 0, 0 #end, #if (mobile && MODDING_ALLOWED) !CopyState.checkExistingFiles() ? CopyState : #end TitleState, 60, 60, true);
 
 		// FlxG.game._customSoundTray wants just the class, it calls new from
 		// create() in there, which gets called when it's added to stage

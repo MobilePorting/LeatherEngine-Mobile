@@ -77,7 +77,7 @@
 		<assets path="CHANGELOG.md" rename='changelog.txt' />
 		<assets path="version.txt" />
 		<!--https://github.com/FunkinCrew/Funkin/pull/3318-->
-		<assets path="alsoft.ini" if="windows" /> <!--this is important i think-->
+		<assets path="alsoft.ini" if="lime_openal" /> <!--this is important i think-->
 	</section>
 
 	<!-- Libraries -->

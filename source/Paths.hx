@@ -18,7 +18,7 @@ import openfl.display3D.textures.RectangleTexture;
 class Paths {
 	public static var currentLevel:String = "preload";
 
-	public static var bitmaps:Map<String, FlxGraphic> = new Map<String, FlxGraphic>();
+	public static var graphics:Map<String, FlxGraphic> = new Map<String, FlxGraphic>();
 
 	public static function getPath(file:String, type:AssetType, library:Null<String>):String {
 		if (library != null)
@@ -107,27 +107,17 @@ class Paths {
 			return file;
 		}
 		@:privateAccess {
-			if(!bitmaps.exists(file)){
-				trace('loading $file to the gpu', DEBUG);
-				bitmap.lock();
-				if (bitmap.__texture == null) {
-					bitmap.image.premultiplied = true;
-					bitmap.getTexture(FlxG.stage.context3D);
-				}
-				bitmap.getSurface();
+			if(!graphics.exists(file)){
 				bitmap.disposeImage();
-				bitmap.image.data = null;
-				bitmap.image = null;
-				bitmap.readable = true; // hashlink fix
 			}
 			else{
 				bitmap = null;
-				return bitmaps.get(file);
+				return graphics.get(file);
 			}
 		}	
 		var graphic:FlxGraphic = FlxGraphic.fromBitmapData(bitmap, false, file, false);
 		graphic.persist = true;
-		bitmaps.set(file, graphic);
+		graphics.set(file, graphic);
 		return graphic;
 	}
 

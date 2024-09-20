@@ -186,7 +186,7 @@ class MusicBeatState extends #if MODCHARTING_TOOLS modcharting.ModchartMusicBeat
 			lime_cache.audio.remove(key);
 		};
 
-		Paths.bitmaps.clear();
+		Paths.graphics.clear();
 
 		// Run built-in garbage collector
 		#if cpp

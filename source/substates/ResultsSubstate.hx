@@ -37,7 +37,7 @@ class ResultsSubstate extends MusicBeatSubstate {
 
 	final rank:ScoringRank;
 	final songName:FlxBitmapText;
-	final difficulty:FlxSprite;
+	var difficulty:FlxSprite;
 	final clearPercentSmall:ClearPercentCounter;
 
 	final maskShaderSongName:LeftMaskShader = new LeftMaskShader();
@@ -65,6 +65,8 @@ class ResultsSubstate extends MusicBeatSubstate {
 	final cameraBG:FlxCamera;
 	final cameraScroll:FlxCamera;
 	final cameraEverything:FlxCamera;
+
+	var fontLetters:String = "AaBbCcDdEeFfGgHhiIJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz:1234567890";
 
 	function getRank(percent:Float):ScoringRank {
 		if (percent >= 100)
@@ -95,7 +97,6 @@ class ResultsSubstate extends MusicBeatSubstate {
 		// We build a lot of this stuff in the constructor, then place it in create().
 		// This prevents having to do `null` checks everywhere.
 
-		var fontLetters:String = "AaBbCcDdEeFfGgHhiIJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz:1234567890";
 		songName = new FlxBitmapText(FlxBitmapFont.fromMonospace(Paths.image("resultScreen/tardlingSpritesheet"), fontLetters, FlxPoint.get(49, 62)));
 		songName.text = params.title;
 		songName.letterSpacing = -15;
@@ -296,8 +297,12 @@ class ResultsSubstate extends MusicBeatSubstate {
 		var diffSpr:String = 'diff_${params?.difficultyId ?? 'Normal'}';
 		difficulty.loadGraphic(Paths.image("resultScreen/" + diffSpr));
 		if (!Assets.exists(Paths.image("resultScreen/" + diffSpr))) {
-			difficulty.visible = false;
+			difficulty = new FlxBitmapText(FlxBitmapFont.fromMonospace(Paths.image("resultScreen/tardlingSpritesheet"), fontLetters, FlxPoint.get(49, 62)));
+			cast(difficulty, FlxBitmapText).text = params?.difficultyId ?? 'Normal';
+			cast(difficulty, FlxBitmapText).letterSpacing = -15;
+			difficulty.angle = -4.4;
 		}
+		difficulty.antialiasing = Options.getData("antialiasing");
 		add(difficulty);
 
 		add(songName);
@@ -313,6 +318,9 @@ class ResultsSubstate extends MusicBeatSubstate {
 
 		// maskShaderSongName.swagMaskX = difficulty.x - 15;
 		maskShaderDifficulty.swagMaskX = difficulty.x - 15;
+		if(difficulty is FlxBitmapText){
+			maskShaderDifficulty.swagMaskX += difficulty.width;
+		}
 
 		var blackTopBar:FlxSprite = new FlxSprite().loadGraphic(Paths.image("resultScreen/topBarBlack"));
 		blackTopBar.y = -blackTopBar.height;

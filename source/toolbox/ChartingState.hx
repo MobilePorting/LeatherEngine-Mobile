@@ -1011,23 +1011,6 @@ class ChartingState extends MusicBeatState {
 		UI_box.addGroup(tab_group_note);
 	}
 
-	function convertSectionToShaggy(section:Int) {
-		for (noteIndex in 0..._song.notes[section].sectionNotes.length) {
-			var coolVal = _song.notes[section].sectionNotes[noteIndex][1] / (_song.keyCount + _song.playerKeyCount);
-
-			if (_song.notes[section].sectionNotes[noteIndex][3] == null)
-				_song.notes[section].sectionNotes[noteIndex][3] = 0;
-
-			if (Std.int(coolVal) == 1)
-				_song.notes[section].sectionNotes[noteIndex][4] = "death";
-
-			if (Std.int(coolVal) == 2)
-				_song.notes[section].sectionNotes[noteIndex][4] = "caution";
-
-			if (Std.int(coolVal) != 0)
-				_song.notes[section].sectionNotes[noteIndex][1] %= (_song.keyCount + _song.playerKeyCount);
-		}
-	}
 
 	function loadSong(daSong:String):Void {
 		if (FlxG.sound.music != null)
@@ -1065,9 +1048,7 @@ class ChartingState extends MusicBeatState {
 			changeSection();
 		};
 
-		for (i in 0..._song.notes.length) {
-			convertSectionToShaggy(i);
-		}
+
 	}
 
 	#if FLX_PITCH

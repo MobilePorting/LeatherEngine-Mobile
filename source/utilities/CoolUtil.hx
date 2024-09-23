@@ -46,7 +46,7 @@ class CoolUtil {
 	#end
 
 	public static function coolTextFile(path:String):Array<String> {
-		if(!Assets.exists(path)){
+		if (!Assets.exists(path)) {
 			return [];
 		}
 		var daList:Array<String> = Assets.getText(path).trim().split('\n');
@@ -59,7 +59,7 @@ class CoolUtil {
 	}
 
 	public static function coolTextFileOfArrays(path:String, ?delimeter:String = " "):Array<Array<String>> {
-		if(!Assets.exists(path)){
+		if (!Assets.exists(path)) {
 			return [[]];
 		}
 		var daListOg:Array<String> = coolTextFile(path);
@@ -178,19 +178,19 @@ class CoolUtil {
 	/**
 	 * Sets the window icon
 	 * @author Vortex
-	 * @param path 
+	 * @param path
 	 */
 	public static inline function setWindowIcon(path:String) {
 		#if desktop
 		FlxG.stage.window.setIcon(Image.fromFile(path));
-		#end 
+		#end
 	}
 
 	/**
 	 * Gets the highest number from a list.
 	 * Shoutout to @crinfarr on Discord.
-	 * @seehttps://discord.com/channels/162395145352904705/162395145352904705/1157847259858354236
-	 * @param ...nums 
+	 * @see https://discord.com/channels/162395145352904705/162395145352904705/1157847259858354236
+	 * @param ...nums
 	 * @return T
 	 */
 	public static function max<T:Float>(...nums:T):T {
@@ -206,7 +206,7 @@ class CoolUtil {
 	 * Gets the lowest number from a list.
 	 * Shoutout to @crinfarr on Discord.
 	 * @see https://discord.com/channels/162395145352904705/162395145352904705/1157847259858354236
-	 * @param ...nums 
+	 * @param ...nums
 	 * @return T
 	 */
 	public static function min<T:Float>(...nums:T):T {
@@ -220,8 +220,8 @@ class CoolUtil {
 
 	/**
 	 * Converts rgb values into hsv values.
-	 * @see: https://math.stackexchange.com/questions/556341/rgb-to-hsv-color-conversion-algorithm
-	 * @see: https://github.com/python/cpython/blob/3.9/Lib/colorsys.py
+	 * @see https://math.stackexchange.com/questions/556341/rgb-to-hsv-color-conversion-algorithm
+	 * @see https://github.com/python/cpython/blob/3.9/Lib/colorsys.py
 	 * @param r The red value
 	 * @param g The green value
 	 * @param b The blue value
@@ -269,7 +269,7 @@ class CoolUtil {
 		@author Leather128
 	**/
 	public static function coolError(message:Null<String> = null, title:Null<String> = null):Void {
-		trace(title + " /// " + message, ERROR);
+		trace(title + "-" + message, ERROR);
 
 		var text:FlxText = new FlxText(0, 0, 1280, title + "\n\n" + message, 32);
 		text.font = Paths.font("vcr.ttf");
@@ -367,7 +367,6 @@ class CoolUtil {
 	**/
 	public static var haxe_trace:Function;
 
-
 	public static inline function getCurrentVersion():String {
 		return 'v' + Application.current.meta.get('version');
 	}
@@ -385,7 +384,8 @@ class CoolUtil {
 			return true;
 		} else {
 			// no meta or no chart
-			if (!Assets.exists(Paths.json('$songPath/$song-metadata$difficultyExtensionMeta')) || !Assets.exists(Paths.json('$songPath/$song-chart$difficultyExtensionMeta'))) {
+			if (!Assets.exists(Paths.json('$songPath/$song-metadata$difficultyExtensionMeta'))
+				|| !Assets.exists(Paths.json('$songPath/$song-chart$difficultyExtensionMeta'))) {
 				return exists;
 			}
 

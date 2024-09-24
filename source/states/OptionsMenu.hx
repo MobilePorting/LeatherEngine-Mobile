@@ -106,7 +106,7 @@ class OptionsMenu extends MusicBeatState {
 			new BoolOption("Animated Backgrounds", "animatedBGs"),
 			new BoolOption("Preload Stage Events", "preloadChangeBGs"),
 			new BoolOption("Persistent Cached Data", "memoryLeaks"),
-			new BoolOption("GPU caching", "gpuCaching"),
+			new BoolOption("VRAM Only Sprites", "gpuCaching"),
 			#if MODCHARTING_TOOLS
 			new BoolOption("Optimized Modcharts", "optimizedModcharts"),
 			#end
@@ -195,7 +195,7 @@ class OptionsMenu extends MusicBeatState {
 			else
 				menuBG = new FlxSprite().loadGraphic(Paths.image('ui skins/' + ui_Skin + '/backgrounds' + '/menuDesat'));
 		else
-			menuBG = new FlxSprite().makeGraphic(128630, FlxColor.fromString("#E1E1E1"), false, "optimizedMenuDesat");
+			menuBG = new FlxSprite().makeGraphic(1286, 730, FlxColor.fromString("#E1E1E1"), false, "optimizedMenuDesat");
 
 		menuBG.color = 0xFFea71fd;
 		menuBG.setGraphicSize(Std.int(menuBG.width * 1.1));

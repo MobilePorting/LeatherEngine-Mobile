@@ -28,6 +28,8 @@ import toolbox.StageMakingState;
 import game.Highscore;
 import openfl.utils.Assets as OpenFLAssets;
 
+using utilities.BackgroundUtil;
+
 class OptionsMenu extends MusicBeatState {
 	var curSelected:Int = 0;
 	var ui_Skin:Null<String>;
@@ -180,6 +182,8 @@ class OptionsMenu extends MusicBeatState {
 
 	public static var instance:OptionsMenu;
 
+	public var menuBG:FlxSprite;
+
 	override function create():Void {
 		if (ui_Skin == null || ui_Skin == "default")
 			ui_Skin = Options.getData("uiSkin");
@@ -187,21 +191,11 @@ class OptionsMenu extends MusicBeatState {
 		MusicBeatState.windowNameSuffix = "";
 		instance = this;
 
-		var menuBG:FlxSprite;
 
-		if (Options.getData("menuBGs"))
-			if (!Assets.exists(Paths.image('ui skins/' + ui_Skin + '/backgrounds' + '/menuDesat')))
-				menuBG = new FlxSprite().loadGraphic(Paths.image('ui skins/default/backgrounds/menuDesat'));
-			else
-				menuBG = new FlxSprite().loadGraphic(Paths.image('ui skins/' + ui_Skin + '/backgrounds' + '/menuDesat'));
-		else
-			menuBG = new FlxSprite().makeGraphic(1286, 730, FlxColor.fromString("#E1E1E1"), false, "optimizedMenuDesat");
-
-		menuBG.color = 0xFFea71fd;
-		menuBG.setGraphicSize(Std.int(menuBG.width * 1.1));
+		menuBG = new FlxSprite().makeBackground(0xFFea71fd);
+		menuBG.scale.set(1.1, 1.1);
 		menuBG.updateHitbox();
 		menuBG.screenCenter();
-		menuBG.antialiasing = true;
 		add(menuBG);
 
 		super.create();

@@ -28,45 +28,48 @@ import flixel.tweens.FlxEase;
 import flixel.util.FlxColor;
 import flixel.FlxCamera;
 
+using utilities.BackgroundUtil;
+
 
 class NewModState extends MusicBeatState{
 
-    var bg:FlxSprite;
+    public var bg:FlxSprite;
 
-    var modNameText:FlxText;
-    var modName:FlxUIInputText;
+    public var modNameText:FlxText;
+    public var modName:FlxUIInputText;
 
-    var UI_box:FlxUITabMenu;
+    public var UI_box:FlxUITabMenu;
 
-    var modIconText:FlxText;
-    var modIcon:FlxSprite = new FlxSprite().loadGraphic(Paths.image('template mod'));
-    var browseButton:FlxButton;
-    var modIconPath:String = Paths.image('template mod');
+    public var modIconText:FlxText;
+    public var modIcon:FlxSprite = new FlxSprite().loadGraphic(Paths.image('template mod'));
+    public var browseButton:FlxButton;
+    public var modIconPath:String = Paths.image('template mod');
 
-    var descriptionText:FlxText;
-    var description:FlxUIInputText;
+    public var descriptionText:FlxText;
+    public var description:FlxUIInputText;
 
-    var authorText:FlxText;
-    var author:FlxUIInputText;
+    public var authorText:FlxText;
+    public var author:FlxUIInputText;
 
-    var modVersionText:FlxText;
-    var modVersion:FlxUIInputText;
+    public var modVersionText:FlxText;
+    public var modVersion:FlxUIInputText;
 
-    var checkAutoEnable:FlxUICheckBox;
-    var checkHideModSwitch:FlxUICheckBox;
+    public var checkAutoEnable:FlxUICheckBox;
+    public var checkHideModSwitch:FlxUICheckBox;
 
-    var rpc_idText:FlxText;
-    var rpc_id:FlxUIInputText;
+    public var rpc_idText:FlxText;
+    public var rpc_id:FlxUIInputText;
 
-    var createButton:FlxButton;
+    public var createButton:FlxButton;
 
-    var camHUD:FlxCamera;
-    var UI_boxPopup:FlxUITabMenu;
-    var popupBg:FlxSprite;
-    var close:FlxButton;
+    public var camHUD:FlxCamera;
+    public var UI_boxPopup:FlxUITabMenu;
+    public var popupBg:FlxSprite;
+    public var close:FlxButton;
 
-    final dirs:Array<String> = [
+    public final dirs:Array<String> = [
         "_append",
+        "_merge",
         "data",
         "fonts",
         "images",
@@ -84,9 +87,8 @@ class NewModState extends MusicBeatState{
         #if DISCORD_ALLOWED
 		DiscordClient.changePresence("Creating A New Mod", null, null, true);
 		#end
-        bg = new FlxSprite();
+        bg = new FlxSprite().makeBackground(0xE1E1E1);
         if(Options.getData("menuBGs")){
-            bg.loadGraphic(Paths.image(Assets.exists('ui skins/${Options.getData("uiSkin")}/backgrounds/menuCharter') ? 'ui skins/${Options.getData("uiSkin")}/backgrounds/menuCharter' : 'ui skins/default/backgrounds/menuCharter'));
             bg.screenCenter();
             add(bg);
         }

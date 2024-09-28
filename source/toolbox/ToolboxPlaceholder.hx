@@ -16,9 +16,10 @@ import lime.utils.Assets;
 import toolbox.StageMakingState;
 import toolbox.util.NewModState;
 
+using utilities.BackgroundUtil;
+
 class ToolboxPlaceholder extends MusicBeatState {
-	var curSelected:Int = 0;
-	var ui_Skin:Null<String>;
+	public var curSelected:Int = 0;
 
 	public static var inMenu = false;
 
@@ -49,9 +50,9 @@ class ToolboxPlaceholder extends MusicBeatState {
 	public var page:FlxTypedGroup<Option> = new FlxTypedGroup<Option>();
 	public static var instance:ToolboxPlaceholder;
 
+	public var menuBG:FlxSprite;
+
 	override function create():Void {
-		if (ui_Skin == null || ui_Skin == "default")
-			ui_Skin = Options.getData("uiSkin");
 
 		if (PlayState.instance == null) {
 			pages["Tools"][0] = null;
@@ -60,20 +61,11 @@ class ToolboxPlaceholder extends MusicBeatState {
 		MusicBeatState.windowNameSuffix = "";
 		instance = this;
 
-		var menuBG:FlxSprite;
 
-		if(Options.getData("menuBGs"))
-			if (!Assets.exists(Paths.image('ui skins/' + ui_Skin + '/backgrounds' + '/menuToolbox')))
-				menuBG = new FlxSprite().loadGraphic(Paths.image('ui skins/default/backgrounds/menuToolbox'));
-			else
-				menuBG = new FlxSprite().loadGraphic(Paths.image('ui skins/' + ui_Skin + '/backgrounds' + '/menuToolbox'));
-		else
-			menuBG = new FlxSprite().makeGraphic(1286, 730, FlxColor.fromString("#E1E1E1"), false, "optimizedMenuDesat");
-
-		menuBG.setGraphicSize(Std.int(menuBG.width * 1.1));
+		menuBG = new FlxSprite().makeBackground(0xE1E1E1);
+		menuBG.scale.set(1.1, 1.1);
 		menuBG.updateHitbox();
 		menuBG.screenCenter();
-		menuBG.antialiasing = true;
 		add(menuBG);
 
 		super.create();

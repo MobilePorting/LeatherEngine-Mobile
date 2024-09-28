@@ -31,34 +31,27 @@ import game.SongLoader;
 import toolbox.StageMakingState;
 import game.Highscore;
 
+using utilities.BackgroundUtil;
+
 class ModsMenu extends MusicBeatState {
-	var curSelected:Int = 0;
-	var ui_Skin:Null<String>;
+	public var curSelected:Int = 0;
 
 	public var page:FlxTypedGroup<ModOption> = new FlxTypedGroup<ModOption>();
 
 	public static var instance:ModsMenu;
 
-	var descriptionText:FlxText;
-	var descBg:FlxSprite;
+	public var descriptionText:FlxText;
+	public var descBg:FlxSprite;
+
+	public var menuBG:FlxSprite;
 
 	override function create() {
-		if (ui_Skin == null || ui_Skin == "default")
-			ui_Skin = Options.getData("uiSkin");
-
 		MusicBeatState.windowNameSuffix = " Mods Menu";
 
 		instance = this;
 
-		var menuBG:FlxSprite;
 
-		if (Options.getData("menuBGs"))
-			if (!Assets.exists(Paths.image('ui skins/' + ui_Skin + '/backgrounds' + '/menuDesat')))
-				menuBG = new FlxSprite().loadGraphic(Paths.image('ui skins/default/backgrounds/menuDesat'));
-			else
-				menuBG = new FlxSprite().loadGraphic(Paths.image('ui skins/' + ui_Skin + '/backgrounds' + '/menuDesat'));
-		else
-			menuBG = new FlxSprite().makeGraphic(1286, 730, FlxColor.fromString("#E1E1E1"), false, "optimizedMenuDesat");
+		menuBG = new FlxSprite().makeBackground(0xFFea71fd);
 
 		menuBG.color = 0xFFea71fd;
 		menuBG.setGraphicSize(Std.int(menuBG.width * 1.1));

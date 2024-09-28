@@ -38,40 +38,41 @@ import openfl.events.IOErrorEvent;
 import openfl.net.FileReference;
 
 using StringTools;
+using utilities.BackgroundUtil;
 
 class ChartingState extends MusicBeatState {
-	var _file:FileReference;
+	public var _file:FileReference;
 
-	var UI_box:FlxUITabMenu;
+	public var UI_box:FlxUITabMenu;
 
 	/**
 	 * Array of notes showing when each section STARTS in STEPS
 	 * Usually rounded up??
 	 */
-	var curSection:Int = 0;
+	public var curSection:Int = 0;
 
-	var bpmTxt:FlxText;
+	public var bpmTxt:FlxText;
 
-	var strumLine:FlxSprite;
-	var curSong:String = 'Dadbattle';
-	var amountSteps:Int = 0;
-	var bullshitUI:FlxGroup;
+	public var strumLine:FlxSprite;
+	public var curSong:String = 'Dadbattle';
+	public var amountSteps:Int = 0;
+	public var bullshitUI:FlxGroup;
 
-	var highlight:FlxSprite;
+	public var highlight:FlxSprite;
 
-	var GRID_SIZE:Int = 40;
+	public var GRID_SIZE:Int = 40;
 
-	var dummyArrow:FlxSprite;
+	public var dummyArrow:FlxSprite;
 
-	var curRenderedNotes:FlxTypedGroup<Note>;
-	var curRenderedIds:FlxTypedGroup<FlxSprite>;
-	var curRenderedEvents:FlxTypedGroup<EventSprite>;
+	public var curRenderedNotes:FlxTypedGroup<Note>;
+	public var curRenderedIds:FlxTypedGroup<FlxSprite>;
+	public var curRenderedEvents:FlxTypedGroup<EventSprite>;
 
-	var gridBG:FlxSprite;
+	public var gridBG:FlxSprite;
 
-	var _song:SongData;
+	public var _song:SongData;
 
-	var difficulty:String = 'normal';
+	public var difficulty:String = 'normal';
 
 	var typingShit:FlxUIInputText;
 	var swagShit:FlxUIInputText;
@@ -79,49 +80,50 @@ class ChartingState extends MusicBeatState {
 	var cutscene_Input:FlxUIInputText;
 	var endCutscene_Input:FlxUIInputText;
 	var characterGroup_Input:FlxUIInputText;
+
 	/*
 	 * WILL BE THE CURRENT / LAST PLACED NOTE
 	**/
-	var curSelectedNote:Array<Dynamic>;
-	var curSelectedEvent:Array<Dynamic>;
+	public var curSelectedNote:Array<Dynamic>;
+	public var curSelectedEvent:Array<Dynamic>;
 
-	var tempBpm:Float = 0;
+	public var tempBpm:Float = 0;
 
-	var vocals:FlxSound;
+	public var vocals:FlxSound;
 
-	var leftIcon:HealthIcon;
-	var rightIcon:HealthIcon;
+	public var leftIcon:HealthIcon;
+	public var rightIcon:HealthIcon;
 
-	var characters:Map<String, Array<String>> = new Map<String, Array<String>>();
-	var gridBlackLine:FlxSprite;
-	var gridEventBlackLine:FlxSprite;
+	public var characters:Map<String, Array<String>> = new Map<String, Array<String>>();
+	public var gridBlackLine:FlxSprite;
+	public var gridEventBlackLine:FlxSprite;
 
-	var selected_mod:String = "default";
+	public var selected_mod:String = "default";
 
-	var stepperSusLength:FlxUINumericStepper;
-	var stepperCharLength:FlxUINumericStepper;
+	public var stepperSusLength:FlxUINumericStepper;
+	public var stepperCharLength:FlxUINumericStepper;
 
-	var current_Note_Character:Int = 0;
+	public var current_Note_Character:Int = 0;
 
 	public static var loadedAutosave:Bool = false;
 
-	static var hitsounds:Bool = false;
+	public static var hitsounds:Bool = false;
 
-	var eventList:Array<String> = [];
-	var eventListData:Array<Array<String>> = [];
+	public var eventList:Array<String> = [];
+	public var eventListData:Array<Array<String>> = [];
 
-	var zoom_level:Float = 1;
+	public var zoom_level:Float = 1;
 
-	var min_zoom:Float = 0.5;
-	var max_zoom:Float = 16;
+	public var min_zoom:Float = 0.5;
+	public var max_zoom:Float = 16;
 
-	var lilBuddiesBox:FlxUICheckBox;
+	public var lilBuddiesBox:FlxUICheckBox;
 
-	var lilStage:FlxSprite;
-	var lilBf:FlxSprite;
-	var lilOpp:FlxSprite;
+	public var lilStage:FlxSprite;
+	public var lilBf:FlxSprite;
+	public var lilOpp:FlxSprite;
 
-	var ui_Skin:Null<String>;
+	public var menuBG:FlxSprite;
 
 	override function create() {
 		#if NO_PRELOAD_ALL
@@ -130,19 +132,12 @@ class ChartingState extends MusicBeatState {
 			Assets.loadLibrary("shared").onComplete(function(_) {});
 		#end
 
-		var menuBG:FlxSprite;
 
-		if (Options.getData("menuBGs"))
-			if (!Assets.exists(Paths.image('ui skins/' + ui_Skin + '/backgrounds' + '/menuCharter')))
-				menuBG = new FlxSprite().loadGraphic(Paths.image('ui skins/default/backgrounds/menuCharter'));
-			else
-				menuBG = new FlxSprite().loadGraphic(Paths.image('ui skins/' + ui_Skin + '/backgrounds' + '/menuCharter'));
-		else
-			menuBG = new FlxSprite().makeGraphic(1286, 730, FlxColor.BLACK, false, "optimizedMenuCharter");
+
+		menuBG = new FlxSprite().makeBackground(0xE1E1E1);
 
 		menuBG.updateHitbox();
 		menuBG.screenCenter();
-		menuBG.antialiasing = true;
 		menuBG.scrollFactor.set();
 		add(menuBG);
 
@@ -305,7 +300,6 @@ class ChartingState extends MusicBeatState {
 		updateGrid();
 
 		new FlxTimer().start(Options.getData("backupDuration") * 60, _backup, 0);
-
 
 		addVirtualPad(LEFT_FULL, A_B_X_Y);
 		addVirtualPadCamera();
@@ -930,7 +924,7 @@ class ChartingState extends MusicBeatState {
 				while (curRenderedNotes.members.length > 0) {
 					curRenderedNotes.remove(curRenderedNotes.members[0], true);
 				}
-				
+
 				while (curRenderedEvents.members.length > 0) {
 					curRenderedEvents.remove(curRenderedEvents.members[0], true);
 				}
@@ -1011,7 +1005,6 @@ class ChartingState extends MusicBeatState {
 		UI_box.addGroup(tab_group_note);
 	}
 
-
 	function loadSong(daSong:String):Void {
 		if (FlxG.sound.music != null)
 			FlxG.sound.music.stop();
@@ -1047,8 +1040,6 @@ class ChartingState extends MusicBeatState {
 			FlxG.sound.music.time = 0;
 			changeSection();
 		};
-
-
 	}
 
 	#if FLX_PITCH
@@ -1284,9 +1275,9 @@ class ChartingState extends MusicBeatState {
 			curRenderedNotes.forEach(function(note:Note) {
 				if (FlxG.sound.music.playing) {
 					FlxG.overlap(strumLine, note, function(_, _) {
-						if(note.isSustainNote)
+						if (note.isSustainNote)
 							return;
-						
+
 						if (!claps.contains(note)) {
 							claps.push(note);
 

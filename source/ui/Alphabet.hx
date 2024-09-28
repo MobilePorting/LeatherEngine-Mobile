@@ -40,12 +40,10 @@ class Alphabet extends FlxSpriteGroup {
 	var isBold:Bool = false;
 	var isTyped:Bool = false;
 
-	public var scaleMult:Float = 1.0;
 
-	public function new(x:Float, y:Float, text:String = "", ?bold:Bool = false, typed:Bool = false, scale:Float = 1) {
+	public function new(x:Float, y:Float, text:String = "", ?bold:Bool = false, typed:Bool = false) {
 		super(x, y);
 
-		scaleMult = scale;
 		forceX = Math.NEGATIVE_INFINITY;
 
 		_finalText = text;
@@ -81,18 +79,17 @@ class Alphabet extends FlxSpriteGroup {
 					xPos += lastSprite.width;
 
 				if (lastWasSpace) {
-					xPos += 40 * scaleMult;
+					xPos += 40;
 					lastWasSpace = false;
 				}
 
-				var letter:AlphaCharacter = new AlphaCharacter(xPos, 0, scaleMult);
+				var letter:AlphaCharacter = new AlphaCharacter(xPos, 0);
 
 				if (isBold)
 					letter.createBold(character);
 				else
 					letter.createLetter(character);
 
-				letter.y -= scaleMult / 2;
 
 				add(letter);
 
@@ -204,17 +201,14 @@ class AlphaCharacter extends FlxSprite {
 
 	public var row:Int = 0;
 
-	public var scaleMult:Float = 1;
-
 	public function new(x:Float, y:Float, scaleMult:Float = 1) {
 		super(x, y);
-		this.scaleMult = scaleMult;
 
 		frames = Paths.getSparrowAtlas('alphabet', "preload", true);
 
 		antialiasing = Options.getData("antialiasing");
 
-		setGraphicSize(width * scaleMult);
+		setGraphicSize(width);
 		updateHitbox();
 	}
 

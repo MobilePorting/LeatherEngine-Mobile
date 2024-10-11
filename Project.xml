@@ -112,6 +112,7 @@
 	<haxeflag name="--macro" value="include('game')" />
 	<haxeflag name="--macro" value="include('hxvlc')" if="VIDEOS_ALLOWED" />
 
+	<define name="hscript" />
 	<define name="hscriptPos" />
 	<define name="CUSTOM_CLASSES" />
 

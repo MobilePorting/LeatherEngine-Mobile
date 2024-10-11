@@ -99,7 +99,7 @@ class ModsMenu extends MusicBeatState {
 		addVirtualPad(UP_DOWN, A_B);
 	}
 
-	function loadMods() {
+	public function loadMods() {
 		page.forEachExists(function(option:ModOption) {
 			page.remove(option);
 			option.kill();

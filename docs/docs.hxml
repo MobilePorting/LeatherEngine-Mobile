@@ -20,6 +20,7 @@
 -cp source
 
 --define hscript
+--define hscriptPos
 --define polymod
 --define LEATHER
 --define LUA_ALLOWED

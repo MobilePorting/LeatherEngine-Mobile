@@ -1,7 +1,6 @@
 package ui;
 
 #if MODDING_ALLOWED
-import sys.io.File;
 import openfl.display.BitmapData;
 import flixel.FlxSprite;
 

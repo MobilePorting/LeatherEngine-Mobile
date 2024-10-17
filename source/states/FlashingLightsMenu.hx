@@ -7,8 +7,8 @@ import flixel.util.FlxColor;
 import flixel.text.FlxText;
 
 class FlashingLightsMenu extends MusicBeatState {
-	private var text:FlxText;
-	private var canInput:Bool = true;
+	public var text:FlxText;
+	public var canInput:Bool = true;
 
 	override public function create() {
 		super.create();

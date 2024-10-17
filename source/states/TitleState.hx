@@ -46,7 +46,7 @@ class TitleState extends MusicBeatState {
 	public var textGroup:FlxGroup;
 	public var polymod:FlxSprite;
 
-	var curWacky:Array<String> = [];
+	public var curWacky:Array<String> = [];
 
 	public static var firstTimeStarting:Bool = false;
 	public static var doneFlixelSplash:Bool = false;

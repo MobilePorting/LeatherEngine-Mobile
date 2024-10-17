@@ -5,7 +5,7 @@
 [![github-pages](https://github.com/MobilePorting/LeatherEngine-LTS-Mobile/actions/workflows/pages.yml/badge.svg)](https://github.com/MobilePorting/LeatherEngine-LTS-Mobile/actions/workflows/pages.yml)
 [![Discord](https://img.shields.io/discord/1142524994258215053.svg?logo=discord)](https://discord.gg/S6vdEvXhzt)
 
-![Logo](art/Logo.png)
+![Logo](https://github.com/Leather128/LeatherEngine/blob/58ec86c56829fb47b32d6313b16b50c8aa242f24/art/Logo.png)
 
 This is the repository for Leather Engine, an engine created for making and playing mods for Friday Night Funkin'.
 

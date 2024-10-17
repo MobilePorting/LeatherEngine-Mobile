@@ -12,6 +12,7 @@
 -L grig.audio
 -L discord_rpc 
 -L linc_luajit
+-L fnf-modcharting-tools
 -L jsonpath
 -L jsonpatch
 -L thx.core
@@ -20,11 +21,16 @@
 -cp source
 
 --define hscript
+--define hscriptPos
 --define polymod
---define LEATHER
 --define LUA_ALLOWED
 --define VIDEOS_ALLOWED
 --define MODDING_ALLOWED
+--define MODCHARTING_TOOLS
+--define LEATHER
+--define FLX_NO_HEALTH
+--define FLX_NO_DEBUG
+--define CUSTOM_CLASSES
 
 --macro lime._internal.macros.DefineMacro.run()
 --macro openfl.utils._internal.ExtraParamsMacro.include()
@@ -33,9 +39,9 @@
 
 
 --macro include('game')
+--macro include('hxvlc')
 --macro include('android')
 --macro include('mobile')
---macro include('hxvlc')
 --macro include('flixel', true, [ 'flixel.addons.editors.spine.*', 'flixel.addons.nape.*', 'flixel.system.macros.*' ])
 --macro keep('Main')
 
@@ -47,4 +53,3 @@
 --cpp docs-bin/
 
 -dce no
-

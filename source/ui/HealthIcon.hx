@@ -29,13 +29,14 @@ class HealthIcon extends TrackerSprite {
 		this.char = char;
 	}
 
+	var selected:String;
+
 	public function changeIconSet(char:String = 'bf') {
 		antialiasing = Options.getData("antialiasing");
 
 		if (Assets.exists(Paths.image('icons/' + char + '-icons').split(".png")[0] + ".xml")
 			|| Assets.exists(Paths.image('icons/icon-' + char).split(".png")[0] + ".xml")
 			|| Assets.exists(Paths.image('icons/' + char).split(".png")[0] + ".xml")) {
-			var selected = "your";
 
 			if (Assets.exists(Paths.image('icons/' + char + '-icons').split(".png")[0] + ".xml")) {
 				frames = Paths.getSparrowAtlas('icons/' + char + '-icons');

@@ -221,6 +221,10 @@
       "value": false
     },
     {
+      "option": "gpuCaching",
+      "value": false
+    },
+    {
       "option": "flixelStartupScreen",
       "value": false
     },

@@ -7,8 +7,8 @@ import flixel.FlxG;
 import openfl.Assets;
 import haxe.Json;
 
-
 using StringTools;
+
 typedef DiscordStuffs = {
 	var values:Array<DiscordStuff>;
 }
@@ -19,29 +19,23 @@ typedef DiscordStuff = {
 	var text:String;
 }
 
-class DiscordClient
-{
-
+class DiscordClient {
 	public static var discordData:DiscordStuffs;
 
 	public static var started:Bool = false;
 
 	public static var active:Bool = false;
 
-
-
-	inline public function new()
-	{	
+	inline public function new() {
 		discordData = Json.parse(Assets.getText(Paths.json("discord")));
 		startLmao();
 	}
 
-	public static function startLmao()
-	{
+	public static function startLmao() {
 		if (discordData == null) {
 			return;
 		}
-		
+
 		for (value in discordData.values) {
 			var idStuff = value.id;
 			trace("Discord Client starting...");
@@ -53,13 +47,11 @@ class DiscordClient
 			});
 		}
 
-
 		trace("Discord Client started.");
 
 		active = true;
 
-		while (active)
-		{
+		while (active) {
 			DiscordRpc.process();
 			sleep(2);
 		}
@@ -70,15 +62,13 @@ class DiscordClient
 		active = false;
 	}
 
-	public static function shutdown()
-	{
+	public static function shutdown() {
 		DiscordRpc.shutdown();
 
 		active = false;
 	}
 
-	static function onReady()
-	{
+	static function onReady() {
 		// should be a bigger issue maybe but whatevs
 		if (discordData == null) {
 			return;
@@ -96,20 +86,16 @@ class DiscordClient
 		}
 	}
 
-	static function onError(_code:Int, _message:String)
-	{
+	static function onError(_code:Int, _message:String) {
 		trace('Error! $_code : $_message');
 	}
 
-	static function onDisconnected(_code:Int, _message:String)
-	{
+	static function onDisconnected(_code:Int, _message:String) {
 		trace('Disconnected! $_code : $_message');
 	}
 
-	public static function initialize()
-	{
-		var DiscordDaemon = sys.thread.Thread.create(() ->
-		{
+	public static function initialize() {
+		var DiscordDaemon = sys.thread.Thread.create(() -> {
 			new DiscordClient();
 		});
 
@@ -117,16 +103,14 @@ class DiscordClient
 		trace("Discord Client initialized");
 	}
 
-	public static function changePresence(details:String, state:Null<String>, ?smallImageKey:String, ?hasStartTimestamp:Bool, ?endTimestamp:Float)
-	{
+	public static function changePresence(details:String, state:Null<String>, ?smallImageKey:String, ?hasStartTimestamp:Bool, ?endTimestamp:Float) {
 		if (discordData == null) {
 			return;
 		}
 
 		var startTimestamp:Float = if (hasStartTimestamp) Date.now().getTime() else 0;
 
-		if (endTimestamp > 0)
-		{
+		if (endTimestamp > 0) {
 			endTimestamp = startTimestamp + endTimestamp;
 		}
 		for (value in discordData.values) {
@@ -142,7 +126,6 @@ class DiscordClient
 				startTimestamp: Std.int(startTimestamp / 1000),
 				endTimestamp: Std.int(endTimestamp / 1000)
 			});
-	
 		}
 		// trace('Discord RPC Updated. Arguments: $details, $state, $smallImageKey, $hasStartTimestamp, $endTimestamp');
 	}

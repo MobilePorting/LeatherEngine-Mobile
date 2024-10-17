@@ -29,26 +29,27 @@ import lime.utils.Assets;
 import flixel.tweens.FlxEase;
 
 using StringTools;
+using utilities.BackgroundUtil;
 
 class FreeplayState extends MusicBeatState {
-	var songs:Array<SongMetadata> = [];
+	public var songs:Array<SongMetadata> = [];
 
-	var selector:FlxText;
+	public var selector:FlxText;
 
-	static var curSelected:Int = 0;
-	static var curDifficulty:Int = 1;
-	static var curSpeed:Float = 1;
+	public static var curSelected:Int = 0;
+	public static var curDifficulty:Int = 1;
+	public static var curSpeed:Float = 1;
 
-	var scoreText:FlxText;
-	var diffText:FlxText;
-	var speedText:FlxText;
-	var lerpScore:Int = 0;
-	var intendedScore:Int = 0;
+	public var scoreText:FlxText;
+	public var diffText:FlxText;
+	public var speedText:FlxText;
+	public var lerpScore:Int = 0;
+	public var intendedScore:Int = 0;
 
-	private var grpSongs:FlxTypedGroup<Alphabet>;
-	private var curPlaying:Bool = false;
+	public var grpSongs:FlxTypedGroup<Alphabet>;
+	public var curPlaying:Bool = false;
 
-	private var iconArray:Array<HealthIcon> = [];
+	public var iconArray:Array<HealthIcon> = [];
 
 	public static var songsReady:Bool = false;
 
@@ -64,29 +65,28 @@ class FreeplayState extends MusicBeatState {
 		0xFF735EB0
 	];
 
-	private var bg:FlxSprite;
-	private var selectedColor:Int = 0xFF7F1833;
-	private var scoreBG:FlxSprite;
+	public var bg:FlxSprite;
+	public var selectedColor:Int = 0xFF7F1833;
+	public var scoreBG:FlxSprite;
 
-	private var curRank:String = "N/A";
+	public var curRank:String = "N/A";
 
-	private var curDiffString:String = "normal";
-	private var curDiffArray:Array<String> = ["easy", "normal", "hard"];
+	public var curDiffString:String = "normal";
+	public var curDiffArray:Array<String> = ["easy", "normal", "hard"];
 
-	var vocals:FlxSound = new FlxSound();
+	public var vocals:FlxSound = new FlxSound();
 
-	var canEnterSong:Bool = true;
+	public var canEnterSong:Bool = true;
 
 	// thx psych engine devs
-	var colorTween:FlxTween;
+	public var colorTween:FlxTween;
 
 	#if (target.threaded)
 	public var loading_songs:Thread;
 	public var stop_loading_songs:Bool = false;
 	#end
 
-	var ui_Skin:Null<String>;
-	var lastSelectedSong:Int = -1;
+	public var lastSelectedSong:Int = -1;
 
 	/**
 		Current instance of `FreeplayState`.
@@ -100,8 +100,6 @@ class FreeplayState extends MusicBeatState {
 
 	override function create() {
 		instance = this;
-		if (ui_Skin == null || ui_Skin == "default")
-			ui_Skin = Options.getData("uiSkin");
 
 		MusicBeatState.windowNameSuffix = " Freeplay";
 
@@ -184,15 +182,7 @@ class FreeplayState extends MusicBeatState {
 			}
 		}
 
-		if (Options.getData("menuBGs"))
-			if (!Assets.exists(Paths.image('ui skins/' + ui_Skin + '/backgrounds' + '/menuBG')))
-				bg = new FlxSprite().loadGraphic(Paths.image('ui skins/default/backgrounds/menuDesat'));
-			else
-				bg = new FlxSprite().loadGraphic(Paths.image('ui skins/' + ui_Skin + '/backgrounds' + '/menuDesat'));
-		else
-			bg = new FlxSprite().makeGraphic(1286, 730, FlxColor.fromString("#E1E1E1"), false, "optimizedMenuDesat");
-
-		add(bg);
+		add(bg = new FlxSprite().makeBackground(0xE1E1E1));
 
 		grpSongs = new FlxTypedGroup<Alphabet>();
 		add(grpSongs);
@@ -216,10 +206,7 @@ class FreeplayState extends MusicBeatState {
 		if (!Options.getData("loadAsynchronously") || !Options.getData("healthIcons")) {
 		#end
 			for (i in 0...songs.length) {
-				var scaleShit = (9 / songs[i].songName.length);
-				if (songs[i].songName.length <= 9)
-					scaleShit = 1;
-				var songText:Alphabet = new Alphabet(0, (70 * i) + 30, songs[i].songName, true, false, scaleShit);
+				var songText:Alphabet = new Alphabet(0, (70 * i) + 30, songs[i].songName, true, false);
 				songText.isMenuItem = true;
 				songText.targetY = i;
 				grpSongs.add(songText);
@@ -238,10 +225,7 @@ class FreeplayState extends MusicBeatState {
 				var i:Int = 0;
 
 				while (!stop_loading_songs && i < songs.length) {
-					var scaleShit = (9 / songs[i].songName.length);
-					if (songs[i].songName.length <= 9)
-						scaleShit = 1;
-					var songText:Alphabet = new Alphabet(0, (70 * i) + 30, songs[i].songName, true, false, scaleShit);
+					var songText:Alphabet = new Alphabet(0, (70 * i) + 30, songs[i].songName, true, false);
 					songText.isMenuItem = true;
 					songText.targetY = i;
 					grpSongs.add(songText);
@@ -474,41 +458,50 @@ class FreeplayState extends MusicBeatState {
 			}
 
 			if (virtualPad.buttonA.justPressed || FlxG.keys.justPressed.ENTER && canEnterSong) {
-				if (CoolUtil.songExists(songs[curSelected].songName, curDiffString)) {
-					PlayState.SONG = SongLoader.loadFromJson(curDiffString, songs[curSelected].songName.toLowerCase());
-					PlayState.isStoryMode = false;
-					PlayState.songMultiplier = curSpeed;
-					PlayState.storyDifficultyStr = curDiffString.toUpperCase();
-
-					PlayState.storyWeek = songs[curSelected].week;
-
-					if (Assets.exists(Paths.inst(PlayState.SONG.song, curDiffString.toLowerCase()))) {
-						#if (target.threaded)
-						stop_loading_songs = true;
-						#end
-
-						if (colorTween != null)
-							colorTween.cancel();
-
-						PlayState.loadChartEvents = true;
-						LoadingState.loadAndSwitchState(new PlayState());
-					} else {
-						if (Assets.exists(Paths.inst(songs[curSelected].songName.toLowerCase(), curDiffString.toLowerCase())))
-							CoolUtil.coolError(PlayState.SONG.song.toLowerCase()
-								+ " (JSON) != "
-								+ songs[curSelected].songName.toLowerCase() + " (FREEPLAY)\nTry making them the same.",
-								"Leather Engine's No Crash, We Help Fix Stuff Tool");
-						else
-							CoolUtil.coolError("Your song seems to not have an Inst.ogg, check the folder name in 'songs'!",
-								"Leather Engine's No Crash, We Help Fix Stuff Tool");
-					}
-				} else
-					CoolUtil.coolError(songs[curSelected].songName.toLowerCase()
-						+ " doesn't match with any song audio files!\nTry fixing it's name in freeplaySonglist.txt",
-						"Leather Engine's No Crash, We Help Fix Stuff Tool");
+				playSong(songs[curSelected].songName, curDiffString);
 			}
 		}
 		call("updatePost", [elapsed]);
+	}
+
+	// TODO: Make less nested
+
+	/**
+		 * Plays a specific song
+		 * @param songName 
+		 * @param diff 
+		 */
+	public function playSong(songName:String, diff:String) {
+		if (!CoolUtil.songExists(songName, diff)) {
+			CoolUtil.coolError(songName.toLowerCase() + " doesn't match with any song audio files!\nTry fixing it's name in freeplaySonglist.txt",
+				"Leather Engine's No Crash, We Help Fix Stuff Tool");
+			return;
+		}
+		PlayState.SONG = SongLoader.loadFromJson(diff, songName.toLowerCase());
+		if (!Assets.exists(Paths.inst(PlayState.SONG.song, diff.toLowerCase()))) {
+			if (Assets.exists(Paths.inst(songName.toLowerCase(), diff.toLowerCase())))
+				CoolUtil.coolError(PlayState.SONG.song.toLowerCase() + " (JSON) does not match " + songName + " (FREEPLAY)\nTry making them the same.",
+					"Leather Engine's No Crash, We Help Fix Stuff Tool");
+			else
+				CoolUtil.coolError("Your song seems to not have an Inst.ogg, check the folder name in 'songs'!",
+					"Leather Engine's No Crash, We Help Fix Stuff Tool");
+			return;
+		}
+		PlayState.isStoryMode = false;
+		PlayState.songMultiplier = curSpeed;
+		PlayState.storyDifficultyStr = diff.toUpperCase();
+
+		PlayState.storyWeek = songs[curSelected].week;
+
+		#if (target.threaded)
+		stop_loading_songs = true;
+		#end
+
+		colorTween?.cancel();
+
+		PlayState.loadChartEvents = true;
+		destroyFreeplayVocals();
+		LoadingState.loadAndSwitchState(new PlayState());
 	}
 
 	override function closeSubState() {

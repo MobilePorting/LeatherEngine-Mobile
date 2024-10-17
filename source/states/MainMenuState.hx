@@ -26,6 +26,8 @@ import flixel.tweens.FlxEase;
 import flixel.tweens.FlxTween;
 import flixel.util.FlxColor;
 
+using utilities.BackgroundUtil;
+
 class MainMenuState extends MusicBeatState {
 	/**
 		Current instance of `MainMenuState`.
@@ -34,13 +36,13 @@ class MainMenuState extends MusicBeatState {
 
 	static var curSelected:Int = 0;
 
-	var menuItems:FlxTypedGroup<FlxSprite>;
+	public var menuItems:FlxTypedGroup<FlxSprite>;
 
 	public var optionShit:Array<String> = ['story mode', 'freeplay', 'options'];
 
-	var magenta:FlxSprite;
-	var camFollow:FlxObject;
-	var ui_Skin:Null<String>;
+	public var magenta:FlxSprite;
+	public var camFollow:FlxObject;
+	public var bg:FlxSprite;
 
 	public inline function call(func:String, ?args:Array<Dynamic>) {
 		if (stateScript != null) {
@@ -48,11 +50,8 @@ class MainMenuState extends MusicBeatState {
 		}
 	}
 
-	override function create() {
+	public override function create() {
 		instance = this;
-
-		if (ui_Skin == null || ui_Skin == "default")
-			ui_Skin = Options.getData("uiSkin");
 		
 		#if MODDING_ALLOWED
 		if (PolymodHandler.metadataArrays.length > 0)
@@ -79,43 +78,24 @@ class MainMenuState extends MusicBeatState {
 
 		persistentUpdate = persistentDraw = true;
 
-		var bg:FlxSprite;
-
-		if(Options.getData("menuBGs"))
-			if (!Assets.exists(Paths.image('ui skins/' + ui_Skin + '/backgrounds' + '/menuBG')))
-				bg = new FlxSprite(-80).loadGraphic(Paths.image('ui skins/default/backgrounds/menuBG'));
-			else
-				bg = new FlxSprite(-80).loadGraphic(Paths.image('ui skins/' + ui_Skin + '/backgrounds' + '/menuBG'));
-		else
-			bg = new FlxSprite(-80).makeGraphic(1286, 730, FlxColor.fromString("#FDE871"), false, "optimizedMenuBG");
-
+		bg = new FlxSprite(-80).makeBackground(0xFDE871);
 		bg.scrollFactor.x = 0;
 		bg.scrollFactor.y = 0.18;
-		bg.setGraphicSize(Std.int(bg.width * 1.3));
+		bg.scale.set(1.3, 1.3);
 		bg.updateHitbox();
 		bg.screenCenter();
-		bg.antialiasing = true;
 		add(bg);
 
 		camFollow = new FlxObject(0, 0, 1, 1);
 		add(camFollow);
 
-		if(Options.getData("menuBGs"))
-			if (!Assets.exists(Paths.image('ui skins/' + ui_Skin + '/backgrounds' + '/menuDesat')))
-				magenta = new FlxSprite(-80).loadGraphic(Paths.image('ui skins/default/backgrounds/menuDesat'));
-			else
-				magenta = new FlxSprite(-80).loadGraphic(Paths.image('ui skins/' + ui_Skin + '/backgrounds' + '/menuDesat'));
-		else
-			magenta = new FlxSprite(-80).makeGraphic(1286, 730, FlxColor.fromString("#E1E1E1"), false, "optimizedMenuDesat");
-
+		magenta = new FlxSprite(-80).makeBackground(0xFFfd719b);
 		magenta.scrollFactor.x = 0;
 		magenta.scrollFactor.y = 0.18;
-		magenta.setGraphicSize(Std.int(magenta.width * 1.3));
+		magenta.scale.set(1.3, 1.3);
 		magenta.updateHitbox();
 		magenta.screenCenter();
 		magenta.visible = false;
-		magenta.antialiasing = true;
-		magenta.color = 0xFFfd719b;
 		add(magenta);
 
 		menuItems = new FlxTypedGroup<FlxSprite>();

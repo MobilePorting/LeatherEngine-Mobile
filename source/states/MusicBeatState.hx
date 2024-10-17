@@ -13,8 +13,8 @@ import game.Conductor.BPMChangeEvent;
 import utilities.Controls;
 import flixel.FlxG;
 import flixel.sound.FlxSound;
-import mobile.flixel.FlxHitbox;
-import mobile.flixel.FlxVirtualPad;
+import mobile.objects.Hitbox;
+import mobile.objects.VirtualPad;
 import flixel.FlxCamera;
 import flixel.input.actions.FlxActionInput;
 import flixel.util.FlxDestroyUtil;
@@ -41,8 +41,8 @@ class MusicBeatState extends #if MODCHARTING_TOOLS modcharting.ModchartMusicBeat
 	inline function get_controls():Controls
 		return PlayerSettings.player1.controls;
 
-	var hitbox:FlxHitbox;
-	var virtualPad:FlxVirtualPad;
+	var hitbox:Hitbox;
+	var virtualPad:VirtualPad;
 	var trackedInputsVirtualPad:Array<FlxActionInput> = [];
 
 	public function addVirtualPad(DPad:FlxDPadMode, Action:FlxActionMode, visible:Bool = true):Void
@@ -50,7 +50,7 @@ class MusicBeatState extends #if MODCHARTING_TOOLS modcharting.ModchartMusicBeat
 		if (virtualPad != null)
 			removeVirtualPad();
 
-		virtualPad = new FlxVirtualPad(DPad, Action);
+		virtualPad = new VirtualPad(DPad, Action);
 		virtualPad.visible = visible;
 		add(virtualPad);
 
@@ -85,7 +85,7 @@ class MusicBeatState extends #if MODCHARTING_TOOLS modcharting.ModchartMusicBeat
 		if (hitbox != null)
 			removeHitbox();
 
-		hitbox = new FlxHitbox(ammo, Std.int(FlxG.width / ammo), FlxG.height);
+		hitbox = new Hitbox(ammo, Std.int(FlxG.width / ammo), FlxG.height);
 		hitbox.visible = visible;
 		hitbox.screenCenter();
 		add(hitbox);

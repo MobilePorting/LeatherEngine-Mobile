@@ -3024,6 +3024,7 @@ class PlayState extends MusicBeatState {
 						heldArray[i] = FlxG.keys.checkStatus(FlxKey.fromString(bruhBinds[i]), FlxInputState.PRESSED);
 					}
 
+					// MTODO: rewrite this code to allow keyboard usage
 					if (controls.mobileC) {
 						justPressedArray[i] = hitbox.hints[i].justPressed;
 						releasedArray[i] = hitbox.hints[i].released;

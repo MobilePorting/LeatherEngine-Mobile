@@ -1,4 +1,4 @@
-package mobile.flixel;
+package mobile.objects;
 
 import flixel.FlxCamera;
 import flixel.FlxG;
@@ -18,7 +18,7 @@ import flixel.util.FlxDestroyUtil;
 /**
  * A simple button class that calls a function when clicked by the touch.
  */
-class FlxButton extends FlxTypedButton<FlxText> {
+class MobileButton extends TypedMobileButton<FlxText> {
 	/**
 	 * Used with public variable status, means not highlighted or pressed.
 	 */
@@ -40,7 +40,7 @@ class FlxButton extends FlxTypedButton<FlxText> {
 	public var text(get, set):String;
 
 	/**
-	 * Creates a new `FlxButton` object with a gray background
+	 * Creates a new `MobileButton` object with a gray background
 	 * and a callback function on the UI thread.
 	 *
 	 * @param   X         The x position of the button.
@@ -98,7 +98,7 @@ class FlxButton extends FlxTypedButton<FlxText> {
 @:generic
 #end
 @:dox(hide)
-class FlxTypedButton<T:FlxSprite> extends FlxSprite implements IFlxInput {
+class TypedMobileButton<T:FlxSprite> extends FlxSprite implements IFlxInput {
 	/**
 	 * The label that appears on the button. Can be any `FlxSprite`.
 	 */
@@ -122,6 +122,11 @@ class FlxTypedButton<T:FlxSprite> extends FlxSprite implements IFlxInput {
 	public var statusAnimations:Array<String> = ['normal', 'highlight', 'pressed'];
 
 	/**
+	 * How much to add/substract from the current indicator value for the label.
+	**/
+	public var labelStatusDiff:Float = 0.05;
+
+	/**
 	 * Whether you can press the button simply by releasing the touch button over it (default).
 	 * If false, the input has to be pressed while hovering over the button.
 	 */
@@ -140,30 +145,30 @@ class FlxTypedButton<T:FlxSprite> extends FlxSprite implements IFlxInput {
 	public var maxInputMovement:Float = Math.POSITIVE_INFINITY;
 
 	/**
-	 * Shows the current state of the button, either `FlxButton.NORMAL`,
-	 * `FlxButton.HIGHLIGHT` or `FlxButton.PRESSED`.
+	 * Shows the current state of the button, either `MobileButton.NORMAL`,
+	 * `MobileButton.HIGHLIGHT` or `MobileButton.PRESSED`.
 	 */
 	public var status(default, set):Int;
 
 	/**
 	 * The properties of this button's `onUp` event (callback function, sound).
 	 */
-	public var onUp(default, null):FlxButtonEvent;
+	public var onUp(default, null):MobileButtonEvent;
 
 	/**
 	 * The properties of this button's `onDown` event (callback function, sound).
 	 */
-	public var onDown(default, null):FlxButtonEvent;
+	public var onDown(default, null):MobileButtonEvent;
 
 	/**
 	 * The properties of this button's `onOver` event (callback function, sound).
 	 */
-	public var onOver(default, null):FlxButtonEvent;
+	public var onOver(default, null):MobileButtonEvent;
 
 	/**
 	 * The properties of this button's `onOut` event (callback function, sound).
 	 */
-	public var onOut(default, null):FlxButtonEvent;
+	public var onOut(default, null):MobileButtonEvent;
 
 	public var justReleased(get, never):Bool;
 	public var released(get, never):Bool;
@@ -173,7 +178,7 @@ class FlxTypedButton<T:FlxSprite> extends FlxSprite implements IFlxInput {
 	/**
 	 * We cast label to a `FlxSprite` for internal operations to avoid Dynamic casts in C++
 	 */
-	var _spriteLabel:FlxSprite;
+	public var _spriteLabel:FlxSprite;
 
 	/** 
 	 * We don't need an ID here, so let's just use `Int` as the type.
@@ -187,6 +192,8 @@ class FlxTypedButton<T:FlxSprite> extends FlxSprite implements IFlxInput {
 
 	var lastStatus = -1;
 
+	public var canChangeLabelAlpha:Bool = true;
+
 	/**
 	 * Creates a new `FlxTypedButton` object with a gray background.
 	 *
@@ -199,18 +206,18 @@ class FlxTypedButton<T:FlxSprite> extends FlxSprite implements IFlxInput {
 
 		loadDefaultGraphic();
 
-		onUp = new FlxButtonEvent(OnClick);
-		onDown = new FlxButtonEvent();
-		onOver = new FlxButtonEvent();
-		onOut = new FlxButtonEvent();
+		onUp = new MobileButtonEvent(OnClick);
+		onDown = new MobileButtonEvent();
+		onOver = new MobileButtonEvent();
+		onOut = new MobileButtonEvent();
 
-		status = multiTouch ? FlxButton.NORMAL : FlxButton.HIGHLIGHT;
+		status = multiTouch ? MobileButton.NORMAL : MobileButton.HIGHLIGHT;
 
 		// Since this is a UI element, the default scrollFactor is (0, 0)
 		scrollFactor.set();
 
-		statusAnimations[FlxButton.HIGHLIGHT] = 'normal';
-		labelAlphas[FlxButton.HIGHLIGHT] = 1;
+		statusAnimations[MobileButton.HIGHLIGHT] = 'normal';
+		labelAlphas[MobileButton.HIGHLIGHT] = 1;
 
 		input = new FlxInput(0);
 	}
@@ -218,9 +225,9 @@ class FlxTypedButton<T:FlxSprite> extends FlxSprite implements IFlxInput {
 	override public function graphicLoaded():Void {
 		super.graphicLoaded();
 
-		setupAnimation('normal', FlxButton.NORMAL);
-		setupAnimation('highlight', FlxButton.HIGHLIGHT);
-		setupAnimation('pressed', FlxButton.PRESSED);
+		setupAnimation('normal', MobileButton.NORMAL);
+		setupAnimation('highlight', MobileButton.HIGHLIGHT);
+		setupAnimation('pressed', MobileButton.PRESSED);
 	}
 
 	function loadDefaultGraphic():Void
@@ -342,7 +349,7 @@ class FlxTypedButton<T:FlxSprite> extends FlxSprite implements IFlxInput {
 		if (currentInput != null && currentInput.justReleased && overlapFound)
 			onUpHandler();
 
-		if (status != FlxButton.NORMAL && (!overlapFound || (currentInput != null && currentInput.justReleased)))
+		if (status != MobileButton.NORMAL && (!overlapFound || (currentInput != null && currentInput.justReleased)))
 			onOutHandler();
 	}
 
@@ -377,7 +384,7 @@ class FlxTypedButton<T:FlxSprite> extends FlxSprite implements IFlxInput {
 		if (input.justPressed) {
 			currentInput = input;
 			onDownHandler();
-		} else if (status == FlxButton.NORMAL) {
+		} else if (status == MobileButton.NORMAL) {
 			// Allow 'swiping' to press a button (dragging it over the button while pressed)
 			if (allowSwiping && input.pressed)
 				onDownHandler();
@@ -395,15 +402,15 @@ class FlxTypedButton<T:FlxSprite> extends FlxSprite implements IFlxInput {
 	}
 
 	function updateLabelAlpha() {
-		if (_spriteLabel != null && labelAlphas.length > status)
-			_spriteLabel.alpha = alpha * labelAlphas[status];
+		if (_spriteLabel != null && canChangeLabelAlpha)
+			_spriteLabel.alpha = alpha == 0 ? 0 : alpha + labelStatusDiff;
 	}
 
 	/**
 	 * Internal function that handles the onUp event.
 	 */
 	function onUpHandler():Void {
-		status = FlxButton.NORMAL;
+		status = MobileButton.NORMAL;
 		input.release();
 		currentInput = null;
 		onUp.fire(); // Order matters here, because onUp.fire() could cause a state change and destroy this object.
@@ -413,7 +420,7 @@ class FlxTypedButton<T:FlxSprite> extends FlxSprite implements IFlxInput {
 	 * Internal function that handles the onDown event.
 	 */
 	function onDownHandler():Void {
-		status = FlxButton.PRESSED;
+		status = MobileButton.PRESSED;
 		input.press();
 		onDown.fire(); // Order matters here, because onDown.fire() could cause a state change and destroy this object.
 	}
@@ -422,7 +429,7 @@ class FlxTypedButton<T:FlxSprite> extends FlxSprite implements IFlxInput {
 	 * Internal function that handles the onOver event.
 	 */
 	function onOverHandler():Void {
-		status = FlxButton.HIGHLIGHT;
+		status = MobileButton.HIGHLIGHT;
 		onOver.fire(); // Order matters here, because onOver.fire() could cause a state change and destroy this object.
 	}
 
@@ -430,7 +437,7 @@ class FlxTypedButton<T:FlxSprite> extends FlxSprite implements IFlxInput {
 	 * Internal function that handles the onOut event.
 	 */
 	function onOutHandler():Void {
-		status = FlxButton.NORMAL;
+		status = MobileButton.NORMAL;
 		input.release();
 		onOut.fire(); // Order matters here, because onOut.fire() could cause a state change and destroy this object.
 	}
@@ -488,10 +495,10 @@ class FlxTypedButton<T:FlxSprite> extends FlxSprite implements IFlxInput {
 }
 
 /** 
- * Helper function for `FlxButton` which handles its events.
+ * Helper function for `MobileButton` which handles its events.
  */
 @:dox(hide)
-private class FlxButtonEvent implements IFlxDestroyable {
+private class MobileButtonEvent implements IFlxDestroyable {
 	/**
 	 * The callback function to call when this even fires.
 	 */

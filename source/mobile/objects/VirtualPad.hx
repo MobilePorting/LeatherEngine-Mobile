@@ -1,4 +1,4 @@
-package mobile.flixel;
+package mobile.objects;
 
 import flixel.FlxG;
 import flixel.graphics.FlxGraphic;
@@ -6,7 +6,6 @@ import flixel.graphics.frames.FlxTileFrames;
 import flixel.group.FlxSpriteGroup;
 import flixel.math.FlxPoint;
 import flixel.util.FlxDestroyUtil;
-import mobile.flixel.FlxButton;
 import openfl.display.BitmapData;
 import openfl.utils.Assets;
 
@@ -40,23 +39,23 @@ enum FlxActionMode {
  *
  * @author Mihai Alexandru (M.A. Jigsaw)
  */
-class FlxVirtualPad extends FlxSpriteGroup {
-	@:dox(hide) public var buttonLeft2:FlxButton = new FlxButton(0, 0);
-	@:dox(hide) public var buttonRight2:FlxButton = new FlxButton(0, 0);
-	@:dox(hide) public var buttonLeft:FlxButton = new FlxButton(0, 0);
-	@:dox(hide) public var buttonUp:FlxButton = new FlxButton(0, 0);
-	@:dox(hide) public var buttonRight:FlxButton = new FlxButton(0, 0);
-	@:dox(hide) public var buttonDown:FlxButton = new FlxButton(0, 0);
-	@:dox(hide) public var buttonA:FlxButton = new FlxButton(0, 0);
-	@:dox(hide) public var buttonB:FlxButton = new FlxButton(0, 0);
-	@:dox(hide) public var buttonC:FlxButton = new FlxButton(0, 0);
-	@:dox(hide) public var buttonD:FlxButton = new FlxButton(0, 0);
-	@:dox(hide) public var buttonE:FlxButton = new FlxButton(0, 0);
-	@:dox(hide) public var buttonP:FlxButton = new FlxButton(0, 0);
-	@:dox(hide) public var buttonV:FlxButton = new FlxButton(0, 0);
-	@:dox(hide) public var buttonX:FlxButton = new FlxButton(0, 0);
-	@:dox(hide) public var buttonY:FlxButton = new FlxButton(0, 0);
-	@:dox(hide) public var buttonZ:FlxButton = new FlxButton(0, 0);
+class VirtualPad extends FlxSpriteGroup {
+	@:dox(hide) public var buttonLeft2:MobileButton = new MobileButton(0, 0);
+	@:dox(hide) public var buttonRight2:MobileButton = new MobileButton(0, 0);
+	@:dox(hide) public var buttonLeft:MobileButton = new MobileButton(0, 0);
+	@:dox(hide) public var buttonUp:MobileButton = new MobileButton(0, 0);
+	@:dox(hide) public var buttonRight:MobileButton = new MobileButton(0, 0);
+	@:dox(hide) public var buttonDown:MobileButton = new MobileButton(0, 0);
+	@:dox(hide) public var buttonA:MobileButton = new MobileButton(0, 0);
+	@:dox(hide) public var buttonB:MobileButton = new MobileButton(0, 0);
+	@:dox(hide) public var buttonC:MobileButton = new MobileButton(0, 0);
+	@:dox(hide) public var buttonD:MobileButton = new MobileButton(0, 0);
+	@:dox(hide) public var buttonE:MobileButton = new MobileButton(0, 0);
+	@:dox(hide) public var buttonP:MobileButton = new MobileButton(0, 0);
+	@:dox(hide) public var buttonV:MobileButton = new MobileButton(0, 0);
+	@:dox(hide) public var buttonX:MobileButton = new MobileButton(0, 0);
+	@:dox(hide) public var buttonY:MobileButton = new MobileButton(0, 0);
+	@:dox(hide) public var buttonZ:MobileButton = new MobileButton(0, 0);
 
 	/**
 	 * Create a gamepad.
@@ -147,7 +146,7 @@ class FlxVirtualPad extends FlxSpriteGroup {
 	override public function destroy():Void {
 		super.destroy();
 		for (field in Reflect.fields(this))
-			if (Std.isOfType(Reflect.field(this, field), FlxButton))
+			if (Std.isOfType(Reflect.field(this, field), MobileButton))
 				Reflect.setField(this, field, FlxDestroyUtil.destroy(Reflect.field(this, field)));
 	}
 
@@ -158,9 +157,9 @@ class FlxVirtualPad extends FlxSpriteGroup {
 	 * @param Y The y position of the button.
 	 * @param Graphic The graphic to use for the button.
 	 * @param Color The color of the button. Defaults to 0xFFFFFF (white).
-	 * @return The created FlxButton.
+	 * @return The created MobileButton.
 	 */
-	private function createButton(X:Float, Y:Float, Graphic:String, Color:Int = 0xFFFFFF):FlxButton {
+	private function createButton(X:Float, Y:Float, Graphic:String, Color:Int = 0xFFFFFF):MobileButton {
 		var graphic:FlxGraphic;
 
 		final path:String = 'shared:assets/shared/images/virtualpad/$Graphic.png';
@@ -173,7 +172,7 @@ class FlxVirtualPad extends FlxSpriteGroup {
 		else
 			graphic = FlxGraphic.fromBitmapData(Assets.getBitmapData('shared:assets/shared/images/virtualpad/default.png'));
 
-		var button:FlxButton = new FlxButton(X, Y);
+		var button:MobileButton = new MobileButton(X, Y);
 		button.frames = FlxTileFrames.fromGraphic(graphic, FlxPoint.get(Std.int(graphic.width / 3), graphic.height));
 		button.solid = false;
 		button.immovable = true;

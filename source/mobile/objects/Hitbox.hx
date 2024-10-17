@@ -1,13 +1,15 @@
-package mobile.flixel;
+package mobile.objects;
 
 import flixel.FlxG;
 import flixel.group.FlxSpriteGroup;
+import flixel.FlxSprite;
 import flixel.util.FlxColor;
 import flixel.util.FlxDestroyUtil;
+import flixel.tweens.FlxTween;
+import flixel.tweens.FlxEase;
 import openfl.display.BitmapData;
 import openfl.display.Shape;
 import openfl.geom.Matrix;
-import mobile.flixel.FlxButton;
 
 /**
  * A zone with 4 hints (A hitbox).
@@ -15,11 +17,11 @@ import mobile.flixel.FlxButton;
  *
  * @author Mihai Alexandru (M.A. Jigsaw)
  */
-class FlxHitbox extends FlxSpriteGroup {
+class Hitbox extends FlxSpriteGroup {
 	/**
-	 * Array of FlxButton representing the hints.
+	 * Array of MobileButton representing the hints.
 	 */
-	public var hints(default, null):Array<FlxButton>;
+	public var hints(default, null):Array<MobileButton>;
 
 	final guh2:Float = 0.00001;
 	final guh:Float = Options.getData("mobileCAlpha") >= 0.9 ? Options.getData("mobileCAlpha") - 0.2 : Options.getData("mobileCAlpha");
@@ -35,7 +37,7 @@ class FlxHitbox extends FlxSpriteGroup {
 	public function new(ammo:UInt, perHintWidth:Int, perHintHeight:Int, ?colors:Array<FlxColor>):Void {
 		super();
 
-		hints = new Array<FlxButton>();
+		hints = new Array<MobileButton>();
 
 		if (colors == null)
 			switch (ammo) {
@@ -151,35 +153,68 @@ class FlxHitbox extends FlxSpriteGroup {
 	 * @param Width The width of the hint.
 	 * @param Height The height of the hint.
 	 * @param Color The color of the hint.
-	 * @return The created FlxButton representing the hint.
+	 * @return The created MobileButton representing the hint.
 	 */
-	private function createHint(X:Float, Y:Float, Width:Int, Height:Int, Color:Int = 0xFFFFFF):FlxButton {
-		var hint:FlxButton = new FlxButton(X, Y);
+	private function createHint(X:Float, Y:Float, Width:Int, Height:Int, Color:Int = 0xFFFFFF):MobileButton {
+		var hint:MobileButton = new MobileButton(X, Y);
 		hint.loadGraphic(createHintGraphic(Width, Height, Color));
-		hint.solid = false;
-		hint.multiTouch = true;
-		hint.immovable = true;
-		hint.moves = false;
-		hint.antialiasing = Options.getData("antialiasing");
-		hint.scrollFactor.set();
-		hint.alpha = 0.00001;
-		hint.active = !Options.getData("botplay");
+
+		hint._spriteLabel = new FlxSprite();
+		hint.labelStatusDiff = (Options.getData("hitboxType") != "Hidden") ? guh : guh2;
+		hint._spriteLabel.loadGraphic(createHintGraphic(Width, Math.floor(Height * 0.035), true));
+		hint._spriteLabel.offset.y -= (hint.height - hint.label.height) / 2;
+
 		if (Options.getData("hitboxType") != "Hidden")
 		{
+			var hintTween:FlxTween = null;
+			var hintLaneTween:FlxTween = null;
+
 			hint.onDown.callback = function()
 			{
-				if (hint.alpha != guh)
-					hint.alpha = guh;
+				if (hintTween != null)
+					hintTween.cancel();
+
+				if (hintLaneTween != null)
+					hintLaneTween.cancel();
+
+				hintTween = FlxTween.tween(hint, {alpha: guh}, guh / 100, {
+					ease: FlxEase.circInOut,
+					onComplete: (twn:FlxTween) -> hintTween = null
+				});
+
+				hintLaneTween = FlxTween.tween(hint._spriteLabel, {alpha: guh2}, guh / 10, {
+					ease: FlxEase.circInOut,
+					onComplete: (twn:FlxTween) -> hintTween = null
+				});
 			}
-			hint.onUp.callback = function() {
-				if (hint.alpha != guh2)
-					hint.alpha = guh2;
-			}
-			hint.onOut.callback = function() {
-				if (hint.alpha != guh2)
-					hint.alpha = guh2;
+
+			hint.onOut.callback = hint.onUp.callback = function()
+			{
+				if (hintTween != null)
+					hintTween.cancel();
+
+				if (hintLaneTween != null)
+					hintLaneTween.cancel();
+
+				hintTween = FlxTween.tween(hint, {alpha: guh2}, guh / 10, {
+					ease: FlxEase.circInOut,
+					onComplete: (twn:FlxTween) -> hintTween = null
+				});
+
+				hintLaneTween = FlxTween.tween(hint._spriteLabel, {alpha: guh}, guh / 100, {
+					ease: FlxEase.circInOut,
+					onComplete: (twn:FlxTween) -> hintTween = null
+				});
 			}
 		}
+
+		hint.moves = hint.solid = false;
+		hint.multiTouch = hint.immovable = true;
+		hint.antialiasing = Options.getData("antialiasing");
+		hint.scrollFactor.set();
+		hint.label.alpha = hint.alpha = guh2;
+		hint.canChangeLabelAlpha = false;
+		hint.active = !Options.getData("botplay");
 		#if FLX_DEBUG
 		hint.ignoreDrawDebug = true;
 		#end
@@ -194,30 +229,43 @@ class FlxHitbox extends FlxSpriteGroup {
 	 * @param Color The color of the hint.
 	 * @return The created BitmapData representing the hint graphic.
 	 */
-	private function createHintGraphic(Width:Int, Height:Int, Color:Int = 0xFFFFFF):BitmapData {
+	private function createHintGraphic(Width:Int, Height:Int, Color:Int = 0xFFFFFF, ?isLane:Bool = false):BitmapData {
 		var shape:Shape = new Shape();
 		shape.graphics.beginFill(Color);
-		if (Options.getData("hitboxType") == "No Gradient") {
+
+		if (Options.getData("hitboxType") == "No Gradient")
+		{
 			var matrix:Matrix = new Matrix();
 			matrix.createGradientBox(Width, Height, 0, 0, 0);
 
-			shape.graphics.beginGradientFill(RADIAL, [Color, Color], [0, guh], [60, 255], matrix, PAD, RGB, 0);
+			if (isLane)
+				shape.graphics.beginFill(Color);
+			else
+				shape.graphics.beginGradientFill(RADIAL, [Color, Color], [0, 1], [60, 255], matrix, PAD, RGB, 0);
 			shape.graphics.drawRect(0, 0, Width, Height);
 			shape.graphics.endFill();
-		} else if (Options.getData("hitboxType") == "No Gradient (Old)") {
+		}
+		else if (Options.getData("hitboxType") == "No Gradient (Old)")
+		{
 			shape.graphics.lineStyle(10, Color, 1);
 			shape.graphics.drawRect(0, 0, Width, Height);
 			shape.graphics.endFill();
-		} else {
+		}
+		else // if (Options.getData("hitboxType") == 'Gradient')
+		{
 			shape.graphics.lineStyle(3, Color, 1);
 			shape.graphics.drawRect(0, 0, Width, Height);
 			shape.graphics.lineStyle(0, 0, 0);
 			shape.graphics.drawRect(3, 3, Width - 6, Height - 6);
 			shape.graphics.endFill();
-			shape.graphics.beginGradientFill(RADIAL, [Color, FlxColor.TRANSPARENT], [guh, 0], [0, 255], null, null, null, 0.5);
+			if (isLane)
+				shape.graphics.beginFill(Color);
+			else
+				shape.graphics.beginGradientFill(RADIAL, [Color, FlxColor.TRANSPARENT], [1, 0], [0, 255], null, null, null, 0.5);
 			shape.graphics.drawRect(3, 3, Width - 6, Height - 6);
 			shape.graphics.endFill();
 		}
+
 		var bitmap:BitmapData = new BitmapData(Width, Height, true, 0);
 		bitmap.draw(shape, true);
 		return bitmap;

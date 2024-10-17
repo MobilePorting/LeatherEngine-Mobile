@@ -306,8 +306,11 @@ class OptionsMenu extends MusicBeatState {
 	override function closeSubState() {
 		persistentUpdate = true;
 		super.closeSubState();
-		if (removeVpad) {removeVirtualPad();
-		addVirtualPad(UP_DOWN, A_B);}
+		if (removeVpad)
+		{
+			removeVirtualPad();
+			addVirtualPad(UP_DOWN, A_B);
+		}
 		addVirtualPadCamera();
 	}
 

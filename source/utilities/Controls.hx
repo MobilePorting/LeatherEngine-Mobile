@@ -10,9 +10,9 @@ import flixel.input.actions.FlxActionSet;
 import flixel.input.gamepad.FlxGamepadButton;
 import flixel.input.gamepad.FlxGamepadInputID;
 import flixel.input.keyboard.FlxKey;
-import mobile.flixel.FlxButton;
-import mobile.flixel.FlxHitbox;
-import mobile.flixel.FlxVirtualPad;
+import mobile.objects.MobileButton;
+import mobile.objects.Hitbox;
+import mobile.objects.VirtualPad;
 
 enum abstract Action(String) to String from String {
 	var UP = "up";
@@ -208,7 +208,7 @@ class Controls extends FlxActionSet {
 	public var trackedInputs:Array<FlxActionInput> = [];
 	public var mobileC(get, never):Bool;
 
-	public function addButton(action:FlxActionDigital, button:FlxButton, state:FlxInputState):Void
+	public function addButton(action:FlxActionDigital, button:MobileButton, state:FlxInputState):Void
 	{
 		if (button == null)
 			return;
@@ -218,7 +218,7 @@ class Controls extends FlxActionSet {
 		action.add(input);
 	}
 
-	public function setVirtualPad(VirtualPad:FlxVirtualPad, DPad:FlxDPadMode, Action:FlxActionMode):Void
+	public function setVirtualPad(VirtualPad:VirtualPad, DPad:FlxDPadMode, Action:FlxActionMode):Void
 	{
 		if (VirtualPad == null)
 			return;

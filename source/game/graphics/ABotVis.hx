@@ -52,6 +52,7 @@ class ABotVis extends FlxSpriteGroup
             viz.animation.play('VIZ', false, false, 6);
         }
 
+
         #if (desktop || mobile)
         @:privateAccess
         analyzer = new SpectralAnalyzer(FlxG.sound.music._channel.__audioSource , 7, 0.1, 40);

@@ -648,11 +648,6 @@ class FreeplayState extends MusicBeatState {
 			iconArray[lastSelectedSong].scale.add(0.2, 0.2);
 		call("beatHitPost");
 	}
-
-	override function destroy() {
-		super.destroy();
-		destroyFreeplayVocals();
-	}
 }
 
 class SongMetadata {

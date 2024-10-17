@@ -12,8 +12,8 @@ import utilities.Controls;
 import game.Conductor.BPMChangeEvent;
 import flixel.FlxG;
 import flixel.FlxSubState;
-import mobile.flixel.FlxHitbox;
-import mobile.flixel.FlxVirtualPad;
+import mobile.objects.Hitbox;
+import mobile.objects.VirtualPad;
 import flixel.FlxCamera;
 import flixel.input.actions.FlxActionInput;
 import flixel.util.FlxDestroyUtil;
@@ -30,8 +30,8 @@ class MusicBeatSubstate extends FlxSubState
 	inline function get_controls():Controls
 		return PlayerSettings.player1.controls;
 
-	var hitbox:FlxHitbox;
-	var virtualPad:FlxVirtualPad;
+	var hitbox:Hitbox;
+	var virtualPad:VirtualPad;
 	var trackedInputsVirtualPad:Array<FlxActionInput> = [];
 
 	public function addVirtualPad(DPad:FlxDPadMode, Action:FlxActionMode, visible:Bool = true):Void
@@ -39,7 +39,7 @@ class MusicBeatSubstate extends FlxSubState
 		if (virtualPad != null)
 			removeVirtualPad();
 
-		virtualPad = new FlxVirtualPad(DPad, Action);
+		virtualPad = new VirtualPad(DPad, Action);
 		virtualPad.visible = visible;
 		add(virtualPad);
 
@@ -74,7 +74,7 @@ class MusicBeatSubstate extends FlxSubState
 		if (hitbox != null)
 			removeHitbox();
 
-		hitbox = new FlxHitbox(ammo, Std.int(FlxG.width / ammo), FlxG.height);
+		hitbox = new Hitbox(ammo, Std.int(FlxG.width / ammo), FlxG.height);
 		hitbox.visible = visible;
 		hitbox.screenCenter();
 		add(hitbox);

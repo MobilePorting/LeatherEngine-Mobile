@@ -21,7 +21,7 @@ using StringTools;
  * 
  * @author Mihai Alexandru (M.A. Jigsaw) and Lily Ross (mcagabe19)
  */
-class SUtil {
+class StorageUtil {
 	#if sys
 	/**
 	 * The root directory for application storage.
@@ -34,7 +34,7 @@ class SUtil {
 	 * @param forcedType The optional forced storage type.
 	 * @return The path to the storage directory.
 	 */
-	 public static function getStorageDirectory(?forcedType:Null<String>):String {
+	public static function getStorageDirectory(?forcedType:Null<String>):String {
 		var daPath:String = Sys.getCwd();
 		#if android
 		if (!FileSystem.exists(rootDir + 'storagetype.txt'))
@@ -51,45 +51,11 @@ class SUtil {
 		daPath = haxe.io.Path.addTrailingSlash(daPath);
 		#elseif ios
 		daPath = LimeSystem.documentsDirectory;
+		#else
+		daPath = Sys.getCwd();
 		#end
 
 		return daPath;
-	}
-
-	/**
-	 * Creates directories along the specified path.
-	 * 
-	 * @param directory The path of the directory to create.
-	 */
-	public static function mkDirs(directory:String):Void {
-		try {
-			if (FileSystem.exists(directory) && FileSystem.isDirectory(directory))
-				return;
-		} catch (e:haxe.Exception) {
-			trace('Something went wrong while looking at folder. (${e.message})');
-		}
-		var total:String = '';
-		if (directory.substr(0, 1) == '/')
-			total = '/';
-
-		var parts:Array<String> = directory.split('/');
-		if (parts.length > 0 && parts[0].indexOf(':') > -1)
-			parts.shift();
-
-		for (part in parts) {
-			if (part != '.' && part != '') {
-				if (total != '' && total != '/')
-					total += '/';
-
-				total += part;
-
-				try {
-					if (!FileSystem.exists(total))
-						FileSystem.createDirectory(total);
-				} catch (e:haxe.Exception)
-					CoolUtil.coolError('Error while creating folder. (${e.message})');
-			}
-		}
 	}
 
 	/**
@@ -99,17 +65,14 @@ class SUtil {
 	 * @param fileExtension The extension of the file. Defaults to '.json'.
 	 * @param fileData The content to save in the file. Defaults to a placeholder string.
 	 */
-	public static function saveContent(fileName:String, fileData:String):Void
-	{
-		try
-		{
+	public static function saveContent(fileName:String, fileData:String):Void {
+		try {
 			if (!FileSystem.exists('saves'))
 				FileSystem.createDirectory('saves');
 
 			File.saveContent('saves/$fileName', fileData);
-			showPopUp('$fileName has been saved.', "Success!");
-		}
-		catch (e:haxe.Exception)
+			CoolUtil.showPopUp('$fileName has been saved.', "Success!");
+		} catch (e:haxe.Exception)
 			CoolUtil.coolError('$fileName couldn\'t be saved. (${e.message})');
 	}
 
@@ -117,48 +80,33 @@ class SUtil {
 	/**
 	 * Requests Android permissions for external storage access.
 	 */
-	public static function doPermissionsShit():Void {
+	public static function requestPermissions():Void {
 		if (AndroidVersion.SDK_INT >= AndroidVersionCode.TIRAMISU)
 			AndroidPermissions.requestPermissions(['READ_MEDIA_IMAGES', 'READ_MEDIA_VIDEO', 'READ_MEDIA_AUDIO']);
 		else
 			AndroidPermissions.requestPermissions(['READ_EXTERNAL_STORAGE', 'WRITE_EXTERNAL_STORAGE']);
 
-		if (!AndroidEnvironment.isExternalStorageManager())
-		{
+		if (!AndroidEnvironment.isExternalStorageManager()) {
 			if (AndroidVersion.SDK_INT >= AndroidVersionCode.S)
 				AndroidSettings.requestSetting('REQUEST_MANAGE_MEDIA');
 			AndroidSettings.requestSetting('MANAGE_APP_ALL_FILES_ACCESS_PERMISSION');
 		}
 
-		if ((AndroidVersion.SDK_INT >= AndroidVersionCode.TIRAMISU && !AndroidPermissions.getGrantedPermissions().contains('android.permission.READ_MEDIA_IMAGES')) || (AndroidVersion.SDK_INT < AndroidVersionCode.TIRAMISU && !AndroidPermissions.getGrantedPermissions().contains('android.permission.READ_EXTERNAL_STORAGE')))
-			showPopUp('If you accepted the permissions you are all good!' + '\nIf you didn\'t then expect a crash' + '\nPress OK to see what happens', 'Notice!');
+		if ((AndroidVersion.SDK_INT >= AndroidVersionCode.TIRAMISU
+			&& !AndroidPermissions.getGrantedPermissions().contains('android.permission.READ_MEDIA_IMAGES'))
+			|| (AndroidVersion.SDK_INT < AndroidVersionCode.TIRAMISU
+				&& !AndroidPermissions.getGrantedPermissions().contains('android.permission.READ_EXTERNAL_STORAGE')))
+			CoolUtil.showPopUp('If you accepted the permissions you are all good!' + '\nIf you didn\'t then expect a crash' + '\nPress OK to see what happens',
+				'Notice!');
 
-		try
-		{
-			if (!FileSystem.exists(SUtil.getStorageDirectory()))
-				mkDirs(SUtil.getStorageDirectory());
-		}
-		catch (e:Dynamic)
-		{
-			showPopUp('Please create folder to\n' + SUtil.getStorageDirectory() + '\nPress OK to close the game', 'Error!');
+		try {
+			if (!FileSystem.exists(StorageUtil.getStorageDirectory()))
+				FileSystem.createDirectory(StorageUtil.getStorageDirectory());
+		} catch (e:Dynamic) {
+			CoolUtil.showPopUp('Please create folder to\n' + StorageUtil.getStorageDirectory() + '\nPress OK to close the game', 'Error!');
 			LimeSystem.exit(1);
 		}
 	}
 	#end
 	#end
-
-	/**
-	 * Displays a pop-up message.
-	 * 
-	 * @param message The message to display in the pop-up.
-	 * @param title The title of the pop-up.
-	 */
-	public static function showPopUp(message:String, title:String):Void
-	{
-		#if android
-		android.Tools.showAlertDialog(title, message, {name: "OK", func: null}, null);
-		#else
-		lime.app.Application.current.window.alert(message, title);
-		#end
-	}
 }

@@ -164,13 +164,11 @@ class Hitbox extends FlxSpriteGroup {
 		hint.label.loadGraphic(createHintGraphic(Width, Math.floor(Height * 0.035), Color, true));
 		hint.label.offset.y -= (hint.height - hint.label.height);
 
-		if (Options.getData("hitboxType") != "Hidden")
-		{
+		if (Options.getData("hitboxType") != "Hidden") {
 			var hintTween:FlxTween = null;
 			var hintLaneTween:FlxTween = null;
 
-			hint.onDown.callback = function()
-			{
+			hint.onDown.callback = function() {
 				if (hintTween != null)
 					hintTween.cancel();
 
@@ -188,8 +186,7 @@ class Hitbox extends FlxSpriteGroup {
 				});
 			}
 
-			hint.onOut.callback = hint.onUp.callback = function()
-			{
+			hint.onOut.callback = hint.onUp.callback = function() {
 				if (hintTween != null)
 					hintTween.cancel();
 
@@ -233,8 +230,7 @@ class Hitbox extends FlxSpriteGroup {
 		var shape:Shape = new Shape();
 		shape.graphics.beginFill(Color);
 
-		if (Options.getData("hitboxType") == "No Gradient")
-		{
+		if (Options.getData("hitboxType") == "No Gradient") {
 			var matrix:Matrix = new Matrix();
 			matrix.createGradientBox(Width, Height, 0, 0, 0);
 
@@ -244,14 +240,11 @@ class Hitbox extends FlxSpriteGroup {
 				shape.graphics.beginGradientFill(RADIAL, [Color, Color], [0, 1], [60, 255], matrix, PAD, RGB, 0);
 			shape.graphics.drawRect(0, 0, Width, Height);
 			shape.graphics.endFill();
-		}
-		else if (Options.getData("hitboxType") == "No Gradient (Old)")
-		{
+		} else if (Options.getData("hitboxType") == "No Gradient (Old)") {
 			shape.graphics.lineStyle(10, Color, 1);
 			shape.graphics.drawRect(0, 0, Width, Height);
 			shape.graphics.endFill();
-		}
-		else // if (Options.getData("hitboxType") == 'Gradient')
+		} else // if (Options.getData("hitboxType") == 'Gradient')
 		{
 			shape.graphics.lineStyle(3, Color, 1);
 			shape.graphics.drawRect(0, 0, Width, Height);

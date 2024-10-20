@@ -295,6 +295,22 @@ class CoolUtil {
 	}
 
 	/**
+	 * Displays a pop-up message.
+	 * 
+	 * @param message The message to display in the pop-up.
+	 * @param title The title of the pop-up.
+	 * 
+	 * @author Lily Ross (mcagabe19)
+	 */
+	 public static function showPopUp(message:String, title:String):Void {
+		#if android
+		android.Tools.showAlertDialog(title, message, {name: "OK", func: null}, null);
+		#else
+		lime.app.Application.current.window.alert(message, title);
+		#end
+	}
+
+	/**
 		Simple map that contains useful ansi color strings
 		that can be used when printing to console for nice colors.
 

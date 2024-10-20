@@ -14,11 +14,8 @@ using utilities.CoolUtil;
  * Crash Handler.
  * @author YoshiCrafter29, Ne_Eo and MAJigsaw77
  */
-
-class CrashHandler
-{
-	public static function init():Void
-	{
+class CrashHandler {
+	public static function init():Void {
 		openfl.Lib.current.loaderInfo.uncaughtErrorEvents.addEventListener(UncaughtErrorEvent.UNCAUGHT_ERROR, onUncaughtError);
 		#if cpp
 		untyped __global__.__hxcpp_set_critical_error_handler(onError);
@@ -27,8 +24,7 @@ class CrashHandler
 		#end
 	}
 
-	private static function onUncaughtError(e:UncaughtErrorEvent):Void
-	{
+	private static function onUncaughtError(e:UncaughtErrorEvent):Void {
 		e.preventDefault();
 		e.stopPropagation();
 		e.stopImmediatePropagation();
@@ -44,12 +40,14 @@ class CrashHandler
 		var stack = haxe.CallStack.exceptionStack();
 		var stackLabelArr:Array<String> = [];
 		var stackLabel:String = "";
-		for(e in stack) {
-			switch(e) {
-				case CFunction: stackLabelArr.push("Non-Haxe (C) Function");
-				case Module(c): stackLabelArr.push('Module ${c}');
+		for (e in stack) {
+			switch (e) {
+				case CFunction:
+					stackLabelArr.push("Non-Haxe (C) Function");
+				case Module(c):
+					stackLabelArr.push('Module ${c}');
 				case FilePos(parent, file, line, col):
-					switch(parent) {
+					switch (parent) {
 						case Method(cla, func):
 							stackLabelArr.push('${file.replace('.hx', '')}.$func() [line $line]');
 						case _:
@@ -63,18 +61,16 @@ class CrashHandler
 		}
 		stackLabel = stackLabelArr.join('\r\n');
 		#if sys
-		try
-		{
+		try {
 			if (!FileSystem.exists('logs'))
 				FileSystem.createDirectory('logs');
 
 			File.saveContent('logs/' + 'Crash ' + Date.now().toString().replace(' ', '-').replace(':', "'") + '.txt', '$m\n$stackLabel');
-		}
-		catch (e:haxe.Exception)
+		} catch (e:haxe.Exception)
 			trace('Couldn\'t save error message. (${e.message})');
 		#end
-        
-        SUtil.showPopUp('$m\n$stackLabel', "Error!");
+
+		CoolUtil.showPopUp('$m\n$stackLabel', "Error!");
 
 		#if html5
 		if (flixel.FlxG.sound.music != null)
@@ -87,8 +83,7 @@ class CrashHandler
 	}
 
 	#if (cpp || hl)
-	private static function onError(message:Dynamic):Void
-	{
+	private static function onError(message:Dynamic):Void {
 		throw Std.string(message);
 	}
 	#end

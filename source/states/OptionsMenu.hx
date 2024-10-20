@@ -238,7 +238,7 @@ class OptionsMenu extends MusicBeatState {
 		if (lastStorageType != Options.getData("storageType"))
 		{
 			onStorageChange();
-			SUtil.showPopUp('Storage Type has been changed and you needed restart the game!!\nPress OK to close the game.', 'Notice!');
+			CoolUtil.showPopUp('Storage Type has been changed and you needed restart the game!!\nPress OK to close the game.', 'Notice!');
 			lime.system.System.exit(0);
 		}
 		#end
@@ -325,7 +325,7 @@ class OptionsMenu extends MusicBeatState {
 	{
 		sys.io.File.saveContent(lime.system.System.applicationStorageDirectory + 'storagetype.txt', Options.getData("storageType"));
 	
-		var lastStoragePath:String = SUtil.getStorageDirectory(lastStorageType);
+		var lastStoragePath:String = StorageUtil.getStorageDirectory(lastStorageType);
 	
 		try
 		{

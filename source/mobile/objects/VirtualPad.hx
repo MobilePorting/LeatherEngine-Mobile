@@ -167,9 +167,10 @@ class VirtualPad extends FlxSpriteGroup {
 		final modsPath:String = 'mods/${Options.getData("curMod")}/images/virtualpad/$Graphic.png';
 		if (sys.FileSystem.exists(modsPath))
 			graphic = FlxGraphic.fromBitmapData(BitmapData.fromFile(modsPath));
-		else #end if (Assets.exists(path))
-			graphic = FlxGraphic.fromBitmapData(Assets.getBitmapData(path));
 		else
+		#end if (Assets.exists(path))
+			graphic = FlxGraphic.fromBitmapData(Assets.getBitmapData(path));
+	else
 			graphic = FlxGraphic.fromBitmapData(Assets.getBitmapData('shared:assets/shared/images/virtualpad/default.png'));
 
 		var button:MobileButton = new MobileButton(X, Y);

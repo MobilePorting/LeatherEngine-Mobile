@@ -178,7 +178,7 @@ class CopyState extends states.MusicBeatState {
 	 * @return The byte array of the file.
 	 */
 	public function getFileBytes(file:String):ByteArray {
-		switch (Path.extension(file)) {
+		switch (Path.extension(file).toLowerCase()) {
 			case 'otf' | 'ttf':
 				return ByteArray.fromFile(file);
 			default:

@@ -18,7 +18,7 @@ import flixel.util.FlxDestroyUtil;
 /**
  * A simple button class that calls a function when clicked by the touch.
  */
-class MobileButton extends TypedMobileButton<FlxText> {
+class MobileButton extends TypedMobileButton<FlxSprite> {
 	/**
 	 * Used with public variable status, means not highlighted or pressed.
 	 */
@@ -53,8 +53,6 @@ class MobileButton extends TypedMobileButton<FlxText> {
 
 		for (point in labelOffsets)
 			point.set(point.x - 1, point.y + 3);
-
-		initLabel(Text);
 	}
 
 	/**
@@ -62,31 +60,13 @@ class MobileButton extends TypedMobileButton<FlxText> {
 	 */
 	override function resetHelpers():Void {
 		super.resetHelpers();
-
-		if (label != null) {
-			label.fieldWidth = label.frameWidth = Std.int(width);
-			label.size = label.size; // Calls set_size(), don't remove!
-		}
-	}
-
-	inline function initLabel(Text:String):Void {
-		if (Text != null) {
-			label = new FlxText(x + labelOffsets[NORMAL].x, y + labelOffsets[NORMAL].y, 80, Text);
-			label.setFormat(null, 8, 0x333333, 'center');
-			label.alpha = labelAlphas[status];
-			label.drawFrame(true);
-		}
 	}
 
 	inline function get_text():String {
-		return (label != null) ? label.text : null;
+		return null;
 	}
 
 	inline function set_text(Text:String):String {
-		if (label == null)
-			initLabel(Text);
-		else
-			label.text = Text;
 		return Text;
 	}
 }

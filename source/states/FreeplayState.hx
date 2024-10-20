@@ -315,7 +315,7 @@ class FreeplayState extends MusicBeatState {
 
 		super.update(elapsed);
 
-		if (FlxG.sound.music.playing)
+		if (FlxG.sound.music != null && FlxG.sound.music.playing)
 			Conductor.songPosition = FlxG.sound.music.time;
 
 		for (i in 0...iconArray.length) {
@@ -446,10 +446,12 @@ class FreeplayState extends MusicBeatState {
 			}
 			#end
 
-			if (FlxG.sound.music.active && FlxG.sound.music.playing && !FlxG.keys.justPressed.ENTER)
-				FlxG.sound.music.pitch = curSpeed;
-			if (vocals != null && vocals.active && vocals.playing && !virtualPad.buttonA.justPressed || !FlxG.keys.justPressed.ENTER)
-				vocals.pitch = curSpeed;
+			if (FlxG.sound.music != null){
+				if (FlxG.sound.music.active && FlxG.sound.music.playing && !FlxG.keys.justPressed.ENTER)
+					FlxG.sound.music.pitch = curSpeed;
+				if (vocals.active && vocals.playing && !virtualPad.buttonA.justPressed || !FlxG.keys.justPressed.ENTER)
+					vocals.pitch = curSpeed;
+			}			
 
 			if (virtualPad.buttonY.justPressed || controls.RESET && !shift) {
 				openSubState(new ResetScoreSubstate(songs[curSelected].songName, curDiffString));

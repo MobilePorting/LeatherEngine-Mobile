@@ -159,10 +159,10 @@ class Hitbox extends FlxSpriteGroup {
 		var hint:MobileButton = new MobileButton(X, Y);
 		hint.loadGraphic(createHintGraphic(Width, Height, Color));
 
-		hint._spriteLabel = new FlxSprite();
+		hint.label = new FlxSprite();
 		hint.labelStatusDiff = (Options.getData("hitboxType") != "Hidden") ? guh : guh2;
-		hint._spriteLabel.loadGraphic(createHintGraphic(Width, Math.floor(Height * 0.035), true));
-		hint._spriteLabel.offset.y -= (hint.height - hint.label.height) / 2;
+		hint.label.loadGraphic(createHintGraphic(Width, Math.floor(Height * 0.035), Color, true));
+		hint.label.offset.y -= (hint.height - hint.label.height);
 
 		if (Options.getData("hitboxType") != "Hidden")
 		{
@@ -182,7 +182,7 @@ class Hitbox extends FlxSpriteGroup {
 					onComplete: (twn:FlxTween) -> hintTween = null
 				});
 
-				hintLaneTween = FlxTween.tween(hint._spriteLabel, {alpha: guh2}, guh / 10, {
+				hintLaneTween = FlxTween.tween(hint.label, {alpha: guh2}, guh / 10, {
 					ease: FlxEase.circInOut,
 					onComplete: (twn:FlxTween) -> hintTween = null
 				});
@@ -201,7 +201,7 @@ class Hitbox extends FlxSpriteGroup {
 					onComplete: (twn:FlxTween) -> hintTween = null
 				});
 
-				hintLaneTween = FlxTween.tween(hint._spriteLabel, {alpha: guh}, guh / 100, {
+				hintLaneTween = FlxTween.tween(hint.label, {alpha: guh}, guh / 100, {
 					ease: FlxEase.circInOut,
 					onComplete: (twn:FlxTween) -> hintTween = null
 				});

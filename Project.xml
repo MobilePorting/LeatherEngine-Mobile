@@ -88,10 +88,10 @@
 	<haxelib name="scriptless-polymod" if="MODDING_ALLOWED" />
 	<haxelib name="flxanimate" />
 	<haxelib name="discord_rpc" if="DISCORD_ALLOWED" />
-	<haxelib name="linc_luajit" if="LUA_ALLOWED" />
+	<haxelib name="linc_luajit" if="LUA_ALLOWED" version="git" />
 	<haxelib name="hxvlc" if="VIDEOS_ALLOWED" />
 	<haxelib name="hxNoise"/>
-	<haxelib name="fnf-modcharting-tools" url="https://github.com/EdwhakKB/FNF-Modcharting-Tools" unless="hl" />
+	<haxelib name="fnf-modcharting-tools" unless="hl" />
 	<haxelib name="funkin.vis" />
 	<haxelib name="grig.audio" />
 	<haxelib name="extension-androidtools" if="android" />

@@ -33,7 +33,7 @@ class CopyState extends states.MusicBeatState {
 	/**
 	 * The name of the file that contains a list of folders to ignore during the copy process.
 	 */
-	public static final IGNORE_FOLDER_FILE_NAME:String = "ignore.txt";
+	public static final IGNORE_FOLDER_FILE_NAME:String = "CopyState-Ignore.txt";
 
 	/**
 	 * A list of directories that shouldn't be copy during the copy process.

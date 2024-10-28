@@ -170,7 +170,7 @@ class MusicBeatState extends #if MODCHARTING_TOOLS modcharting.ModchartMusicBeat
 			cache.bitmapData.remove(key);
 		for (key in cache.font.keys())
 			cache.font.remove(key);
-		@:privateAccess
+		
 		for (key in cache.sound.keys()) {
 			cache.sound.get(key).close();
 			cache.sound.remove(key);

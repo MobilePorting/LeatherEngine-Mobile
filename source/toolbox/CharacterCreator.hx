@@ -416,7 +416,7 @@ class CharacterCreator extends MusicBeatState {
 		if (FlxG.mouse.wheel != 0)
 			charCam.zoom += FlxG.keys.pressed.SHIFT ? FlxG.mouse.wheel / 100.0 : FlxG.mouse.wheel / 10.0;
 		if (FlxG.keys.justPressed.Z)
-			stage.visible = !stage.visible;
+			stage.foregroundSprites.visible = stage.infrontOfGFSprites.visible = stage.visible = !stage.visible;
 		if (FlxG.keys.justPressed.X) {
 			char.isPlayer = !char.isPlayer;
 			char.flipX = !char.flipX;
@@ -496,10 +496,10 @@ class CharacterCreator extends MusicBeatState {
 			genBoyOffsets(false);
 		}
 
-		var upP = FlxG.keys.anyJustPressed([UP]);
-		var rightP = FlxG.keys.anyJustPressed([RIGHT]);
-		var downP = FlxG.keys.anyJustPressed([DOWN]);
-		var leftP = FlxG.keys.anyJustPressed([LEFT]);
+		var upP = FlxG.keys.justPressed.UP;
+		var rightP = FlxG.keys.justPressed.RIGHT;
+		var downP = FlxG.keys.justPressed.DOWN;
+		var leftP = FlxG.keys.justPressed.LEFT;
 
 		var holdShift = FlxG.keys.pressed.SHIFT;
 		var multiplier = 1;
@@ -578,15 +578,12 @@ class CharacterCreator extends MusicBeatState {
 		_file = null;
 	}
 
-	/**
-	 * Called if there is an error while saving the gameplay recording.
-	 */
 	function onSaveError(_):Void {
 		_file.removeEventListener(Event.COMPLETE, onSaveComplete);
 		_file.removeEventListener(Event.CANCEL, onSaveCancel);
 		_file.removeEventListener(IOErrorEvent.IO_ERROR, onSaveError);
 		_file = null;
-		FlxG.log.error("Problem saving offsets file");
+		trace("Problem saving offsets file", ERROR);
 	}
 	function reloadStage() {
 		objects = [];

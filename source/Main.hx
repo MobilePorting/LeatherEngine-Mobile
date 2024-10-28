@@ -56,6 +56,12 @@ class Main extends Sprite {
 		logsOverlay.visible = false;
 		addChild(logsOverlay);
 
+		/*untyped FlxG.log = new ui.logs.LogFrontEnd();
+		LogStyle.WARNING.callback = (data) -> trace(data, WARNING);
+		LogStyle.ERROR.callback = (data) -> trace(data, ERROR);
+		LogStyle.NOTICE.callback = (data) -> trace(data);*/
+
+
 		display = new SimpleInfoDisplay(8, 3, 0xFFFFFF, "_sans");
 		addChild(display);
 

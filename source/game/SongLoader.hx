@@ -87,6 +87,7 @@ class SongLoader {
 			endCutscene: metadata.playData.endCutscene,
 			cutscene: metadata.playData.cutscene,
 			moveCamera: false,
+			chartType: VSLICE
 		};
 
 		// should work with custom skins i think
@@ -215,6 +216,9 @@ class SongLoader {
 
 		song.events = events;
 		song.moveCamera = true;
+
+		song.chartType = LEGACY;
+
 		return song;
 	}
 }
@@ -231,6 +235,11 @@ typedef Section = {
 	var changeTimeScale:Bool;
 }
 
+enum abstract ChartType(Int){
+	var LEGACY = 0;
+	var VSLICE = 1;
+}
+
 typedef SongData = {
 	// 0.2.8 and before stuff
 	var song:Null<String>;
@@ -242,29 +251,32 @@ typedef SongData = {
 	var player2:Null<String>;
 	var validScore:Null<Bool>;
 
+	
 	// engine specific shit
 	var gf:Null<String>;
 	var stage:Null<String>;
 	var ui_Skin:Null<String>;
-
+	
 	var modchartPath:Null<String>;
 	var modchartingTools:Null<Bool>;
-
+	
 	var keyCount:Null<Int>;
 	var playerKeyCount:Null<Int>;
 	var events:Null<Array<Array<Dynamic>>>;
-
+	
 	var cutscene:Null<String>;
 	var endCutscene:Null<String>;
-
+	
 	var timescale:Null<Array<Int>>;
 	var chartOffset:Null<Float>; // in milliseconds
 	var specialAudioName:Null<String>;
+	
+	var chartType:ChartType;
 
 	// psych compat
 	var gfVersion:Null<String>;
 	var player3:Null<String>;
-
+	
 	// shaggy moment (ugh)
 	var mania:Null<Int>;
 	var moveCamera:Null<Bool>;

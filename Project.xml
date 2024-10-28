@@ -104,6 +104,10 @@
 	<haxedef name="FLX_NO_DEBUG" unless="debug" />
 	<haxedef name="FLX_NO_HEALTH" /> <!--Remove dumb health variable from FlxSprite -->
 
+
+	<haxedef name="openfl_enable_experimental_update_queue" />
+
+
 	<haxedef name="NAPE_RELEASE_BUILD" unless="debug" />
 
 	<!-- HSCRIPT GO BRRRRRRR -->

@@ -134,7 +134,7 @@ class ChartingState extends MusicBeatState {
 
 
 
-		menuBG = new FlxSprite().makeBackground(0xE1E1E1);
+		menuBG = new FlxSprite().makeBackground(0x3D3D3D);
 
 		menuBG.updateHitbox();
 		menuBG.screenCenter();
@@ -1904,6 +1904,7 @@ class ChartingState extends MusicBeatState {
 						eventSprite.updateHitbox();
 
 						eventSprite.y = Math.floor(getYfromStrum((event[1] - sectionStartTime()) % (Conductor.stepCrochet * Conductor.stepsPerSection)));
+						eventSprite.antialiasing = Options.getData("antialiasing");
 
 						curRenderedEvents.add(eventSprite);
 					}

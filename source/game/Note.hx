@@ -124,15 +124,15 @@ class Note extends FlxSkewedSprite {
 
 		if (PlayState.instance.types.contains(arrow_Type)) {
 			if (Assets.exists(Paths.image('ui skins/' + song.ui_Skin + "/arrows/" + arrow_Type, 'shared'))) {
-				frames = Paths.getSparrowAtlas('ui skins/' + song.ui_Skin + "/arrows/" + arrow_Type, 'shared');
+				frames = Paths.getSparrowAtlas('ui skins/' + song.ui_Skin + "/arrows/" + arrow_Type, 'shared', song.modchartingTools);
 			} else {
-				frames = Paths.getSparrowAtlas('ui skins/${song.ui_Skin}/arrows/default', 'shared');
+				frames = Paths.getSparrowAtlas('ui skins/${song.ui_Skin}/arrows/default', 'shared', song.modchartingTools);
 			}
 		} else {
 			if (Assets.exists(Paths.image("ui skins/default/arrows/" + arrow_Type, 'shared'))) {
-				frames = Paths.getSparrowAtlas("ui skins/default/arrows/" + arrow_Type, 'shared');
+				frames = Paths.getSparrowAtlas("ui skins/default/arrows/" + arrow_Type, 'shared', song.modchartingTools);
 			} else {
-				frames = Paths.getSparrowAtlas('ui skins/${song.ui_Skin}/arrows/default', 'shared');
+				frames = Paths.getSparrowAtlas('ui skins/${song.ui_Skin}/arrows/default', 'shared', song.modchartingTools);
 			}
 		}
 
@@ -187,10 +187,7 @@ class Note extends FlxSkewedSprite {
 		if (PlayState.instance.type_Configs.get(arrow_Type)[4] != null)
 			playMissOnMiss = PlayState.instance.type_Configs.get(arrow_Type)[4] == "true";
 		else {
-			if (shouldHit)
-				playMissOnMiss = true;
-			else
-				playMissOnMiss = false;
+			playMissOnMiss = shouldHit;
 		}
 
 		if (PlayState.instance.type_Configs.get(arrow_Type)[3] != null)

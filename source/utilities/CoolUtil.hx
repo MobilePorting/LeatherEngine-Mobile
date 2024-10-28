@@ -2,25 +2,26 @@ package utilities;
 
 import game.SongLoader.FNFCMetadata;
 #if sys
-import sys.FileSystem;
 import sys.io.File;
 #end
 import flixel.FlxG;
-import flixel.math.FlxMath;
 import flixel.text.FlxText;
 import flixel.tweens.FlxTween;
 import flixel.util.FlxColor;
 import lime.app.Application;
 import lime.graphics.Image;
 import lime.utils.Assets;
-import openfl.utils.Function;
-import states.PlayState;
 import ui.logs.Logs;
+import haxe.Log;
 import haxe.Json;
+import haxe.PosInfos;
 
 /**
  * Helper class with lots of utilitiy functions.
  */
+@:cppFileCode('
+	#include <iostream>
+')
 class CoolUtil {
 	public static function boundTo(value:Float, min:Float, max:Float):Float {
 		var newValue:Float = value;
@@ -337,7 +338,7 @@ class CoolUtil {
 
 		@author Leather128
 	**/
-	public static function haxe_print(value:Dynamic, ?pos_infos:haxe.PosInfos):Void {
+	public static function haxe_print(value:Dynamic, ?pos_infos:PosInfos):Void {
 		if (pos_infos.customParams == null)
 			print(value, LOG, pos_infos);
 		else {
@@ -356,24 +357,33 @@ class CoolUtil {
 
 		@author Leather128
 	**/
-	public static function print(message:String, ?type:PrintType = LOG, ?pos_infos:haxe.PosInfos):Void {
+	public static function print(message:String, ?type:PrintType = LOG, ?pos_infos:PosInfos):Void {
+		untyped __cpp__("std::cout << {0}", '${Log.formatOutput('${messageFromPrintType(type)} $message', pos_infos)}\n');
 		switch (type) {
-			case LOG:
-				haxe_trace('${ansi_colors["cyan"]} LOG ${ansi_colors["default"]} $message', pos_infos);
-				Logs.log(message);
 			case DEBUG:
-				haxe_trace('${ansi_colors["green"]} DEBUG ${ansi_colors["default"]} $message', pos_infos);
-				Logs.debug(message);
+				Logs.debug(Log.formatOutput(message, pos_infos));
 			case WARNING:
-				haxe_trace('${ansi_colors["yellow"]} WARNING ${ansi_colors["default"]} $message', pos_infos);
-				Logs.warn(message);
+				Logs.warn(Log.formatOutput(message, pos_infos));
 			case ERROR:
-				haxe_trace('${ansi_colors["red"]} ERROR ${ansi_colors["default"]} $message', pos_infos);
-				Logs.error(message);
-			// if you really want null, then here have it >:(
+				Logs.error(Log.formatOutput(message, pos_infos));
 			default:
-				haxe_trace(message, pos_infos);
+				Logs.log(Log.formatOutput(message, pos_infos));
 		}
+	}
+
+	public static function messageFromPrintType(?type:PrintType = LOG):String{
+		var messagePrefix:String;
+		switch (type){
+			case DEBUG:
+				messagePrefix = '${ansi_colors["green"]} DEBUG';
+			case WARNING:
+				messagePrefix = '${ansi_colors["yellow"]} WARNING';
+			case ERROR:
+				messagePrefix = '${ansi_colors["red"]} ERROR';
+			default:
+				messagePrefix = '${ansi_colors["cyan"]} LOG';
+		}
+		return '$messagePrefix ${ansi_colors["default"]}';
 	}
 
 	/**
@@ -381,7 +391,7 @@ class CoolUtil {
 
 		@author Leather128
 	**/
-	public static var haxe_trace:Function;
+	public dynamic static function haxe_trace(v:Dynamic,  ?infos:Null<PosInfos>){}
 
 	public static inline function getCurrentVersion():String {
 		return 'v' + Application.current.meta.get('version');

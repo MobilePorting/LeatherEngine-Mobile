@@ -62,7 +62,7 @@ class ToolboxPlaceholder extends MusicBeatState {
 		instance = this;
 
 
-		menuBG = new FlxSprite().makeBackground(0xE1E1E1);
+		menuBG = new FlxSprite().makeBackground(0x00FF6A);
 		menuBG.scale.set(1.1, 1.1);
 		menuBG.updateHitbox();
 		menuBG.screenCenter();

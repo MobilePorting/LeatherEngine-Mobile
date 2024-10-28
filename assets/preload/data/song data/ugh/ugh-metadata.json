@@ -23,7 +23,8 @@
     "ratings": { "easy": 2, "normal": 3, "hard": 4 },
     "album": "volume2",
     "previewStart": 0,
-    "previewEnd": 15000
+    "previewEnd": 15000,
+    "cutscene": "ugh"
   },
   "generatedBy": "Friday Night Funkin' - v0.3.3 (rewrite/master:6334d16) PROTOTYPE",
   "timeFormat": "ms",

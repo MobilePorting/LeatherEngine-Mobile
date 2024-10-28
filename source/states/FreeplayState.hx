@@ -188,6 +188,7 @@ class FreeplayState extends MusicBeatState {
 		add(grpSongs);
 
 		scoreText = new FlxText(FlxG.width, 5, 0, "", 32);
+		scoreText.antialiasing = Options.getData("antialiasing");
 
 		scoreBG = new FlxSprite(scoreText.x - 6, 0).makeGraphic(1, 1, FlxColor.BLACK);
 		scoreBG.alpha = 0.6;
@@ -197,10 +198,12 @@ class FreeplayState extends MusicBeatState {
 		diffText = new FlxText(FlxG.width, scoreText.y + 36, 0, "", 24);
 		diffText.font = scoreText.font;
 		diffText.alignment = RIGHT;
+		diffText.antialiasing = Options.getData("antialiasing");
 
 		speedText = new FlxText(FlxG.width, diffText.y + 36, 0, "", 24);
 		speedText.font = scoreText.font;
 		speedText.alignment = RIGHT;
+		speedText.antialiasing = Options.getData("antialiasing");
 
 		#if (target.threaded)
 		if (!Options.getData("loadAsynchronously") || !Options.getData("healthIcons")) {
@@ -248,6 +251,7 @@ class FreeplayState extends MusicBeatState {
 		add(speedText);
 
 		selector = new FlxText();
+		selector.antialiasing = Options.getData("antialiasing");
 
 		selector.size = 40;
 		selector.text = "<";
@@ -285,17 +289,20 @@ class FreeplayState extends MusicBeatState {
 		var leText:String = 'Press $buttonReset to reset song score ~ $buttonShift + LEFT and RIGHT to change song speed';
 		#end
 
-		var text:FlxText = new FlxText(textBG.x - 1, textBG.y + 4, FlxG.width, leText, 18);
-		text.setFormat(Paths.font("vcr.ttf"), 16, FlxColor.WHITE, CENTER);
-		text.scrollFactor.set();
-		text.screenCenter(X);
-		add(text);
+		infoText = new FlxText(textBG.x - 1, textBG.y + 4, FlxG.width, leText, 18);
+		infoText.setFormat(Paths.font("vcr.ttf"), 16, FlxColor.WHITE, CENTER);
+		infoText.scrollFactor.set();
+		infoText.screenCenter(X);
+		infoText.antialiasing = Options.getData("antialiasing");
+		add(infoText);
 
 		addVirtualPad(LEFT_FULL, A_B_C_X_Y_Z);
 
 		super.create();
 		call("createPost");
 	}
+
+	public var infoText:FlxText;
 
 	public function addSong(songName:String, weekNum:Int, songCharacter:String) {
 		call("addSong", [songName, weekNum, songCharacter]);

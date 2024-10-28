@@ -377,7 +377,7 @@ class StageGroup extends FlxGroup {
 		}
 	}
 
-	public function getCharacterPos(character:Int, char:Character = null):Dynamic {
+	public function getCharacterPos(character:Int, char:Character = null):Array<Float> {
 		switch (character) {
 			case 0: // bf
 				if (char == null)

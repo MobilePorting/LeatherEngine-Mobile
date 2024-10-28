@@ -87,11 +87,9 @@ class NewModState extends MusicBeatState{
         #if DISCORD_ALLOWED
 		DiscordClient.changePresence("Creating A New Mod", null, null, true);
 		#end
-        bg = new FlxSprite().makeBackground(0xE1E1E1);
-        if(Options.getData("menuBGs")){
-            bg.screenCenter();
-            add(bg);
-        }
+        bg = new FlxSprite().makeBackground(0x00FFEA);
+        bg.screenCenter();
+        add(bg);
 
         camHUD = new FlxCamera();
         FlxG.cameras.add(camHUD, false); // false so it's not a default camera

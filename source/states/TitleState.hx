@@ -137,7 +137,7 @@ class TitleState extends MusicBeatState {
 		FlxG.sound.playMusic(MusicUtilities.getTitleMusic(), 0);
 	}
 
-	function startIntro() {
+	public function startIntro() {
 		if (!initialized) {
 			call("startIntro");
 
@@ -180,10 +180,8 @@ class TitleState extends MusicBeatState {
 
 		logoBl = new FlxSprite(0, 0);
 
-		if (Options.getData("watermarks"))
-			logoBl.frames = Paths.getSparrowAtlas('title/leatherLogoBumpin');
-		else
-			logoBl.frames = Paths.getSparrowAtlas('title/logoBumpin');
+
+		logoBl.frames = Paths.getSparrowAtlas('title/logoBumpin');
 
 		logoBl.antialiasing = Options.getData("antialiasing");
 		logoBl.animation.addByPrefix('bump', 'logo bumpin', 24);
@@ -195,7 +193,7 @@ class TitleState extends MusicBeatState {
 		gfDance.frames = Paths.getSparrowAtlas('title/gfDanceTitle');
 		gfDance.animation.addByIndices('danceLeft', 'gfDance', [30, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14], "", 24, false);
 		gfDance.animation.addByIndices('danceRight', 'gfDance', [15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29], "", 24, false);
-		gfDance.antialiasing = true;
+		gfDance.antialiasing = Options.getData("antialiasing");
 		gfDance.shader = swagShader.shader;
 
 		titleText = new FlxSprite(100, FlxG.height * 0.8);
@@ -241,7 +239,7 @@ class TitleState extends MusicBeatState {
 		initialized = true;
 	}
 
-	function getIntroTextShit():Array<Array<String>> {
+	public function getIntroTextShit():Array<Array<String>> {
 		var fullText:String = Assets.getText(Paths.txt('introText'));
 
 		var firstArray:Array<String> = fullText.split('\n');
@@ -256,7 +254,8 @@ class TitleState extends MusicBeatState {
 
 	public var transitioning:Bool = false;
 
-	override function update(elapsed:Float) {
+	public override function update(elapsed:Float) {
+
 		if (FlxG.keys.justPressed.Y) {
 			FlxTween.tween(FlxG.stage.window, {x: FlxG.stage.window.x + 300}, 1.4, {ease: FlxEase.quadInOut, type: PINGPONG, startDelay: 0.35});
 			FlxTween.tween(FlxG.stage.window, {y: FlxG.stage.window.y + 100}, 0.7, {ease: FlxEase.quadInOut, type: PINGPONG});
@@ -339,7 +338,7 @@ class TitleState extends MusicBeatState {
 		call("update", [elapsed]);
 	}
 
-	function createCoolText(textArray:Array<String>) {
+	public function createCoolText(textArray:Array<String>) {
 		call("createCoolText", textArray);
 		for (i in 0...textArray.length) {
 			addMoreText(textArray[i]);
@@ -347,7 +346,7 @@ class TitleState extends MusicBeatState {
 		call("createCoolTextPost", textArray);
 	}
 
-	function addMoreText(text:String) {
+	public function addMoreText(text:String) {
 		call("addMoreText", [text]);
 		var coolText:Alphabet = new Alphabet(0, 0, text.toUpperCase(), true, false);
 		coolText.screenCenter(X);
@@ -357,7 +356,7 @@ class TitleState extends MusicBeatState {
 		call("addMoreTextPost", [text]);
 	}
 
-	function deleteCoolText() {
+	public function deleteCoolText() {
 		call("deleteCoolText");
 		if (textGroup?.members != null) {
 			while (textGroup.members.length > 0) {
@@ -368,7 +367,7 @@ class TitleState extends MusicBeatState {
 		call("deleteCoolTextPost");
 	}
 
-	function textDataText(line:Int) {
+	public function textDataText(line:Int) {
 		if (titleTextData == null || line < 0) {
 			return;
 		}

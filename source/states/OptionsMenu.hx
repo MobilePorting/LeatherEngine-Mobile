@@ -31,8 +31,7 @@ import openfl.utils.Assets as OpenFLAssets;
 using utilities.BackgroundUtil;
 
 class OptionsMenu extends MusicBeatState {
-	var curSelected:Int = 0;
-	var ui_Skin:Null<String>;
+	public var curSelected:Int = 0;
 	var removeVpad:Bool = true;
 
 	public var inMenu = false;
@@ -184,9 +183,7 @@ class OptionsMenu extends MusicBeatState {
 
 	public var menuBG:FlxSprite;
 
-	override function create():Void {
-		if (ui_Skin == null || ui_Skin == "default")
-			ui_Skin = Options.getData("uiSkin");
+	public override function create():Void {
 
 		MusicBeatState.windowNameSuffix = "";
 		instance = this;
@@ -233,7 +230,7 @@ class OptionsMenu extends MusicBeatState {
 		}
 	}
 
-	function goBack() {
+	public function goBack() {
 		#if android
 		if (lastStorageType != Options.getData("storageType"))
 		{
@@ -241,7 +238,7 @@ class OptionsMenu extends MusicBeatState {
 			CoolUtil.showPopUp('Storage Type has been changed and you needed restart the game!!\nPress OK to close the game.', 'Notice!');
 			lime.system.System.exit(0);
 		}
-		#end
+
 		if (pageName != "Categories") {
 			loadPage(cast(page.members[0], PageOption).pageName);
 			return;
@@ -251,7 +248,7 @@ class OptionsMenu extends MusicBeatState {
 		FlxG.switchState(new MainMenuState());
 	}
 
-	override function update(elapsed:Float) {
+	public override function update(elapsed:Float) {
 		super.update(elapsed);
 
 		if (!inMenu) {

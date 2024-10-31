@@ -3,7 +3,7 @@
   "description": "Base Game",
   "author": "Ninjamuffin99, PhantomArcade, KawaiiSprite, EvilSk8r",
   "api_version": "0.5.0",
-  "mod_version": "0.2.8",
+  "mod_version": "0.5.2",
   "license": "Apache 2.0",
   "metadata": {
     "canBeDisabled": "false"

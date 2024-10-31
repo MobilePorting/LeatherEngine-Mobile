@@ -44,7 +44,7 @@ class TitleState extends MusicBeatState {
 	public var blackScreen:FlxSprite;
 	public var credGroup:FlxGroup;
 	public var textGroup:FlxGroup;
-	public var polymod:FlxSprite;
+	public var newgrounds:FlxSprite;
 
 	public var curWacky:Array<String> = [];
 
@@ -173,16 +173,13 @@ class TitleState extends MusicBeatState {
 			call("startIntroPost");
 		}
 
-		version = '${MusicBeatState.windowNamePrefix} (${CoolUtil.getCurrentVersion()})';
+		version = '${Application.current.meta.get('name')} ${CoolUtil.getCurrentVersion()}';
 
 
 		call("createTitleAssets");
 
 		logoBl = new FlxSprite(0, 0);
-
-
 		logoBl.frames = Paths.getSparrowAtlas('title/logoBumpin');
-
 		logoBl.antialiasing = Options.getData("antialiasing");
 		logoBl.animation.addByPrefix('bump', 'logo bumpin', 24);
 		logoBl.animation.play('bump');
@@ -216,20 +213,18 @@ class TitleState extends MusicBeatState {
 		blackScreen = new FlxSprite().makeGraphic(FlxG.width, FlxG.height, FlxColor.BLACK);
 		credGroup.add(blackScreen);
 
-		polymod = new FlxSprite(0, FlxG.height * 0.52).loadGraphic(Paths.image('title/polymod_logo'));
-		polymod.setGraphicSize(290); // aprox what newgrounds_logo.width * 0.8 was (289.6), only used cuz polymod_logo is different size than it lol!!!
-		polymod.updateHitbox();
-		polymod.screenCenter(X);
-		polymod.antialiasing = Options.getData("antialiasing");
-		polymod.visible = false;
-		add(polymod);
+		newgrounds = new FlxSprite(0, FlxG.height * 0.52).loadGraphic(Paths.image('title/newgrounds_logo'));
+		newgrounds.scale.set(0.8, 0.8);
+		newgrounds.updateHitbox();
+		newgrounds.screenCenter(X);
+		newgrounds.antialiasing = Options.getData("antialiasing");
+		newgrounds.visible = false;
+		add(newgrounds);
 
 		call("createTitleAssetsPost");
 
-		if (Options.getData("watermarks"))
-			titleTextData = CoolUtil.coolTextFile(Paths.txt("watermarkTitleText", "preload"));
-		else
-			titleTextData = CoolUtil.coolTextFile(Paths.txt("titleText", "preload"));
+
+		titleTextData = CoolUtil.coolTextFile(Paths.txt("titleText", "preload"));
 
 		if (initialized) {
 			skipIntro();
@@ -308,7 +303,7 @@ class TitleState extends MusicBeatState {
 
 			call("checkForUpdate");
 			new FlxTimer().start(2, (tmr:FlxTimer) -> {
-				var http:Http = new Http("https://raw.githubusercontent.com/MobilePorting/LeatherEngine-LTS-Mobile/main/version.txt");
+				var http:Http = new Http("https://raw.githubusercontent.com/MobilePorting/LeatherEngine-Mobile/main/version.txt");
 				http.onData = (data:String) -> {
 					data = 'v' + data;
 					trace(data);
@@ -378,8 +373,7 @@ class TitleState extends MusicBeatState {
 		}
 
 		if (lineText.contains("~")) {
-			var coolText = lineText.split("~");
-			createCoolText(coolText);
+			createCoolText(lineText.split("~"));
 		} else {
 			addMoreText(lineText);
 		}
@@ -417,10 +411,10 @@ class TitleState extends MusicBeatState {
 				textDataText(2);
 			case 7:
 				textDataText(3);
-				polymod.visible = true;
+				newgrounds.visible = true;
 			case 8:
 				deleteCoolText();
-				polymod.visible = false;
+				newgrounds.visible = false;
 			case 9:
 				if (curWacky[0] != null) {
 					createCoolText([curWacky[0]]);
@@ -445,7 +439,7 @@ class TitleState extends MusicBeatState {
 
 	public var skippedIntro:Bool = false;
 
-	function skipIntro():Void {
+	public function skipIntro():Void {
 		call("skipIntro");
 		if (!skippedIntro) {
 			MusicBeatState.windowNameSuffix = "";
@@ -453,7 +447,7 @@ class TitleState extends MusicBeatState {
 			if (Options.getData("flashingLights"))
 				FlxG.camera.flash(FlxColor.WHITE, 4);
 
-			remove(polymod);
+			remove(newgrounds);
 			remove(credGroup);
 			skippedIntro = true;
 		}

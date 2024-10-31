@@ -98,6 +98,8 @@ class FreeplayState extends MusicBeatState {
 			stateScript.call(func, args);
 	}
 
+	private var initSonglist:Array<String> = [];
+
 	override function create() {
 		instance = this;
 
@@ -127,7 +129,6 @@ class FreeplayState extends MusicBeatState {
 		if (FlxG.sound.music == null || !FlxG.sound.music.playing)
 			TitleState.playTitleMusic();
 		#if MODDING_ALLOWED
-		var initSonglist;
 		if (!ModList.modList.get(Options.getData("curMod"))) {
 			Options.setData("Friday Night Funkin'", "curMod");
 			CoolUtil.coolError("Hmmm... I couldnt find the mod you are trying to switch to.\nIt is either disabled or not in the files.\nI switched the mod to base game to avoid a crash!",
@@ -140,10 +141,8 @@ class FreeplayState extends MusicBeatState {
 			initSonglist = CoolUtil.coolTextFileSys("mods/" + Options.getData("curMod") + "/_append/data/freeplaySongList.txt");
 		else if (sys.FileSystem.exists("mods/" + Options.getData("curMod") + "/_append/data/freeplaySonglist.txt"))
 			initSonglist = CoolUtil.coolTextFileSys("mods/" + Options.getData("curMod") + "/_append/data/freeplaySonglist.txt");
-		else
-			initSonglist = [];
 		#else
-		var initSonglist = CoolUtil.coolTextFile(Paths.txt('freeplaySonglist'));
+		initSonglist = CoolUtil.coolTextFile(Paths.txt('freeplaySonglist'));
 		#end
 
 		if (curSelected > initSonglist.length)

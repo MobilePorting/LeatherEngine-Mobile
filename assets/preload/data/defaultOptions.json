@@ -165,10 +165,6 @@
       "value": false
     },
     {
-      "option": "watermarks",
-      "value": true
-    },
-    {
       "option": "botplay",
       "value": false
     },

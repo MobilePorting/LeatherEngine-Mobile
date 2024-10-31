@@ -137,7 +137,7 @@ class ResultsSubstate extends MusicBeatSubstate {
 	}
 
 	override function create():Void {
-		if (PlayState.storyPlaylist.length > 1 || Options.getData("skipResultsScreen")) {
+		if ((PlayState.storyPlaylist.length > 1  && PlayState.isStoryMode) || Options.getData("skipResultsScreen")) {
 			PlayState.instance.finishSongStuffs();
 			return;
 		}

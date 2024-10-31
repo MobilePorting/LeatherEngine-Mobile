@@ -78,7 +78,6 @@ class OptionsMenu extends MusicBeatState {
 			new PageOption("Back", "Categories"),
 			new BoolOption("Prototype Title Screen", "oldTitle"),
 			new BoolOption("Friday Night Title Music", "nightMusic"),
-			new BoolOption("Watermarks", "watermarks"),
 			new BoolOption("Freeplay Music", "freeplayMusic"),
 			#if DISCORD_ALLOWED
 			new BoolOption("Discord RPC", "discordRPC"),

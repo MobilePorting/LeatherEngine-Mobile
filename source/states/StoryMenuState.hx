@@ -87,52 +87,54 @@ class StoryMenuState extends MusicBeatState {
 		}
 		#end
 
-		lerpScore = Math.floor(FlxMath.lerp(lerpScore, intendedScore, 0.5));
+		if(currentGroup != null){
 
-		weekScoreText.text = "WEEK SCORE:" + lerpScore;
+			lerpScore = Math.floor(FlxMath.lerp(lerpScore, intendedScore, 0.5));
 
-		weekTitleText.x = FlxG.width - (weekTitleText.width + 10);
+			weekScoreText.text = "WEEK SCORE:" + lerpScore;
 
-		if (!movedBack) {
-			if (!selectedWeek) {
-				if (-1 * Math.floor(FlxG.mouse.wheel) != 0)
-					changeWeek(-1 * Math.floor(FlxG.mouse.wheel));
+			weekTitleText.x = FlxG.width - (weekTitleText.width + 10);
 
-				if (controls.UP_P)
-					changeWeek(-1);
-				if (controls.DOWN_P)
-					changeWeek(1);
+			if (!movedBack) {
+				if (!selectedWeek) {
+					if (-1 * Math.floor(FlxG.mouse.wheel) != 0)
+						changeWeek(-1 * Math.floor(FlxG.mouse.wheel));
 
-				if (controls.RIGHT)
-					rightArrow.animation.play('press')
-				else
-					rightArrow.animation.play('idle');
+					if (controls.UP_P)
+						changeWeek(-1);
+					if (controls.DOWN_P)
+						changeWeek(1);
 
-				if (controls.LEFT)
-					leftArrow.animation.play('press');
-				else
-					leftArrow.animation.play('idle');
+					if (controls.RIGHT)
+						rightArrow.animation.play('press')
+					else
+						rightArrow.animation.play('idle');
 
-				if (controls.RIGHT_P)
-					changeDifficulty(1);
-				if (controls.LEFT_P)
-					changeDifficulty(-1);
+					if (controls.LEFT)
+						leftArrow.animation.play('press');
+					else
+						leftArrow.animation.play('idle');
 
-				if (virtualPad.buttonRight2.justPressed || FlxG.keys.justPressed.E)
-					changeGroup(1);
-				if (virtualPad.buttonLeft2.justPressed || FlxG.keys.justPressed.Q)
-					changeGroup(-1);
+					if (controls.RIGHT_P)
+						changeDifficulty(1);
+					if (controls.LEFT_P)
+						changeDifficulty(-1);
 
-				if (virtualPad.buttonX.justPressed || controls.RESET) {
-					persistentUpdate = false;
-					openSubState(new ResetScoreSubstate("nonelolthisisweekslmao", curDifficulties[curDifficulty][0], curWeek, currentGroup.pathName + "Week",
-						true));
-					changeWeek();
+					if (virtualPad.buttonRight2.justPressed || FlxG.keys.justPressed.E)
+						changeGroup(1);
+					if (virtualPad.buttonLeft2.justPressed || FlxG.keys.justPressed.Q)
+						changeGroup(-1);
+
+					if (virtualPad.buttonX.justPressed || controls.RESET) {
+						openSubState(new ResetScoreSubstate("nonelolthisisweekslmao", curDifficulties[curDifficulty][0], curWeek, currentGroup.pathName + "Week",
+							true));
+						changeWeek();
+					}
 				}
-			}
 
-			if (controls.ACCEPT)
-				selectWeek();
+				if (controls.ACCEPT)
+					selectWeek();
+			}
 		}
 
 		if (controls.BACK && !movedBack && !selectedWeek) {
@@ -154,6 +156,11 @@ class StoryMenuState extends MusicBeatState {
 	}
 
 	function createStoryUI() {
+		#if DISCORD_ALLOWED
+		// Updating Discord Rich Presence
+		DiscordClient.changePresence("In the Story Menus", null);
+		#end
+
 		weekScoreText = new FlxText(10, 10, 0, "SCORE: 49324858", 36);
 		weekScoreText.setFormat("VCR OSD Mono", 32);
 
@@ -162,15 +169,23 @@ class StoryMenuState extends MusicBeatState {
 		weekTitleText.alpha = 0.7;
 
 		yellowBG = new FlxSprite(0, 56).makeGraphic(FlxG.width, 400, FlxColor.WHITE);
+		if(currentGroup == null){
+			var text:FlxText = new FlxText();
+			text.text = "This mod has no weeks!";
+			text.font = Paths.font("vcr.ttf");
+			text.alignment = CENTER;
+			text.borderStyle = OUTLINE;
+			text.size = 32;
+			text.antialiasing = Options.getData("antialiasing");
+			text.screenCenter();
+			add(text);
+			return;
+		}
 		bgSprite = new FlxSprite(0, 56);
 		bgSprite.visible = false;
 
 		menuCharacters = new FlxTypedGroup<MenuCharacter>();
 
-		#if DISCORD_ALLOWED
-		// Updating Discord Rich Presence
-		DiscordClient.changePresence("In the Story Menus", null);
-		#end
 
 		addWeekCharacters();
 
@@ -182,9 +197,7 @@ class StoryMenuState extends MusicBeatState {
 
 		add(menuCharacters);
 		add(new FlxSprite(0, 456).makeGraphic(400, 1280, FlxColor.BLACK));
-
-		var blackBarThingie:FlxSprite = new FlxSprite().makeGraphic(FlxG.width, 56, FlxColor.BLACK);
-		add(blackBarThingie);
+		add(new FlxSprite().makeGraphic(FlxG.width, 56, FlxColor.BLACK));
 
 		createWeekGraphics();
 
@@ -198,6 +211,7 @@ class StoryMenuState extends MusicBeatState {
 		leftArrow.animation.addByPrefix('idle', "arrow0");
 		leftArrow.animation.addByPrefix('press', "arrow push", 24, false);
 		leftArrow.animation.play('idle');
+		leftArrow.antialiasing = Options.getData("antialiasing");
 
 		difficultySprite = new FlxSprite(leftArrow.x + leftArrow.width + 4, leftArrow.y);
 		difficultySprite.loadGraphic(Paths.image("campaign menu/difficulties/default/normal"));
@@ -211,6 +225,7 @@ class StoryMenuState extends MusicBeatState {
 		rightArrow.animation.addByPrefix('press', "arrow push", 24, false);
 		rightArrow.animation.play('idle');
 		rightArrow.flipX = true;
+		rightArrow.antialiasing = Options.getData("antialiasing");
 
 		difficultySelectorGroup.add(leftArrow);
 		difficultySelectorGroup.add(difficultySprite);
@@ -368,6 +383,9 @@ class StoryMenuState extends MusicBeatState {
 	var intendedScore:Int = 0;
 
 	function changeWeek(change:Int = 0):Void {
+		if(currentGroup == null){
+			return;
+		}
 		curWeek = FlxMath.wrap(curWeek + change, 0, currentGroup.weeks.length - 1);
 
 		var bullShit:Int = 0;
@@ -474,10 +492,22 @@ class StoryMenuState extends MusicBeatState {
 		} else
 			trace('Tried to load json ${Paths.json("week data/" + name)} that doesn\'t exist!', ERROR);
 	}
-
+	public var initWeekList:Array<String>;
 	function loadGroups():Void {
-		for (week in CoolUtil.coolTextFile(Paths.txt("storyWeekList")))
-			loadJSON(week);
+		#if MODDING_ALLOWED 
+		if(sys.FileSystem.exists("mods/" + Options.getData("curMod") + "/data/storyWeekList.txt")){
+			initWeekList = CoolUtil.coolTextFileSys("mods/" + Options.getData("curMod") + "/data/storyWeekList.txt");
+		}
+		else if(sys.FileSystem.exists("mods/" + Options.getData("curMod") + "/_append/data/storyWeekList.txt")){
+			initWeekList = CoolUtil.coolTextFileSys("mods/" + Options.getData("curMod") + "/_append/data/storyWeekList.txt");
+		}
+		#else
+		initWeekList = CoolUtil.coolTextFile(Paths.txt('storyWeekList'));
+		#end
+		if(initWeekList != null){
+			for (week in initWeekList)
+				loadJSON(week);
+		}
 
 		currentGroup = groups[0];
 	}

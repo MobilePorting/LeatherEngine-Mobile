@@ -182,6 +182,8 @@ class OptionsMenu extends MusicBeatState {
 
 	public var menuBG:FlxSprite;
 
+	public static var playing:Bool = false;
+
 	public override function create():Void {
 
 		MusicBeatState.windowNameSuffix = "";
@@ -200,8 +202,8 @@ class OptionsMenu extends MusicBeatState {
 
 		loadPage("Categories");
 
-		if (FlxG.sound.music == null)
-			FlxG.sound.playMusic(MusicUtilities.getOptionsMusic(), 0.7, true);
+		FlxG.sound.playMusic(MusicUtilities.getOptionsMusic(), 0.7, true);
+		OptionsMenu.playing = true;
 
 		addVirtualPad(UP_DOWN, A_B);
 		addVirtualPadCamera();
@@ -250,6 +252,9 @@ class OptionsMenu extends MusicBeatState {
 
 	public override function update(elapsed:Float) {
 		super.update(elapsed);
+
+		if (FlxG.sound.music.volume < 0.8)
+			FlxG.sound.music.volume += 0.5 * FlxG.elapsed;
 
 		if (!inMenu) {
 			if (-1 * Math.floor(FlxG.mouse.wheel) != 0) {

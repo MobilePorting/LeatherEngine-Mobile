@@ -34,8 +34,8 @@ class CoolUtil {
 		return newValue;
 	}
 
-	#if sys
 	public static function coolTextFileSys(path:String):Array<String> {
+		#if sys
 		var daList:Array<String> = File.getContent(path).trim().split('\n');
 
 		for (i in 0...daList.length) {
@@ -43,8 +43,10 @@ class CoolUtil {
 		}
 
 		return daList;
+		#else
+		return coolTextFile(path);
+		#end
 	}
-	#end
 
 	public static function coolTextFile(path:String):Array<String> {
 		if (!Assets.exists(path)) {

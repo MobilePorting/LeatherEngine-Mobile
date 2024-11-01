@@ -3,6 +3,36 @@
 Created with Funkin Packer v0.1.3 https://neeeoo.github.io/funkin-packer/
 -->
 <TextureAtlas imagePath="GF_assets.png" width="3884" height="3740">
+	<SubTexture name="GF Dancing Beat0000" x="3178" y="2871" width="292" height="409" frameX="-16" frameY="-14" frameWidth="326" frameHeight="423"/>
+	<SubTexture name="GF Dancing Beat0001" x="3178" y="2871" width="292" height="409" frameX="-16" frameY="-14" frameWidth="326" frameHeight="423"/>
+	<SubTexture name="GF Dancing Beat0002" x="897" y="3322" width="292" height="407" frameX="-14" frameY="-16" frameWidth="326" frameHeight="423"/>
+	<SubTexture name="GF Dancing Beat0003" x="3234" y="2053" width="292" height="406" frameX="-14" frameY="-16" frameWidth="326" frameHeight="423"/>
+	<SubTexture name="GF Dancing Beat0004" x="3234" y="823" width="291" height="409" frameX="-15" frameY="-13" frameWidth="326" frameHeight="423"/>
+	<SubTexture name="GF Dancing Beat0005" x="2554" y="395" width="291" height="408" frameX="-15" frameY="-13" frameWidth="326" frameHeight="423"/>
+	<SubTexture name="GF Dancing Beat0006" x="2912" y="824" width="289" height="410" frameX="-18" frameY="-11" frameWidth="326" frameHeight="423"/>
+	<SubTexture name="GF Dancing Beat0007" x="2216" y="2483" width="312" height="420" frameX="-10" frameY="-1" frameWidth="326" frameHeight="423"/>
+	<SubTexture name="GF Dancing Beat0008" x="2216" y="2483" width="312" height="420" frameX="-10" frameY="-1" frameWidth="326" frameHeight="423"/>
+	<SubTexture name="GF Dancing Beat0009" x="2216" y="2483" width="312" height="420" frameX="-10" frameY="-1" frameWidth="326" frameHeight="423"/>
+	<SubTexture name="GF Dancing Beat0010" x="1255" y="2484" width="322" height="421" frameX="-1" frameY="-0" frameWidth="326" frameHeight="423"/>
+	<SubTexture name="GF Dancing Beat0011" x="1255" y="2484" width="322" height="421" frameX="-1" frameY="-0" frameWidth="326" frameHeight="423"/>
+	<SubTexture name="GF Dancing Beat0012" x="1255" y="2484" width="322" height="421" frameX="-1" frameY="-0" frameWidth="326" frameHeight="423"/>
+	<SubTexture name="GF Dancing Beat0013" x="1578" y="2483" width="324" height="421" frameX="-0" frameY="-0" frameWidth="326" frameHeight="423"/>
+	<SubTexture name="GF Dancing Beat0014" x="1578" y="2483" width="324" height="421" frameX="-0" frameY="-0" frameWidth="326" frameHeight="423"/>
+	<SubTexture name="GF Dancing Beat0015" x="1275" y="2906" width="321" height="411" frameX="-2" frameY="-12" frameWidth="326" frameHeight="423"/>
+	<SubTexture name="GF Dancing Beat0016" x="1275" y="2906" width="321" height="411" frameX="-2" frameY="-12" frameWidth="326" frameHeight="423"/>
+	<SubTexture name="GF Dancing Beat0017" x="1597" y="2905" width="320" height="411" frameX="-4" frameY="-12" frameWidth="326" frameHeight="423"/>
+	<SubTexture name="GF Dancing Beat0018" x="3272" y="1" width="320" height="410" frameX="-4" frameY="-12" frameWidth="326" frameHeight="423"/>
+	<SubTexture name="GF Dancing Beat0019" x="1918" y="2904" width="317" height="411" frameX="-6" frameY="-11" frameWidth="326" frameHeight="423"/>
+	<SubTexture name="GF Dancing Beat0020" x="3272" y="412" width="317" height="410" frameX="-6" frameY="-11" frameWidth="326" frameHeight="423"/>
+	<SubTexture name="GF Dancing Beat0021" x="2236" y="2904" width="312" height="411" frameX="-10" frameY="-10" frameWidth="326" frameHeight="423"/>
+	<SubTexture name="GF Dancing Beat0022" x="2310" y="1238" width="293" height="416" frameX="-33" frameY="-5" frameWidth="326" frameHeight="423"/>
+	<SubTexture name="GF Dancing Beat0023" x="2618" y="1220" width="293" height="415" frameX="-33" frameY="-6" frameWidth="326" frameHeight="423"/>
+	<SubTexture name="GF Dancing Beat0024" x="2310" y="1238" width="293" height="416" frameX="-33" frameY="-5" frameWidth="326" frameHeight="423"/>
+	<SubTexture name="GF Dancing Beat0025" x="2310" y="1238" width="293" height="416" frameX="-33" frameY="-5" frameWidth="326" frameHeight="423"/>
+	<SubTexture name="GF Dancing Beat0026" x="2618" y="1220" width="293" height="415" frameX="-33" frameY="-6" frameWidth="326" frameHeight="423"/>
+	<SubTexture name="GF Dancing Beat0027" x="2618" y="1220" width="293" height="415" frameX="-33" frameY="-6" frameWidth="326" frameHeight="423"/>
+	<SubTexture name="GF Dancing Beat0028" x="2604" y="1636" width="292" height="415" frameX="-33" frameY="-6" frameWidth="326" frameHeight="423"/>
+	<SubTexture name="GF Dancing Beat0029" x="2604" y="1636" width="292" height="415" frameX="-33" frameY="-6" frameWidth="326" frameHeight="423"/>
 	<SubTexture name="GF Dancing Beat Hair Landing0006" x="3471" y="2841" width="399" height="379" frameX="-43" frameY="-42" frameWidth="467" frameHeight="423"/>
 	<SubTexture name="GF Dancing Beat Hair Landing0005" x="3471" y="2460" width="399" height="380" frameX="-43" frameY="-42" frameWidth="467" frameHeight="423"/>
 	<SubTexture name="GF FEAR0003" x="3313" y="3281" width="309" height="391" frameX="-1" frameY="-2" frameWidth="310" frameHeight="393"/>
@@ -24,19 +54,13 @@ Created with Funkin Packer v0.1.3 https://neeeoo.github.io/funkin-packer/
 	<SubTexture name="gf sad0005" x="3022" y="3288" width="290" height="404" frameX="-0" frameY="-0" frameWidth="292" frameHeight="404"/>
 	<SubTexture name="gf sad0007" x="3593" y="1" width="290" height="404" frameX="-0" frameY="-0" frameWidth="292" frameHeight="404"/>
 	<SubTexture name="gf sad0009" x="3593" y="406" width="290" height="404" frameX="-0" frameY="-0" frameWidth="292" frameHeight="404"/>
-	<SubTexture name="GF Dancing Beat0004" x="3234" y="2053" width="292" height="406" frameX="-14" frameY="-16" frameWidth="326" frameHeight="423"/>
 	<SubTexture name="GF Dancing Beat Hair blowing0018" x="944" y="2078" width="468" height="405" frameX="-82" frameY="-18" frameWidth="555" frameHeight="423"/>
 	<SubTexture name="GF left note0001" x="2140" y="3316" width="296" height="406" frameX="-7" frameY="-4" frameWidth="304" frameHeight="410"/>
-	<SubTexture name="GF Dancing Beat0003" x="897" y="3322" width="292" height="407" frameX="-14" frameY="-16" frameWidth="326" frameHeight="423"/>
 	<SubTexture name="GF Dancing Beat Hair blowing0020" x="1413" y="2072" width="468" height="407" frameX="-81" frameY="-15" frameWidth="555" frameHeight="423"/>
 	<SubTexture name="GF Down Note0001" x="1190" y="3322" width="312" height="407" frameX="-0" frameY="-6" frameWidth="312" frameHeight="413"/>
-	<SubTexture name="GF Dancing Beat0006" x="2554" y="395" width="291" height="408" frameX="-15" frameY="-13" frameWidth="326" frameHeight="423"/>
 	<SubTexture name="GF Right Note0001" x="1503" y="3318" width="319" height="407" frameX="-0" frameY="-5" frameWidth="320" frameHeight="412"/>
 	<SubTexture name="GF Right Note0002" x="1823" y="3317" width="316" height="407" frameX="-4" frameY="-5" frameWidth="320" frameHeight="412"/>
 	<SubTexture name="GF Dancing Beat Hair blowing0017" x="474" y="2079" width="469" height="408" frameX="-83" frameY="-15" frameWidth="555" frameHeight="423"/>
-	<SubTexture name="GF Dancing Beat0007" x="2912" y="824" width="289" height="410" frameX="-18" frameY="-11" frameWidth="326" frameHeight="423"/>
-	<SubTexture name="GF Dancing Beat0001" x="3178" y="2871" width="292" height="409" frameX="-16" frameY="-14" frameWidth="326" frameHeight="423"/>
-	<SubTexture name="GF Dancing Beat0005" x="3234" y="823" width="291" height="409" frameX="-15" frameY="-13" frameWidth="326" frameHeight="423"/>
 	<SubTexture name="GF left note0003" x="3234" y="1233" width="304" height="409" frameX="-0" frameY="-0" frameWidth="304" frameHeight="410"/>
 	<SubTexture name="GF left note0005" x="3234" y="1643" width="303" height="409" frameX="-1" frameY="-0" frameWidth="304" frameHeight="410"/>
 	<SubTexture name="GF Dancing Beat Hair blowing0007" x="1" y="829" width="530" height="409" frameX="-7" frameY="-12" frameWidth="555" frameHeight="423"/>
@@ -47,8 +71,6 @@ Created with Funkin Packer v0.1.3 https://neeeoo.github.io/funkin-packer/
 	<SubTexture name="GF Dancing Beat Hair Landing0019" x="2912" y="413" width="319" height="410" frameX="-145" frameY="-12" frameWidth="467" frameHeight="423"/>
 	<SubTexture name="GF Dancing Beat Hair Landing0021" x="2860" y="2877" width="317" height="410" frameX="-147" frameY="-11" frameWidth="467" frameHeight="423"/>
 	<SubTexture name="GF Dancing Beat Hair blowing0001" x="1583" y="824" width="486" height="410" frameX="-45" frameY="-13" frameWidth="555" frameHeight="423"/>
-	<SubTexture name="GF Dancing Beat0019" x="3272" y="1" width="320" height="410" frameX="-4" frameY="-12" frameWidth="326" frameHeight="423"/>
-	<SubTexture name="GF Dancing Beat0021" x="3272" y="412" width="317" height="410" frameX="-6" frameY="-11" frameWidth="326" frameHeight="423"/>
 	<SubTexture name="GF Dancing Beat Hair blowing0006" x="1586" y="413" width="488" height="410" frameX="-45" frameY="-11" frameWidth="555" frameHeight="423"/>
 	<SubTexture name="GF Right Note0003" x="3127" y="2460" width="298" height="410" frameX="-21" frameY="-1" frameWidth="320" frameHeight="412"/>
 	<SubTexture name="GF Dancing Beat Hair Landing0016" x="1" y="2918" width="321" height="411" frameX="-143" frameY="-12" frameWidth="467" frameHeight="423"/>
@@ -58,10 +80,6 @@ Created with Funkin Packer v0.1.3 https://neeeoo.github.io/funkin-packer/
 	<SubTexture name="GF Dancing Beat Hair Landing0020" x="643" y="2910" width="317" height="411" frameX="-147" frameY="-11" frameWidth="467" frameHeight="423"/>
 	<SubTexture name="GF Dancing Beat Hair Landing0022" x="961" y="2910" width="313" height="411" frameX="-150" frameY="-10" frameWidth="467" frameHeight="423"/>
 	<SubTexture name="GF Dancing Beat Hair blowing0005" x="1597" y="1" width="488" height="411" frameX="-45" frameY="-11" frameWidth="555" frameHeight="423"/>
-	<SubTexture name="GF Dancing Beat0016" x="1275" y="2906" width="321" height="411" frameX="-2" frameY="-12" frameWidth="326" frameHeight="423"/>
-	<SubTexture name="GF Dancing Beat0018" x="1597" y="2905" width="320" height="411" frameX="-4" frameY="-12" frameWidth="326" frameHeight="423"/>
-	<SubTexture name="GF Dancing Beat0020" x="1918" y="2904" width="317" height="411" frameX="-6" frameY="-11" frameWidth="326" frameHeight="423"/>
-	<SubTexture name="GF Dancing Beat0022" x="2236" y="2904" width="312" height="411" frameX="-10" frameY="-10" frameWidth="326" frameHeight="423"/>
 	<SubTexture name="GF Down Note0003" x="2549" y="2899" width="310" height="411" frameX="-2" frameY="-1" frameWidth="312" frameHeight="413"/>
 	<SubTexture name="GF Dancing Beat Hair blowing0025" x="1072" y="1" width="524" height="411" frameX="-31" frameY="-10" frameWidth="555" frameHeight="423"/>
 	<SubTexture name="GF Right Note0005" x="2972" y="1" width="299" height="411" frameX="-18" frameY="-0" frameWidth="320" frameHeight="412"/>
@@ -75,22 +93,16 @@ Created with Funkin Packer v0.1.3 https://neeeoo.github.io/funkin-packer/
 	<SubTexture name="GF Dancing Beat Hair Landing0029" x="2529" y="2483" width="293" height="415" frameX="-173" frameY="-6" frameWidth="467" frameHeight="423"/>
 	<SubTexture name="GF Dancing Beat Hair blowing0015" x="537" y="1" width="534" height="413" frameX="-21" frameY="-8" frameWidth="555" frameHeight="423"/>
 	<SubTexture name="GF Dancing Beat Hair blowing0013" x="1" y="414" width="535" height="414" frameX="-20" frameY="-7" frameWidth="555" frameHeight="423"/>
-	<SubTexture name="GF Dancing Beat0026" x="2618" y="1220" width="293" height="415" frameX="-33" frameY="-6" frameWidth="326" frameHeight="423"/>
-	<SubTexture name="GF Dancing Beat0029" x="2604" y="1636" width="292" height="415" frameX="-33" frameY="-6" frameWidth="326" frameHeight="423"/>
 	<SubTexture name="GF Dancing Beat Hair Landing0023" x="2323" y="2066" width="294" height="416" frameX="-173" frameY="-5" frameWidth="467" frameHeight="423"/>
-	<SubTexture name="GF Dancing Beat0023" x="2310" y="1238" width="293" height="416" frameX="-33" frameY="-5" frameWidth="326" frameHeight="423"/>
 	<SubTexture name="GF Dancing Beat Hair blowing0023" x="1443" y="1653" width="479" height="418" frameX="-76" frameY="-3" frameWidth="555" frameHeight="423"/>
 	<SubTexture name="GF Dancing Beat Hair blowing0029" x="482" y="1659" width="480" height="418" frameX="-74" frameY="-3" frameWidth="555" frameHeight="423"/>
 	<SubTexture name="GF Dancing Beat Hair Landing0008" x="1903" y="2483" width="312" height="420" frameX="-151" frameY="-1" frameWidth="467" frameHeight="423"/>
 	<SubTexture name="GF Dancing Beat Hair blowing0008" x="1" y="1239" width="490" height="419" frameX="-63" frameY="-2" frameWidth="555" frameHeight="423"/>
-	<SubTexture name="GF Dancing Beat0008" x="2216" y="2483" width="312" height="420" frameX="-10" frameY="-1" frameWidth="326" frameHeight="423"/>
 	<SubTexture name="GF Dancing Beat Hair blowing0026" x="1" y="1659" width="480" height="419" frameX="-75" frameY="-2" frameWidth="555" frameHeight="423"/>
 	<SubTexture name="GF Dancing Beat Hair blowing0014" x="1023" y="1232" width="489" height="420" frameX="-66" frameY="-1" frameWidth="555" frameHeight="423"/>
 	<SubTexture name="GF Dancing Beat Hair Landing0011" x="607" y="2488" width="322" height="421" frameX="-142" frameY="-0" frameWidth="467" frameHeight="423"/>
 	<SubTexture name="GF Dancing Beat Hair Landing0014" x="930" y="2488" width="324" height="421" frameX="-140" frameY="-0" frameWidth="467" frameHeight="423"/>
 	<SubTexture name="GF Dancing Beat Hair blowing0011" x="532" y="1232" width="490" height="421" frameX="-65" frameY="-0" frameWidth="555" frameHeight="423"/>
-	<SubTexture name="GF Dancing Beat0011" x="1255" y="2484" width="322" height="421" frameX="-1" frameY="-0" frameWidth="326" frameHeight="423"/>
-	<SubTexture name="GF Dancing Beat0014" x="1578" y="2483" width="324" height="421" frameX="-0" frameY="-0" frameWidth="326" frameHeight="423"/>
 	<SubTexture name="GF Cheer0003" x="302" y="2490" width="304" height="424" frameX="-0" frameY="-3" frameWidth="304" frameHeight="427"/>
 	<SubTexture name="GF Cheer0001" x="1" y="2490" width="300" height="427" frameX="-3" frameY="-0" frameWidth="304" frameHeight="427"/>
 	<SubTexture name="GF Up Note0001" x="1996" y="1238" width="313" height="432" frameX="-0" frameY="-0" frameWidth="313" frameHeight="433"/>
@@ -130,18 +142,6 @@ Created with Funkin Packer v0.1.3 https://neeeoo.github.io/funkin-packer/
 	<SubTexture name="GF Dancing Beat Hair blowing0012" x="532" y="1232" width="490" height="421" frameX="-65" frameY="-0" frameWidth="555" frameHeight="423"/>
 	<SubTexture name="GF Dancing Beat Hair blowing0024" x="1443" y="1653" width="479" height="418" frameX="-76" frameY="-3" frameWidth="555" frameHeight="423"/>
 	<SubTexture name="GF Dancing Beat Hair blowing0030" x="482" y="1659" width="480" height="418" frameX="-74" frameY="-3" frameWidth="555" frameHeight="423"/>
-	<SubTexture name="GF Dancing Beat0002" x="3178" y="2871" width="292" height="409" frameX="-16" frameY="-14" frameWidth="326" frameHeight="423"/>
-	<SubTexture name="GF Dancing Beat0009" x="2216" y="2483" width="312" height="420" frameX="-10" frameY="-1" frameWidth="326" frameHeight="423"/>
-	<SubTexture name="GF Dancing Beat0010" x="2216" y="2483" width="312" height="420" frameX="-10" frameY="-1" frameWidth="326" frameHeight="423"/>
-	<SubTexture name="GF Dancing Beat0012" x="1255" y="2484" width="322" height="421" frameX="-1" frameY="-0" frameWidth="326" frameHeight="423"/>
-	<SubTexture name="GF Dancing Beat0013" x="1255" y="2484" width="322" height="421" frameX="-1" frameY="-0" frameWidth="326" frameHeight="423"/>
-	<SubTexture name="GF Dancing Beat0015" x="1578" y="2483" width="324" height="421" frameX="-0" frameY="-0" frameWidth="326" frameHeight="423"/>
-	<SubTexture name="GF Dancing Beat0017" x="1275" y="2906" width="321" height="411" frameX="-2" frameY="-12" frameWidth="326" frameHeight="423"/>
-	<SubTexture name="GF Dancing Beat0024" x="2310" y="1238" width="293" height="416" frameX="-33" frameY="-5" frameWidth="326" frameHeight="423"/>
-	<SubTexture name="GF Dancing Beat0025" x="2310" y="1238" width="293" height="416" frameX="-33" frameY="-5" frameWidth="326" frameHeight="423"/>
-	<SubTexture name="GF Dancing Beat0027" x="2618" y="1220" width="293" height="415" frameX="-33" frameY="-6" frameWidth="326" frameHeight="423"/>
-	<SubTexture name="GF Dancing Beat0028" x="2618" y="1220" width="293" height="415" frameX="-33" frameY="-6" frameWidth="326" frameHeight="423"/>
-	<SubTexture name="GF Dancing Beat0030" x="2604" y="1636" width="292" height="415" frameX="-33" frameY="-6" frameWidth="326" frameHeight="423"/>
 	<SubTexture name="GF Down Note0002" x="1190" y="3322" width="312" height="407" frameX="-0" frameY="-6" frameWidth="312" frameHeight="413"/>
 	<SubTexture name="GF Down Note0004" x="2549" y="2899" width="310" height="411" frameX="-2" frameY="-1" frameWidth="312" frameHeight="413"/>
 	<SubTexture name="GF Down Note0006" x="2618" y="2052" width="310" height="412" frameX="-2" frameY="-0" frameWidth="312" frameHeight="413"/>

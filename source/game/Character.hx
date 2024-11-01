@@ -496,7 +496,7 @@ class Character extends FlxSprite {
 		script?.call("dance", [altAnim, force]);
 		if (shouldDance) {
 			if (!debugMode && curCharacter != '' && hasAnims() && (force || (!playFullAnim && !preventDanceForAnim))) {
-				var alt = "";
+				var alt:String = '';
 
 				if ((!dancesLeftAndRight && hasAnim("idle" + altAnim))
 					|| (dancesLeftAndRight
@@ -506,17 +506,16 @@ class Character extends FlxSprite {
 
 				mostRecentAlt = alt;
 
-				var special_animation = !(curAnimName().startsWith('idle')
+				var alwaysPlayAnimation:Bool = (curAnimName().startsWith('idle')
 					|| curAnimName().startsWith('danceLeft')
 					|| curAnimName().startsWith('danceRight')
 					|| curAnimName().startsWith('sing'));
 
-				if (!special_animation || curAnimFinished() || curAnimLooped()) {
+				if (alwaysPlayAnimation || curAnimFinished() || curAnimLooped()) {
 					if (!dancesLeftAndRight)
 						playAnim('idle' + alt);
-					else {
+					else if (dancesLeftAndRight) {
 						danced = !danced;
-
 						if (danced)
 							playAnim('danceRight' + alt);
 						else
@@ -554,12 +553,10 @@ class Character extends FlxSprite {
 			preventDanceForAnim = true;
 
 		var daOffset = animOffsets.get(AnimName);
-		if (animOffsets.exists(AnimName)) {
-			offset.set((daOffset[0] * _cosAngle) - (daOffset[1] *_sinAngle), (daOffset[1] * _cosAngle) + (daOffset[0] * _sinAngle));
-		}
-		else{
+		if (animOffsets.exists(AnimName))
+			offset.set((daOffset[0] * _cosAngle) - (daOffset[1] * _sinAngle), (daOffset[1] * _cosAngle) + (daOffset[0] * _sinAngle));
+		else
 			offset.set(0, 0);
-		}
 	}
 
 	public inline function addOffset(name:String, x:Float = 0, y:Float = 0) {

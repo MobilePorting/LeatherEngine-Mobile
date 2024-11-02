@@ -13,13 +13,11 @@ import haxe.Json;
 import flixel.util.FlxColor;
 import flixel.math.FlxPoint;
 import states.PlayState;
-import flixel.util.FlxTimer;
-import flixel.sound.FlxSound;
 import flixel.FlxG;
 import flixel.FlxSprite;
 import flixel.group.FlxGroup;
 import modding.CharacterConfig;
-import game.DancingSprite.BackgroundGirls;
+import game.DancingSprite;
 
 using StringTools;
 
@@ -38,15 +36,12 @@ class StageGroup extends FlxGroup {
 	public var p1_Cam_Offset:FlxPoint = new FlxPoint(0, 0);
 	public var p2_Cam_Offset:FlxPoint = new FlxPoint(0, 0);
 
-	private var stage_Data:StageData;
+	public var stage_Data:StageData;
 
 	public var stage_Objects:Array<Array<Dynamic>> = [];
 
-	// SCHOOL STUFF
-	private var bgGirls:BackgroundGirls;
-
 	// other
-	private var onBeatHit_Group:FlxTypedGroup<FlxSprite> = new FlxTypedGroup<FlxSprite>();
+	public var onBeatHit_Group:FlxTypedGroup<FlxSprite> = new FlxTypedGroup<FlxSprite>();
 
 	public var foregroundSprites:FlxGroup = new FlxGroup();
 	public var infrontOfGFSprites:FlxGroup = new FlxGroup();
@@ -61,261 +56,118 @@ class StageGroup extends FlxGroup {
 		if (newStage != null)
 			stage = newStage;
 
-		var bruhStages:Array<String> = ['school', 'school-mad'];
-		var stagesNormally:Array<String> = CoolUtil.coolTextFile(Paths.txt('stageList'));
-
-		if (stage != "") {
-			if (!bruhStages.contains(stage) && stagesNormally.contains(stage)) {
-				var JSON_Data:String = "";
-
-				JSON_Data = Assets.getText(Paths.json("stage data/" + stage)).trim();
-				stage_Data = cast Json.parse(JSON_Data);
-			}
+		if (stage != "" && Assets.exists(Paths.json("stage data/" + stage))) {
+			stage_Data = cast Json.parse(Assets.getText(Paths.json("stage data/" + stage)).trim());
+		} else {
+			stage_Data = cast Json.parse(Assets.getText(Paths.json("stage data/stage")).trim());
 		}
 
 		clear();
 
-		if (stage != "") {
-			switch (stage) {
-				case "school":
-					{
-						player_2_Point.x = 379;
-						player_2_Point.y = 928;
-						gf_Point.x = 709;
-						gf_Point.y = 856;
-						player_1_Point.x = 993;
-						player_1_Point.y = 944;
+		switch (stage) {
+			//incase you want to harcode your stage
+			default:
+				{
+					if (stage_Data != null) {
+						camZoom = stage_Data.camera_Zoom;
 
-						var bgSky = new FlxSprite().loadGraphic(Paths.image(stage + '/weebSky', 'stages'));
-						bgSky.scrollFactor.set(0.1, 0.1);
-						add(bgSky);
+						if (stage_Data.camera_Offsets != null) {
+							p1_Cam_Offset.set(stage_Data.camera_Offsets[0][0], stage_Data.camera_Offsets[0][1]);
+							p2_Cam_Offset.set(stage_Data.camera_Offsets[1][0], stage_Data.camera_Offsets[1][1]);
+						}
 
-						var repositionShit = -200;
+						player_1_Point.set(stage_Data.character_Positions[0][0], stage_Data.character_Positions[0][1]);
+						player_2_Point.set(stage_Data.character_Positions[1][0], stage_Data.character_Positions[1][1]);
+						gf_Point.set(stage_Data.character_Positions[2][0], stage_Data.character_Positions[2][1]);
 
-						var bgSchool:FlxSprite = new FlxSprite(repositionShit, 0).loadGraphic(Paths.image(stage + '/weebSchool', 'stages'));
-						bgSchool.scrollFactor.set(0.6, 0.90);
-						add(bgSchool);
+						if (stage_Data.character_Scrolls != null) {
+							p1_Scroll = stage_Data.character_Scrolls[0];
+							p2_Scroll = stage_Data.character_Scrolls[1];
+							gf_Scroll = stage_Data.character_Scrolls[2];
+						}
 
-						var bgStreet:FlxSprite = new FlxSprite(repositionShit).loadGraphic(Paths.image(stage + '/weebStreet', 'stages'));
-						bgStreet.scrollFactor.set(0.95, 0.95);
-						add(bgStreet);
+						var null_Object_Name_Loop:Int = 0;
 
-						var fgTrees:FlxSprite = new FlxSprite(repositionShit + 170, 130).loadGraphic(Paths.image(stage + '/weebTreesBack', 'stages'));
-						fgTrees.scrollFactor.set(0.9, 0.9);
-						add(fgTrees);
+						for (Object in stage_Data.objects) {
+							var Sprite:FlxSprite = Object.dances ? new DancingSprite(Object.position[0],
+								Object.position[1]) : new FlxSprite(Object.position[0], Object.position[1]);
 
-						var bgTrees:FlxSprite = new FlxSprite(repositionShit - 380, -800);
-						var treetex = Paths.getPackerAtlas(stage + '/weebTrees', 'stages');
-						bgTrees.frames = treetex;
-						bgTrees.animation.add('treeLoop', [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18], 12);
-						bgTrees.animation.play('treeLoop');
-						bgTrees.scrollFactor.set(0.85, 0.85);
-						add(bgTrees);
+							if (Options.getData("shaders"))
+								Sprite.shader = colorSwap.shader;
 
-						var treeLeaves:FlxSprite = new FlxSprite(repositionShit, -40);
-						treeLeaves.frames = Paths.getSparrowAtlas(stage + '/petals', 'stages');
-						treeLeaves.animation.addByPrefix('leaves', 'PETALS ALL', 24, true);
-						treeLeaves.animation.play('leaves');
-						treeLeaves.scrollFactor.set(0.85, 0.85);
-						add(treeLeaves);
+							if (Object.color != null && Object.color != [])
+								Sprite.color = FlxColor.fromRGB(Object.color[0], Object.color[1], Object.color[2]);
 
-						var widShit = Std.int(bgSky.width * 6);
+							Sprite.antialiasing = Object.antialiased;
+							Sprite.scrollFactor.set(Object.scroll_Factor[0], Object.scroll_Factor[1]);
 
-						bgSky.setGraphicSize(widShit);
-						bgSchool.setGraphicSize(widShit);
-						bgStreet.setGraphicSize(widShit);
-						bgTrees.setGraphicSize(Std.int(widShit * 1.4));
-						fgTrees.setGraphicSize(Std.int(widShit * 0.8));
-						treeLeaves.setGraphicSize(widShit);
-
-						fgTrees.updateHitbox();
-						bgSky.updateHitbox();
-						bgSchool.updateHitbox();
-						bgStreet.updateHitbox();
-						bgTrees.updateHitbox();
-						treeLeaves.updateHitbox();
-
-						bgGirls = new BackgroundGirls(-100, 190);
-						bgGirls.scrollFactor.set(0.9, 0.9);
-
-						bgGirls.setGraphicSize(Std.int(bgGirls.width * 6));
-						bgGirls.updateHitbox();
-						add(bgGirls);
-					}
-				case "school-mad":
-					{
-						stage = "school";
-
-						player_2_Point.x = 379;
-						player_2_Point.y = 928;
-						gf_Point.x = 709;
-						gf_Point.y = 856;
-						player_1_Point.x = 993;
-						player_1_Point.y = 944;
-
-						var bgSky = new FlxSprite().loadGraphic(Paths.image(stage + '/weebSky', 'stages'));
-						bgSky.scrollFactor.set(0.1, 0.1);
-						add(bgSky);
-
-						var repositionShit = -200;
-
-						var bgSchool:FlxSprite = new FlxSprite(repositionShit, 0).loadGraphic(Paths.image(stage + '/weebSchool', 'stages'));
-						bgSchool.scrollFactor.set(0.6, 0.90);
-						add(bgSchool);
-
-						var bgStreet:FlxSprite = new FlxSprite(repositionShit).loadGraphic(Paths.image(stage + '/weebStreet', 'stages'));
-						bgStreet.scrollFactor.set(0.95, 0.95);
-						add(bgStreet);
-
-						var fgTrees:FlxSprite = new FlxSprite(repositionShit + 170, 130).loadGraphic(Paths.image(stage + '/weebTreesBack', 'stages'));
-						fgTrees.scrollFactor.set(0.9, 0.9);
-						add(fgTrees);
-
-						var bgTrees:FlxSprite = new FlxSprite(repositionShit - 380, -800);
-						var treetex = Paths.getPackerAtlas(stage + '/weebTrees', 'stages');
-						bgTrees.frames = treetex;
-						bgTrees.animation.add('treeLoop', [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18], 12);
-						bgTrees.animation.play('treeLoop');
-						bgTrees.scrollFactor.set(0.85, 0.85);
-						add(bgTrees);
-
-						var treeLeaves:FlxSprite = new FlxSprite(repositionShit, -40);
-						treeLeaves.frames = Paths.getSparrowAtlas(stage + '/petals', 'stages');
-						treeLeaves.animation.addByPrefix('leaves', 'PETALS ALL', 24, true);
-						treeLeaves.animation.play('leaves');
-						treeLeaves.scrollFactor.set(0.85, 0.85);
-						add(treeLeaves);
-
-						var widShit = Std.int(bgSky.width * 6);
-
-						bgSky.setGraphicSize(widShit);
-						bgSchool.setGraphicSize(widShit);
-						bgStreet.setGraphicSize(widShit);
-						bgTrees.setGraphicSize(Std.int(widShit * 1.4));
-						fgTrees.setGraphicSize(Std.int(widShit * 0.8));
-						treeLeaves.setGraphicSize(widShit);
-
-						fgTrees.updateHitbox();
-						bgSky.updateHitbox();
-						bgSchool.updateHitbox();
-						bgStreet.updateHitbox();
-						bgTrees.updateHitbox();
-						treeLeaves.updateHitbox();
-
-						bgGirls = new BackgroundGirls(-100, 190);
-						bgGirls.scrollFactor.set(0.9, 0.9);
-
-						bgGirls.getScared();
-
-						bgGirls.setGraphicSize(Std.int(bgGirls.width * 6));
-						bgGirls.updateHitbox();
-						add(bgGirls);
-
-						stage = "school-mad";
-					}
-				// CUSTOM SHIT
-				default:
-					{
-						if (stage_Data != null) {
-							camZoom = stage_Data.camera_Zoom;
-
-							if (stage_Data.camera_Offsets != null) {
-								p1_Cam_Offset.set(stage_Data.camera_Offsets[0][0], stage_Data.camera_Offsets[0][1]);
-								p2_Cam_Offset.set(stage_Data.camera_Offsets[1][0], stage_Data.camera_Offsets[1][1]);
+							if (Object.object_Name != null && Object.object_Name != "")
+								stage_Objects.push([Object.object_Name, Sprite, Object]);
+							else {
+								stage_Objects.push(["undefinedSprite" + null_Object_Name_Loop, Sprite, Object]);
+								null_Object_Name_Loop++;
 							}
 
-							player_1_Point.set(stage_Data.character_Positions[0][0], stage_Data.character_Positions[0][1]);
-							player_2_Point.set(stage_Data.character_Positions[1][0], stage_Data.character_Positions[1][1]);
-							gf_Point.set(stage_Data.character_Positions[2][0], stage_Data.character_Positions[2][1]);
+							if (Object.is_Animated) {
+								Sprite.frames = Paths.getSparrowAtlas((stage_Data.imageDirectory ?? stage) + "/" + Object.file_Name, "stages");
 
-							if (stage_Data.character_Scrolls != null) {
-								p1_Scroll = stage_Data.character_Scrolls[0];
-								p2_Scroll = stage_Data.character_Scrolls[1];
-								gf_Scroll = stage_Data.character_Scrolls[2];
-							}
+								for (Animation in Object.animations) {
+									var Anim_Name = Animation.name;
 
-							var null_Object_Name_Loop:Int = 0;
+									if (Animation.name == "beatHit")
+										onBeatHit_Group.add(Sprite);
 
-							for (Object in stage_Data.objects) {
-								var Sprite = new FlxSprite(Object.position[0], Object.position[1]);
-
-								if (Options.getData("shaders"))
-									Sprite.shader = colorSwap.shader;
-
-								if (Object.color != null && Object.color != [])
-									Sprite.color = FlxColor.fromRGB(Object.color[0], Object.color[1], Object.color[2]);
-
-								Sprite.antialiasing = Object.antialiased;
-								Sprite.scrollFactor.set(Object.scroll_Factor[0], Object.scroll_Factor[1]);
-
-								if (Object.object_Name != null && Object.object_Name != "")
-									stage_Objects.push([Object.object_Name, Sprite, Object]);
-								else {
-									stage_Objects.push(["undefinedSprite" + null_Object_Name_Loop, Sprite, Object]);
-									null_Object_Name_Loop++;
+									if (Animation.indices == null) {
+										Sprite.animation.addByPrefix(Anim_Name, Animation.animation_name, Animation.fps, Animation.looped);
+									} else if (Animation.indices.length == 0) {
+										Sprite.animation.addByPrefix(Anim_Name, Animation.animation_name, Animation.fps, Animation.looped);
+									} else {
+										Sprite.animation.addByIndices(Anim_Name, Animation.animation_name, Animation.indices, "", Animation.fps,
+											Animation.looped);
+									}
 								}
 
-								if (Object.is_Animated) {
-									Sprite.frames = Paths.getSparrowAtlas(stage + "/" + Object.file_Name, "stages");
+								if (Object.start_Animation != "" && Object.start_Animation != null && Object.start_Animation != "null")
+									Sprite.animation.play(Object.start_Animation);
+							} else if (Object.file_Name.startsWith('#')) {
+								Sprite.makeGraphic(Std.int(Object.scale), Std.int(Object.scale), FlxColor.fromString(Object.file_Name));
+							} else
+								Sprite.loadGraphic(Paths.image((stage_Data.imageDirectory ?? stage) + "/" + Object.file_Name, "stages"));
 
-									for (Animation in Object.animations) {
-										var Anim_Name = Animation.name;
+							if (Object.uses_Frame_Width)
+								Sprite.setGraphicSize(Std.int(Sprite.frameWidth * Object.scale));
+							else
+								Sprite.setGraphicSize(Std.int(Sprite.width * Object.scale));
 
-										if (Animation.name == "beatHit")
-											onBeatHit_Group.add(Sprite);
+							if (Object.updateHitbox || Object.updateHitbox == null)
+								Sprite.updateHitbox();
 
-										if (Animation.indices == null) {
-											Sprite.animation.addByPrefix(Anim_Name, Animation.animation_name, Animation.fps, Animation.looped);
-										} else if (Animation.indices.length == 0) {
-											Sprite.animation.addByPrefix(Anim_Name, Animation.animation_name, Animation.fps, Animation.looped);
-										} else {
-											Sprite.animation.addByIndices(Anim_Name, Animation.animation_name, Animation.indices, "", Animation.fps,
-												Animation.looped);
-										}
-									}
+							if (Object.alpha != null)
+								Sprite.alpha = Object.alpha;
 
-									if (Object.start_Animation != "" && Object.start_Animation != null && Object.start_Animation != "null")
-										Sprite.animation.play(Object.start_Animation);
-								} else if (Object.file_Name.startsWith('#')) {
-									Sprite.makeGraphic(Std.int(Object.scale), Std.int(Object.scale), FlxColor.fromString(Object.file_Name));
-								} else
-									Sprite.loadGraphic(Paths.image(stage + "/" + Object.file_Name, "stages"));
-
-								if (Object.uses_Frame_Width)
-									Sprite.setGraphicSize(Std.int(Sprite.frameWidth * Object.scale));
-								else
-									Sprite.setGraphicSize(Std.int(Sprite.width * Object.scale));
-
-								if (Object.updateHitbox || Object.updateHitbox == null)
-									Sprite.updateHitbox();
-
-								if (Object.alpha != null)
-									Sprite.alpha = Object.alpha;
-
-								if (Object.layer != null) {
-									switch (Object.layer.toLowerCase()) {
-										case "foreground":
-											foregroundSprites.add(Sprite);
-										case "gf":
-											infrontOfGFSprites.add(Sprite);
-										default:
-											add(Sprite);
-									}
-								} else
-									add(Sprite);
-							}
-						}
-						if (Assets.exists(Paths.hx('data/stage data/${stage}'))) {
-							if (FlxG.state is PlayState) {
-								var script:HScript = new HScript(Paths.hx('data/stage data/${stage}'));
-								for (object in stage_Objects){
-									script.interp.variables.set(object[0], object[1]);
+							if (Object.layer != null) {
+								switch (Object.layer.toLowerCase()) {
+									case "foreground":
+										foregroundSprites.add(Sprite);
+									case "gf":
+										infrontOfGFSprites.add(Sprite);
+									default:
+										add(Sprite);
 								}
-								PlayState.instance.scripts.push(script);
-							}
+							} else
+								add(Sprite);
 						}
 					}
-			}
+					if (Assets.exists(Paths.hx('data/stage data/${stage}'))) {
+						if (FlxG.state is PlayState) {
+							var script:HScript = new HScript(Paths.hx('data/stage data/${stage}'));
+							for (object in stage_Objects) {
+								script.interp.variables.set(object[0], object[1]);
+							}
+							PlayState.instance.scripts.push(script);
+						}
+					}
+				}
 		}
 	}
 
@@ -421,8 +273,11 @@ class StageGroup extends FlxGroup {
 				sprite.animation.play("beatHit");
 			}
 
-			if (stage.startsWith('school'))
-				bgGirls.dance();
+			for (member in members) {
+				if (member is DancingSprite) {
+					cast(member, DancingSprite).dance();
+				}
+			}
 		}
 	}
 
@@ -463,6 +318,8 @@ typedef StageData = {
 	var camera_Offsets:Array<Array<Float>>;
 	var objects:Array<StageObject>;
 	var scriptName:Null<String>;
+	var backgroundColor:Null<String>;
+	var imageDirectory:Null<String>;
 }
 
 typedef StageObject = {
@@ -484,4 +341,5 @@ typedef StageObject = {
 	// Animations //
 	var animations:Array<CharacterAnimation>;
 	var start_Animation:String;
+	var dances:Null<Bool>;
 }

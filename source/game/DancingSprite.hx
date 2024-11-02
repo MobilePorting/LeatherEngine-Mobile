@@ -25,23 +25,3 @@ class DancingSprite extends FlxSprite {
 			animation.play('dance' + altAnim, true);
 	}
 }
-
-class BackgroundGirls extends DancingSprite {
-	public function new(x:Float, y:Float) {
-		super(x, y, false, false);
-
-		frames = Paths.getSparrowAtlas('school/bgFreaks', "stages");
-
-		animation.addByIndices('danceLeft', 'BG girls group', CoolUtil.numberArray(14), "", 24, false);
-		animation.addByIndices('danceRight', 'BG girls group', CoolUtil.numberArray(30, 15), "", 24, false);
-
-		dance();
-	}
-
-	public function getScared():Void {
-		animation.addByIndices('danceLeft', 'BG fangirls dissuaded', CoolUtil.numberArray(14), "", 24, false);
-		animation.addByIndices('danceRight', 'BG fangirls dissuaded', CoolUtil.numberArray(30, 15), "", 24, false);
-
-		dance();
-	}
-}

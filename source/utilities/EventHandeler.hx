@@ -204,6 +204,8 @@ class EventHandeler {
 
 					game.defaultCamZoom = game.stage.camZoom;
 
+					game.camGame.bgColor = FlxColor.fromString(game.stage.stage_Data.backgroundColor ?? "#000000");
+
 					#if LUA_ALLOWED
 					game.stage.createLuaStuff();
 					#end
@@ -218,7 +220,6 @@ class EventHandeler {
 
 					game.call("start", [game.stage.stage], STAGE);
 
-					@:privateAccess
 					game.addBgStuff();
 				}
 			case "change keycount":

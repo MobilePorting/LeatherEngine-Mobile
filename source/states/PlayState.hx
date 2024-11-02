@@ -803,6 +803,7 @@ class PlayState extends MusicBeatState {
 		call("createStage", [stage.stage]);
 
 		defaultCamZoom = stage.camZoom;
+		camGame.bgColor = FlxColor.fromString(stage.stage_Data.backgroundColor ?? "#000000");
 
 		var camPos:FlxPoint = new FlxPoint(dad.getGraphicMidpoint().x, dad.getGraphicMidpoint().y);
 
@@ -3797,7 +3798,7 @@ class PlayState extends MusicBeatState {
 		}
 	}
 
-	function addBgStuff() {
+	public function addBgStuff() {
 		stage.setCharOffsets();
 
 		add(stage);

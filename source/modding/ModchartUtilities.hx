@@ -215,13 +215,13 @@ class ModchartUtilities {
 
 		perlin = new Perlin();
 
-		lua_Sprites.set("boyfriend", PlayState.boyfriend);
-		lua_Sprites.set("girlfriend", PlayState.gf);
-		lua_Sprites.set("dad", PlayState.dad);
+		lua_Sprites.set("boyfriend", PlayState.boyfriend.getMainCharacter());
+		lua_Sprites.set("girlfriend", PlayState.gf.getMainCharacter());
+		lua_Sprites.set("dad", PlayState.dad.getMainCharacter());
 
-		lua_Characters.set("boyfriend", PlayState.boyfriend);
-		lua_Characters.set("girlfriend", PlayState.gf);
-		lua_Characters.set("dad", PlayState.dad);
+		lua_Characters.set("boyfriend", PlayState.boyfriend.getMainCharacter());
+		lua_Characters.set("girlfriend", PlayState.gf.getMainCharacter());
+		lua_Characters.set("dad", PlayState.dad.getMainCharacter());
 
 		lua_Cameras.set("game", {cam: PlayState.instance.camGame, shaders: [], shaderNames: []});
 		lua_Cameras.set("hud", {cam: PlayState.instance.camHUD, shaders: [], shaderNames: []});
@@ -3499,9 +3499,9 @@ class ModchartUtilities {
 		lua_Sprites.set("girlfriend", PlayState.gf);
 		lua_Sprites.set("dad", PlayState.dad);
 
-		lua_Characters.set("boyfriend", PlayState.boyfriend);
-		lua_Characters.set("girlfriend", PlayState.gf);
-		lua_Characters.set("dad", PlayState.dad);
+		lua_Characters.set("boyfriend", PlayState.boyfriend.getMainCharacter());
+		lua_Characters.set("girlfriend", PlayState.gf.getMainCharacter());
+		lua_Characters.set("dad", PlayState.dad.getMainCharacter());
 
 		lua_Sounds.set("Inst", FlxG.sound.music);
 		lua_Sounds.set("Voices", PlayState.instance.vocals);

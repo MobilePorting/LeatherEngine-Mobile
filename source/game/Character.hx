@@ -527,13 +527,11 @@ class Character extends FlxSprite {
 	}
 
 	public function playAnim(AnimName:String, Force:Bool = false, Reversed:Bool = false, Frame:Int = 0):Void {
-		if (playFullAnim)
-			return;
-		if (!hasAnim(AnimName))
+		if (playFullAnim || !hasAnim(AnimName))
 			return;
 		
 		if (singAnimPrefix != 'sing' && AnimName.contains('sing')){
-			var anim = AnimName;
+			var anim:String = AnimName;
 			anim = anim.replace('sing', singAnimPrefix);
 			if (animation.getByName(anim) != null) //check if it exists so no broken anims
 				AnimName = anim;
@@ -563,14 +561,12 @@ class Character extends FlxSprite {
 		animOffsets.set(name, [(isPlayer && offsetsFlipWhenPlayer) || (!isPlayer && offsetsFlipWhenEnemy) ? -x : x, y]);
 	}
 
-	public var followMainCharacter:Bool = false;
 
 	public function getMainCharacter():Character
 	{
-		if (otherCharacters != null && otherCharacters.length > 0)
+		if (otherCharacters?.length > 0)
 		{
-			if (followMainCharacter)
-				return otherCharacters[mainCharacterID];
+			return otherCharacters[mainCharacterID];
 		}
 		return this;
 	}

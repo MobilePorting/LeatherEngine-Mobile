@@ -81,12 +81,7 @@ function shootNextCan() {
 }
 
 function darkenStageProps() {
-	// Darken the background, then fade it back.
-	var dumb:Array<FlxSprite> = [];
-	for (penis in PlayState.instance.stage.stage_Objects) {
-		dumb.push(penis[1]);
-	}
-	for (stageProp in dumb) {
+	for (stageProp in  PlayState.instance.stage.members) {
 		// If not excluded, darken.
 		stageProp.color = 0xFF111111;
 		new FlxTimer().start(1 / 24, (tmr) -> {

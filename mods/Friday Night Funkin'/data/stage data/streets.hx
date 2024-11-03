@@ -113,12 +113,12 @@ function startCountdown() {
 }
 function createStage()
 {
-	scrollingSky = new FlxTiledSprite(Paths.image('phillyStreets/phillySkybox'), 2922, 718, true, false);
+	scrollingSky = new FlxTiledSprite(Paths.image('streets/phillySkybox', 'stages'), 2922, 718, true, false);
 	scrollingSky.setPosition(-650, -375);
 	scrollingSky.scrollFactor.set(0.1, 0.1);
 	scrollingSky.scale.set(0.65, 0.65);
 
-	PlayState.instance.stage.add(scrollingSky);
+	PlayState.instance.stage.insert(0, scrollingSky);
     addProp(phillyTraffic_lightmap, 'phillyTraffic_lightmap');
     addProp(phillyHighwayLights_lightmap, 'phillyHighwayLights_lightmap');
     resetCar(true, true);

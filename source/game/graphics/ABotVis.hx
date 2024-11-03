@@ -62,29 +62,29 @@ class ABotVis extends FlxSpriteGroup
         //analyzer.maxDb = -35;
     }
 
-    override function draw()
+    override function update(elapsed:Float)
     {
         #if (desktop || mobile)
         if(FlxG.sound.music != null){
             var levels = analyzer.getLevels();
-
+            
             var grp = group.members.length;
             var lvls = levels.length;
             for (i in 0...(grp > lvls ? lvls : grp))
-            {
-                var animFrame:Int = Math.round(levels[i].value * 5 * FlxG.sound.volume);
-                animFrame = Math.floor(FlxMath.bound(animFrame, 0, 5));
-
-                //animFrame = Math.floor(Math.min(5, animFrame));
-                //animFrame = Math.floor(Math.max(0, animFrame));
-
+                {
+                    var animFrame:Int = Math.round(levels[i].value * 5 * FlxG.sound.volume);
+                    animFrame = Math.floor(FlxMath.bound(animFrame, 0, 5));
+                    
+                    //animFrame = Math.floor(Math.min(5, animFrame));
+                    //animFrame = Math.floor(Math.max(0, animFrame));
+                    
                 animFrame = Std.int(Math.abs(animFrame - 5)); // shitty dumbass flip, cuz dave got da shit backwards lol!
-
+                
                 group.members[i].animation.curAnim.curFrame = animFrame;
             }
-
+            
         }
         #end
-        super.draw();
+        super.update(elapsed);
     }
 }

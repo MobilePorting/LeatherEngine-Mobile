@@ -1,4 +1,4 @@
-import game.graphics.SpraycanAtlasSprite;
+import game.SpraycanAtlasSprite;
 
 var STATE_ARCING:Int = 2; // In the air.
 var STATE_SHOT:Int = 3; // Hit by the player.

@@ -1,4 +1,4 @@
-package game.components;
+package game;
 
 import flixel.FlxSprite;
 import shaders.PureColor;
@@ -43,6 +43,7 @@ class ClearPercentCounter extends FlxTypedSpriteGroup<FlxSprite>
 
     var clearPercentText:FlxSprite = new FlxSprite(0, 0).loadGraphic(Paths.image('resultScreen/clearPercent/clearPercentText${small ? 'Small' : ''}'));
     clearPercentText.x = small ? 40 : 0;
+    clearPercentText.antialiasing = Options.getData("antialiasing");
     add(clearPercentText);
 
     drawNumbers();

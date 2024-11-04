@@ -16,6 +16,7 @@ import flixel.text.FlxText;
 import flixel.tweens.FlxEase;
 import flixel.tweens.FlxTween;
 import flixel.util.FlxColor;
+import openfl.utils.Assets;
 import ui.Option;
 
 using StringTools;
@@ -33,7 +34,10 @@ class PauseSubState extends MusicBeatSubstate {
 
 	var menu:String = "default";
 
-	var pauseMusic:FlxSound = new FlxSound().loadEmbedded(Paths.music('breakfast'), true, true);
+	var pauseMusic:FlxSound = new FlxSound().loadEmbedded(Paths.music('breakfast'
+		+ (Assets.exists(Paths.music('breakfast-' + PlayState.boyfriend.curCharacter, 'shared')) ? '-' + PlayState.boyfriend.curCharacter : ''),
+		'shared'),
+		true, true);
 
 	var pauseCamera:FlxCamera = new FlxCamera();
 
@@ -105,9 +109,12 @@ class PauseSubState extends MusicBeatSubstate {
 
 	var holdTime:Float = 0;
 
+	public var MAX_MUSIC_VOLUME:Float = 0.5;
+	public var MUSIC_INCREASE_SPEED:Float = 0.02;
+
 	override function update(elapsed:Float) {
-		if (pauseMusic.volume < 0.5)
-			pauseMusic.volume += 0.01 * elapsed;
+		if (pauseMusic.volume < MAX_MUSIC_VOLUME)
+			pauseMusic.volume += MUSIC_INCREASE_SPEED * elapsed;
 
 		super.update(elapsed);
 

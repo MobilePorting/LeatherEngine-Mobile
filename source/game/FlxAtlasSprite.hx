@@ -1,4 +1,4 @@
-package game.graphics;
+package game;
 
 import flixel.util.FlxSignal.FlxTypedSignal;
 import flxanimate.FlxAnimate;

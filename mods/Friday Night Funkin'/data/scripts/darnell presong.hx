@@ -1,4 +1,4 @@
-import game.graphics.SpraycanAtlasSprite;
+import game.SpraycanAtlasSprite;
 
 function startCutscene(){
   trace("started cutscene");

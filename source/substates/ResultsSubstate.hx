@@ -2,12 +2,12 @@ package substates;
 
 import openfl.utils.Assets;
 import states.PlayState;
-import game.components.ResultScore;
+import game.ResultScore;
 import utilities.ScoringRank;
 import flixel.sound.FlxSound;
 import flixel.FlxG;
 import states.StoryMenuState;
-import game.graphics.FlxAtlasSprite;
+import game.FlxAtlasSprite;
 import flixel.FlxSprite;
 import flixel.effects.FlxFlicker;
 import flixel.graphics.frames.FlxBitmapFont;
@@ -26,8 +26,8 @@ import flixel.addons.display.FlxBackdrop;
 import flixel.util.FlxGradient;
 import flixel.util.FlxTimer;
 import shaders.LeftMaskShader;
-import game.components.TallyCounter;
-import game.components.ClearPercentCounter;
+import game.TallyCounter;
+import game.ClearPercentCounter;
 
 /**
  * The substate for the results screen after a song or week is finished.

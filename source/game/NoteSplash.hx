@@ -18,10 +18,10 @@ class NoteSplash extends FlxSprite {
 	public var affectedbycolor:Bool = false;
 	public var jsonData:JsonData;
 
-	public function setup_splash(noteData:Int, target:FlxSprite, ?isPlayer:Bool = false, ?ui_Skin:String) {
-		this.target = target;
+	public function new(?X:Float = 0, ?Y:Float = 0){
+		super(X, Y);
 
-		var localKeyCount = isPlayer ? PlayState.SONG.playerKeyCount : PlayState.SONG.keyCount;
+		colorSwap = new ColorSwap();
 
 		alpha = 0.8;
 
@@ -32,6 +32,19 @@ class NoteSplash extends FlxSprite {
 				frames = Paths.getSparrowAtlas("ui skins/default/arrows/Note_Splashes");
 		}
 
+		if(Assets.exists(Paths.json("ui skins/" + PlayState.SONG.ui_Skin + "/config"))){
+			jsonData = Json.parse(Assets.getText(Paths.json("ui skins/" + PlayState.SONG.ui_Skin + "/config")));	
+			for (value in jsonData.values) {
+				this.affectedbycolor = value.affectedbycolor;
+			}
+		}
+	}
+
+	public function setup_splash(noteData:Int, target:FlxSprite, ?isPlayer:Bool = false) {
+
+		var localKeyCount:Int = isPlayer ? PlayState.SONG.playerKeyCount : PlayState.SONG.keyCount;
+
+		this.target = target;
 		graphic.destroyOnNoUse = false;
 
 		animation.addByPrefix("default", "note splash " + NoteVariables.Other_Note_Anim_Stuff[localKeyCount - 1][noteData] + "0", FlxG.random.int(22, 26),
@@ -45,17 +58,7 @@ class NoteSplash extends FlxSprite {
 		updateHitbox();
 		centerOffsets();
 
-		if (ui_Skin == null)
-			ui_Skin = PlayState.SONG.ui_Skin;
 
-		if(Assets.exists(Paths.json("ui skins/" + ui_Skin + "/config"))){
-			jsonData = Json.parse(Assets.getText(Paths.json("ui skins/" + ui_Skin + "/config")));	
-			for (value in jsonData.values) {
-				this.affectedbycolor = value.affectedbycolor;
-			}
-		}
-
-		colorSwap = new ColorSwap();
 		shader = affectedbycolor ? colorSwap.shader : null;
 
 		noteColor = NoteColors.getNoteColor(NoteVariables.Other_Note_Anim_Stuff[PlayState.SONG.keyCount - 1][noteData]);

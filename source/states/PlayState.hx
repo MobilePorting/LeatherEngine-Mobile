@@ -2271,7 +2271,7 @@ class PlayState extends MusicBeatState {
 								}
 
 								if (!note.isSustainNote && opponentNoteSplashes) {
-									var splash = splash_group.recycle(NoteSplash);
+									var splash:NoteSplash = splash_group.recycle(NoteSplash);
 									splash.setup_splash(spr.ID, spr, false);
 									if (note.colorSwap != null) {
 										splash.colorSwap.r = note.colorSwap.r;
@@ -2864,7 +2864,7 @@ class PlayState extends MusicBeatState {
 		if ((daRating == "sick" || daRating == "marvelous") && playerNoteSplashes) {
 			playerStrums.forEachAlive(function(spr:StrumNote) {
 				if (spr.ID == Math.abs(noteData)) {
-					var splash = splash_group.recycle(NoteSplash);
+					var splash:NoteSplash = splash_group.recycle(NoteSplash);
 					splash.setup_splash(noteData, spr, true);
 					if (spr.colorSwap != null) {
 						splash.colorSwap.r = spr.colorSwap.r;

@@ -1,4 +1,4 @@
-package game.graphics;
+package game;
 
 import lime.media.AudioSource;
 import flixel.FlxG;
@@ -19,7 +19,7 @@ class ABotVis extends FlxSpriteGroup
     var analyzer:SpectralAnalyzer;
     #end
 
-    public function new(snd:AudioSource)
+    public function new()
     {
         super();
 

@@ -1,7 +1,7 @@
 package substates;
 
 import flixel.sound.FlxSound;
-import game.graphics.FlxAtlasSprite;
+import game.FlxAtlasSprite;
 import lime.utils.Assets;
 import game.Character;
 import states.FreeplayState;

@@ -983,7 +983,7 @@ class PlayState extends MusicBeatState {
 		#if (MODCHARTING_TOOLS)
 		if (SONG.modchartingTools
 			|| Assets.exists(Paths.json("song data/" + SONG.song.toLowerCase() + "/modchart"))
-			|| Assets.exists(Paths.json("song data/" + SONG.song.toLowerCase() + "/modchart" + storyDifficultyStr.toLowerCase()))) {
+			|| Assets.exists(Paths.json("song data/" + SONG.song.toLowerCase() + "/modchart-" + storyDifficultyStr.toLowerCase()))) {
 			playfieldRenderer = new PlayfieldRenderer(strumLineNotes, notes, this);
 			playfieldRenderer.cameras = [camHUD];
 			add(playfieldRenderer);

@@ -38,6 +38,8 @@ class MaxFPSMenu extends MusicBeatSubstate
     override function update(elapsed:Float) {
         super.update(elapsed);
 
+        FlxG.stage.frameRate = flixel.math.FlxMath.bound(fps, 0.1, 1000);
+
         var leftP = controls.LEFT_P;
 		var rightP = controls.RIGHT_P;
 

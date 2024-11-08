@@ -348,10 +348,15 @@ class ResultsSubstate extends MusicBeatSubstate {
 		// resultsAnim.zIndex = 1200;
 		resultsAnim.antialiasing = Options.getData("antialiasing");
 		add(resultsAnim);
-		new FlxTimer().start(6 / 24, _ -> {
-			resultsAnim.visible = true;
-			resultsAnim.animation.play("result");
-		});
+		try{
+			new FlxTimer().start(6 / 24, _ -> {
+				resultsAnim.visible = true;
+				resultsAnim.animation.play("result");
+			});
+		}
+		catch(e){
+			
+		}
 
 		ratingsPopin.animation.addByPrefix("idle", "Categories", 24, false);
 		ratingsPopin.visible = false;

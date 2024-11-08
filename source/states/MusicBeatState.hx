@@ -109,7 +109,7 @@ class MusicBeatState extends #if MODCHARTING_TOOLS modcharting.ModchartMusicBeat
 	override public function create() {
 		super.create();
 		#if sys
-		var statePath:String = Type.getClassName(Type.getClass(FlxG.state)).replace(".", "/");
+		var statePath:String = Type.getClassName(Type.getClass(this)).replace(".", "/");
 		if (sys.FileSystem.exists('mods/${Options.getData("curMod")}/classes/${statePath}.hx')) {
 			stateScript = new HScript('mods/${Options.getData("curMod")}/classes/${statePath}.hx');
 		}
@@ -230,11 +230,11 @@ class MusicBeatState extends #if MODCHARTING_TOOLS modcharting.ModchartMusicBeat
 		Application.current.window.title = windowNamePrefix + windowNameSuffix #if debug + ' (DEBUG)' #end;
 	}
 
-	private function updateBeat():Void {
+	public function updateBeat():Void {
 		curBeat = Math.floor(curStep / Conductor.timeScale[1]);
 	}
 
-	private function updateCurStep():Void {
+	public function updateCurStep():Void {
 		var lastChange:BPMChangeEvent = {
 			stepTime: 0,
 			songTime: 0,

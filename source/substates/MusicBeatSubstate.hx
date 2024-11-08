@@ -5,7 +5,6 @@ import lime.app.Application;
 import flixel.input.FlxInput.FlxInputState;
 import flixel.FlxSprite;
 import flixel.FlxBasic;
-import openfl.Lib;
 import game.Conductor;
 import utilities.PlayerSettings;
 import utilities.Controls;
@@ -18,14 +17,15 @@ import flixel.FlxCamera;
 import flixel.input.actions.FlxActionInput;
 import flixel.util.FlxDestroyUtil;
 
-class MusicBeatSubstate extends FlxSubState
-{
-	private var lastBeat:Float = 0;
-	private var lastStep:Float = 0;
+class MusicBeatSubstate extends FlxSubState {
+	public var lastBeat:Float = 0;
+	public var lastStep:Float = 0;
 
-	private var curStep:Int = 0;
-	private var curBeat:Int = 0;
-	private var controls(get, never):Controls;
+	public var curStep:Int = 0;
+	public var curBeat:Int = 0;
+	public var controls(get, never):Controls;
+
+	public var stateScript:HScript;
 
 	inline function get_controls():Controls
 		return PlayerSettings.player1.controls;
@@ -109,8 +109,17 @@ class MusicBeatSubstate extends FlxSubState
 			hitbox = FlxDestroyUtil.destroy(hitbox);
 	}
 
-	override function update(elapsed:Float)
-	{
+	override public function create() {
+		super.create();
+		#if sys
+		var statePath:String = Type.getClassName(Type.getClass(this)).replace(".", "/");
+		if (sys.FileSystem.exists('mods/${Options.getData("curMod")}/classes/${statePath}.hx')) {
+			stateScript = new HScript('mods/${Options.getData("curMod")}/classes/${statePath}.hx');
+		}
+		#end
+	}
+
+	override function update(elapsed:Float) {
 		var oldStep:Int = curStep;
 
 		updateCurStep();
@@ -121,8 +130,6 @@ class MusicBeatSubstate extends FlxSubState
 
 		super.update(elapsed);
 
-		if(FlxG.stage != null)
-			FlxG.stage.frameRate = flixel.math.FlxMath.bound(Options.getData("maxFPS"), 0.1, 1000);
 
 		if (!Options.getData("antialiasing")) {
 			forEachAlive(function(basic:FlxBasic) {
@@ -133,21 +140,19 @@ class MusicBeatSubstate extends FlxSubState
 			}, true);
 		}
 
-		if(FlxG.keys.checkStatus(FlxKey.fromString(Options.getData("fullscreenBind", "binds")), FlxInputState.JUST_PRESSED))
+		if (FlxG.keys.checkStatus(FlxKey.fromString(Options.getData("fullscreenBind", "binds")), FlxInputState.JUST_PRESSED))
 			FlxG.fullscreen = !FlxG.fullscreen;
 
-		Application.current.window.title = MusicBeatState.windowNamePrefix + MusicBeatState.windowNameSuffix;
+		Application.current.window.title = MusicBeatState.windowNamePrefix + MusicBeatState.windowNameSuffix #if debug + ' (DEBUG)' #end;
 	}
 
-	private function updateCurStep():Void
-	{
+	public function updateCurStep():Void {
 		var lastChange:BPMChangeEvent = {
 			stepTime: 0,
 			songTime: 0,
 			bpm: 0
 		}
-		for (i in 0...Conductor.bpmChangeMap.length)
-		{
+		for (i in 0...Conductor.bpmChangeMap.length) {
 			if (Conductor.songPosition > Conductor.bpmChangeMap[i].songTime)
 				lastChange = Conductor.bpmChangeMap[i];
 		}
@@ -155,14 +160,12 @@ class MusicBeatSubstate extends FlxSubState
 		curStep = lastChange.stepTime + Math.floor((Conductor.songPosition - lastChange.songTime) / Conductor.stepCrochet);
 	}
 
-	public function stepHit():Void
-	{
+	public function stepHit():Void {
 		if (curStep % 4 == 0)
 			beatHit();
 	}
 
-	public function beatHit():Void
-	{
-		//do literally nothing dumbass
+	public function beatHit():Void {
+		// do literally nothing dumbass
 	}
 }

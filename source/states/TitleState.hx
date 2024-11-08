@@ -88,7 +88,8 @@ class TitleState extends MusicBeatState {
 			#end
 			MusicBeatState.windowNamePrefix = Options.getData("curMod");
 			CoolUtil.setWindowIcon("mods/" + Options.getData("curMod") + "/_polymod_icon.png");
-
+			FlxG.drawFramerate = Options.getData("maxFPS");
+			
 			#if FLX_NO_DEBUG
 			if (Options.getData("flixelStartupScreen") && !doneFlixelSplash) {
 				doneFlixelSplash = true;
@@ -96,12 +97,12 @@ class TitleState extends MusicBeatState {
 				return;
 			}
 			#end
-
+			
 			if (Options.getData("flashingLights") == null)
 				FlxG.switchState(new FlashingLightsMenu());
-
+			
 			curWacky = FlxG.random.getObject(getIntroTextShit());
-
+			
 			super.create();
 
 			#if DISCORD_ALLOWED
@@ -411,10 +412,12 @@ class TitleState extends MusicBeatState {
 				textDataText(2);
 			case 7:
 				textDataText(3);
-				newgrounds.visible = true;
+				if(newgrounds != null)
+					newgrounds.visible = true;
 			case 8:
 				deleteCoolText();
-				newgrounds.visible = false;
+				if(newgrounds != null)
+					newgrounds.visible = false;
 			case 9:
 				if (curWacky[0] != null) {
 					createCoolText([curWacky[0]]);

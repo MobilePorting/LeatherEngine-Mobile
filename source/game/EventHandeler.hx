@@ -1,4 +1,4 @@
-package utilities;
+package game;
 
 import game.TimeBar;
 import flixel.graphics.FlxGraphic;

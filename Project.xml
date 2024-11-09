@@ -4,7 +4,7 @@
 	<define name="no-deprecation-warnings" />
 
 	<app title="Leather Engine" file="LeatherEngine" packageName="com.leather128.funkin"
-		package="com.leather128.funkin" main="Main" version="0.5.0" company="leather128" />
+		package="com.leather128.funkin" main="Main" version="0.5.0pre" company="leather128" />
 
 	<!-- totally not stolen from psych engine -->
 	<haxedef name="LINC_LUA_RELATIVE_DYNAMIC_LIB" /> <!-- i think this is important -->

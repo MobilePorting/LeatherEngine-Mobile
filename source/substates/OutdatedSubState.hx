@@ -1,18 +1,14 @@
 package substates;
 
-import states.TitleState;
 
 import states.MainMenuState;
 import states.MusicBeatState;
 import flixel.FlxG;
 import flixel.FlxSprite;
-import flixel.FlxSubState;
 import flixel.text.FlxText;
 import flixel.util.FlxColor;
-import lime.app.Application;
 
 class OutdatedSubState extends MusicBeatState {
-	public static var leftState:Bool = false;
 	private var version:String = 'vnull';
 
 	public function new(?version:String = 'vnull') {
@@ -23,8 +19,7 @@ class OutdatedSubState extends MusicBeatState {
 	override function create() {
 		super.create();
 
-		var bg:FlxSprite = new FlxSprite().makeGraphic(FlxG.width, FlxG.height, FlxColor.BLACK);
-		add(bg);
+		add(new FlxSprite().makeGraphic(FlxG.width, FlxG.height, FlxColor.BLACK));
 
 		final buttonEnter:String = controls.mobileC ? 'A' : 'ENTER';
 		final buttonESC:String = controls.mobileC ? 'B' : 'ESCAPE';
@@ -47,11 +42,10 @@ class OutdatedSubState extends MusicBeatState {
 		super.update(elapsed);
 
 		if (controls.ACCEPT) {
-			CoolUtil.openURL("https://github.com/MobilePorting/LeatherEngine-LTS-Mobile");
+			CoolUtil.openURL("https://github.com/MobilePorting/LeatherEngine-Mobile");
 		}
 
 		if (controls.BACK) {
-			leftState = true;
 			FlxG.switchState(new MainMenuState());
 		}
 	}

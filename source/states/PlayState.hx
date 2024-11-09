@@ -51,7 +51,7 @@ import ui.DialogueBox;
 import ui.HealthIcon;
 import utilities.NoteVariables;
 import utilities.Ratings;
-import utilities.EventHandeler;
+import game.EventHandeler;
 import sys.FileSystem;
 
 using StringTools;
@@ -368,7 +368,7 @@ class PlayState extends MusicBeatState {
 
 		@author ninjamuffin99 probably
 	**/
-	@:noCompletion public static var daPixelZoom:Float = 6;
+	@:noCompletion public static inline var daPixelZoom:Float = 6;
 
 	/**
 		Whether or not you are currently in a cutscene.
@@ -603,9 +603,10 @@ class PlayState extends MusicBeatState {
 	}
 
 	override public function create() {
-		tweenManager = new FlxTweenManager();
 		// set instance because duh
 		instance = this;
+
+		tweenManager = new FlxTweenManager();
 
 		FlxG.mouse.visible = false;
 
@@ -655,8 +656,7 @@ class PlayState extends MusicBeatState {
 
 		// preload the miss sounds
 		for (i in 0...2) {
-			var sound = FlxG.sound.load(Paths.sound('missnote' + Std.string((i + 1))), 0.2);
-			missSounds.push(sound);
+			missSounds.push(FlxG.sound.load(Paths.sound('missnote' + Std.string((i + 1))), 0.2));
 		}
 
 		// load our binds

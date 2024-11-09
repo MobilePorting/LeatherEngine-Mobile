@@ -11,6 +11,7 @@ import utilities.Controls;
 import game.Conductor.BPMChangeEvent;
 import flixel.FlxG;
 import flixel.FlxSubState;
+import modding.scripts.languages.HScript;
 import mobile.objects.Hitbox;
 import mobile.objects.VirtualPad;
 import flixel.FlxCamera;

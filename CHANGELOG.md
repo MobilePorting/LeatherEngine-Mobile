@@ -5,10 +5,13 @@ All notable changes will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [0.5.0] - Unreleased
+## [0.5.0pre] - 11/9/2024
 
 ### Added
 
+- Weekend 1
+- Erect mode
+- Support for vslice chart format.
 - Zoom in the chart editor.
 - Lots of new functions and variables in the Lua API. See the wiki!
 - `singDuration` property to character jsons to control their sing duration.
@@ -20,20 +23,44 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - You can now switch what side you are using to edit offsets on in Animation Debug.
 - `Mute Vocals` option in chart editor.
 - Persistent Cached Data option (stops clearing asset caches).
+- Vram Sprites option (loads textures into gpu)
 - Skip Results Screen Options.
 - You can now zoom into the Animation Debug using the mouse.
 - HScript support!
-- Global / local scripts! Put any .lua or .hx file into data/scripts/global to have that script run on every song in every mod. Put a .lua or .hx file into data/scripts/local to have it run on every song in the mod it is in.
+- Global scripts will be run on any mod in data/scripts/global
+- Local scripts will be run on the current mod in data/scripts/local
 - You can put any .lua or .hx file into a song folder to have it run (like psych engine)
-- Softcoded Discord RPC - Check assets/data/discord.json
-- Fully softcoded and custom shaders! Check assets/data/modcharts/shader-example.lua
+- Discord Rich Presence can now be changed per mod.
+- Runtime shader support
 - Change Keycount events
 - Copy/Paste events in charter
-- Cool new modchart features via modcharting tools by TheZoroForce240
+- Cool new modchart features via modcharting tools haxelib
 - Modcharting tools can be used in lua scripts, hscript, and the modchart editor (hit 9 midsong)
-- Take screenshots by pressing F2 on the keyboard
-- Note glow when can be hit option
 - Lil' Buddies in charter
+- Multiatlas support in characters via `extraSheets` property
+- FlxAnimate support (Texture atlas)
+- `mainCharacterID` property in group character jsons
+- Characters can now have an hscript attached.
+- Added `script` type to cutscenes.
+- Added `introSound` property to cutscenes.
+- Notes can now be skewed
+- Notes can now carry a hscript or lua script.
+- Color quants option.
+- Stages can now have a hscript.
+- Stages have a HSV shader attached, used in voiid chronicles.
+- `backgroundColor` property in stages.
+- `imageDirectory` property in stages.
+- `dances` property in stage objects
+- The mod system has been changed to allow for more customization and less conflicts. The currently selected mod will take priority over all other mods.
+- The base game assets are now in a mod, this mod will take priority 2nd to the currently selected mod.
+- All states/and substates can now carry a script.
+- Added developer mode option. Shows ingame logs. Press F3 when enabled.
+- Different breakfast themes per character.
+- Ingame mod creator gui.
+- Added support for hud elements to be moved.
+- The ability to write custom states and substates via hscript
+- Added crash handling for better debugging
+- [Auto generated docs](https://vortex2oblivion.github.io/LeatherEngine/) after every commit
 
 ### Fixed
 
@@ -55,6 +82,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Event Luas now have the `create()` function called on them just like the rest of the game's lua.
 - Crashes with sounds not having a `_transform` value while trying to use it.
 - Memory Counter reports correct values.
+- Note splashes should now be antialiased properly.
+- Lots of new built in events.
+- Skip time option when charting.
+- Change playback speed when charting,
+- Bug where charts in psych extra keys would display the wrong key count.
+- All cached assets should try and clear when changing states to hopefully help on memory leaks
+- The window icon will change to the icon of the currently selected mod
+- Sustains should no longer be able to be a negative value in the chart editor, causing rendering issues.
+- Fixed a lime issue where audio could be muffled or low quality due to lime having a gain limiter on by default see #3318
 
 ### Changed
 
@@ -65,14 +101,37 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Freeplay no longer has < > when the selected song has one difficulty.
 - Info text now goes onto the time bar in the leather engine time bar style.
 - Stage sprites that use the `beatHit` animation no longer are forced to play it every beat (if it's already playing it won't play until it's not).
-- Newgrounds Logo in Title Screen has been replaced by the Polymod Logo.
 - Tutorial's camera zoom now acts like it does in base game\* (not exactly the same, but close enough, and a less janky way as well).
 - Some miscellaneous ui changes in-game.
 - Revamped Animation Debug Menu.
 - Results screen note graph now uses one texture for much better performance.
 - Hitting 8 midsong will now bring you to animation debug
 - Better tankman offsets
-- Optimized character spritesheets
+- Optimized all spritesheets
+- Results screen now matches the one from vslice
+- Softcoded all stages and characters
+- Added support for voiid chronicles lua functions.
+- HSV note shader to RGB note shader (may break some old ui skins)
+- The time bar is now a group
+- Updated polymod to 1.8.0
+- All menu backgrounds are now recolored ingame.
+- Story mode and freeplay will no longer crash when no weeks or songs are present.
+- Window title is now named after the current mod rather than a text file.
+- Sprites created with lua are now antialiased by default.
+- Strums are now in a separate image from the notes (This might break mods overwriting the default ui skin)
+- Stages should now work even when not in the `stageList`
+- Gf is now a group character, gf + speakers.
+- Sustains now show the actual sustain texture.
+- The mouse pointer will automatically hide itself during gameplay.
+- The window title will show `(DEBUG)` when compiling to debug mode.
+- Note splash texture now uses the one from vslice.
+
+### Removed
+
+- LeatherLogoBumpin
+- Unused spritesheets
+- Support for shaggy charts (The ones made in the kade engine 1.2 3 year old mod that nobody has touched in forever)
+- Replays support (nobody used them and they caused a lot of overhead)
 
 ## [0.4.2] - 6/14/2022
 

@@ -1,5 +1,27 @@
-function onEvent(name:String) {
-	switch (name.toLowerCase()) {
+var cantUppercut:Bool = false;
+
+function isPlayerLowHealth():Bool {
+	return PlayState.instance.health <= 0.30 * 2.0;
+}
+
+function isDarnellPreppingUppercut():Void {
+	return dad.curAnimName() == 'uppercutPrep';
+}
+
+function playerOneSing(a, b, c) {
+	var shouldDoUppercutPrep = isPlayerLowHealth() && isDarnellPreppingUppercut();
+
+	if (shouldDoUppercutPrep) {
+		playPunchHighAnim();
+		return;
+	}
+
+	if (cantUppercut) {
+		playBlockAnim();
+		cantUppercut = false;
+		return;
+	}
+	switch (c.toLowerCase()) {
 		case "weekend-1-punchlow":
 			playPunchLowAnim();
 		case "weekend-1-punchlowblocked":
@@ -54,7 +76,103 @@ function onEvent(name:String) {
 			playIdleAnim();
 		case "weekend-1-fakeout":
 			playFakeoutAnim();
-			playCringeAnim();
+		case "weekend-1-taunt":
+			playTauntConditionalAnim();
+		case "weekend-1-tauntforce":
+			playTauntAnim();
+		case "weekend-1-reversefakeout":
+			playIdleAnim();
+	}
+}
+
+function isDarnellInUppercut():Void {
+	return
+		dad.curAnimName() == 'uppercut'
+		|| dad.curAnimName() == 'uppercut-hold';
+}
+
+function willMissBeLethal():Bool {
+	return (PlayState.instance.health + 0.035) <= 0.0;
+}
+
+function playerOneMiss(a, b, c) {
+
+	if (isDarnellInUppercut()) {
+		playUppercutHitAnim();
+		return;
+	}
+
+	if (willMissBeLethal()) {
+		playHitLowAnim();
+		return;
+	}
+
+	if (cantUppercut) {
+		playHitHighAnim();
+		return;
+	}
+
+	switch (c.toLowerCase()) {
+		case "weekend-1-punchlow":
+			playHitLowAnim();
+		case "weekend-1-punchlowblocked":
+			playHitLowAnim();
+		case "weekend-1-punchlowdodged":
+			playHitLowAnim();
+		case "weekend-1-punchlowspin":
+			playHitSpinAnim();
+
+		// Pico fails to punch, and instead gets hit!
+		case "weekend-1-punchhigh":
+			playHitHighAnim();
+		case "weekend-1-punchhighblocked":
+			playHitHighAnim();
+		case "weekend-1-punchhighdodged":
+			playHitHighAnim();
+		case "weekend-1-punchhighspin":
+			playHitSpinAnim();
+
+		// Pico fails to block, and instead gets hit!
+		case "weekend-1-blockhigh":
+			playHitHighAnim();
+		case "weekend-1-blocklow":
+			playHitLowAnim();
+		case "weekend-1-blockspin":
+			playHitSpinAnim();
+
+		// Pico fails to dodge, and instead gets hit!
+		case "weekend-1-dodgehigh":
+			playHitHighAnim();
+		case "weekend-1-dodgelow":
+			playHitLowAnim();
+		case "weekend-1-dodgespin":
+			playHitSpinAnim();
+
+		// Pico ALWAYS gets punched.
+		case "weekend-1-hithigh":
+			playHitHighAnim();
+		case "weekend-1-hitlow":
+			playHitLowAnim();
+		case "weekend-1-hitspin":
+			playHitSpinAnim();
+
+		// Fail to dodge the uppercut.
+		case "weekend-1-picouppercutprep":
+			playPunchHighAnim();
+			cantUppercut = true;
+		case "weekend-1-picouppercut":
+			playUppercutAnim(false);
+
+		// Darnell's attempt to uppercut, Pico dodges or gets hit.
+		case "weekend-1-darnelluppercutprep":
+			playIdleAnim();
+		case "weekend-1-darnelluppercut":
+			playUppercutHitAnim();
+
+		case "weekend-1-idle":
+			playIdleAnim();
+		case "weekend-1-fakeout":
+			playHitHighAnim();
 		case "weekend-1-taunt":
 			playTauntConditionalAnim();
 		case "weekend-1-tauntforce":
@@ -71,26 +189,29 @@ function doAlternate():String {
 	return alternate ? '1' : '2';
 }
 
+function playBlockAnim() {
+	bf.playAnim('block', true, false);
+	PlayState.instance.camGame.shake(0.002, 0.1);
+	moveToBack();
+}
+
 function playCringeAnim() {
-	dad.playAnim('cringe', true, false);
+	bf.playAnim('cringe', true, false);
 	moveToBack();
 }
 
 function playDodgeAnim() {
 	bf.playAnim('dodge', true, false);
-	dad.playAnim('punchHigh' + doAlternate(), true, false);
 	moveToBack();
 }
 
 function playIdleAnim() {
 	bf.playAnim('idle', false, false);
-	dad.playAnim('idle', false, false);
 	moveToBack();
 }
 
 function playFakeoutAnim() {
 	bf.playAnim('fakeout', true, false);
-	dad.playAnim('pissed', true, false);
 	moveToBack();
 }
 
@@ -101,7 +222,6 @@ function playUppercutPrepAnim() {
 
 function playUppercutAnim(hit:Bool) {
 	bf.playAnim('uppercut', true, false);
-	dad.playAnim('uppercutHit', true, false);
 	if (hit) {
 		PlayState.instance.camGame.shake(0.005, 0.25);
 	}
@@ -110,21 +230,18 @@ function playUppercutAnim(hit:Bool) {
 
 function playUppercutHitAnim() {
 	bf.playAnim('uppercutHit', true, false);
-	dad.playAnim('hitHigh', true, false);
 	PlayState.instance.camGame.shake(0.005, 0.25);
 	moveToBack();
 }
 
 function playHitHighAnim() {
 	bf.playAnim('hitHigh', true, false);
-	dad.playAnim('punchHigh' + doAlternate(), true, false);
 	PlayState.instance.camGame.shake(0.0025, 0.15);
 	moveToBack();
 }
 
 function playHitLowAnim() {
 	bf.playAnim('hitLow', true, false);
-	dad.playAnim('punchLow' + doAlternate(), true, false);
 	PlayState.instance.camGame.shake(0.0025, 0.15);
 	moveToBack();
 }
@@ -137,13 +254,11 @@ function playHitSpinAnim() {
 
 function playPunchHighAnim() {
 	bf.playAnim('punchHigh' + doAlternate(), true, false);
-	dad.playAnim(FlxG.random.int(0,1) == 1 ? 'block' : 'hitHigh', true, false);
 	moveToFront();
 }
 
 function playPunchLowAnim() {
 	bf.playAnim('punchLow' + doAlternate(), true, false);
-	dad.playAnim(FlxG.random.int(0,1) == 1 ? 'block' : 'hitHigh', true, false);
 	moveToFront();
 }
 
@@ -157,20 +272,14 @@ function playTauntConditionalAnim() {
 
 function playTauntAnim() {
 	bf.playAnim('taunt', true, false);
-	dad.playAnim('pissed', true, false);
 	moveToBack();
 }
 
-function playBlockAnim() {
-	bf.playAnim('block', true, false);
-	dad.playAnim('punchHigh' + doAlternate(), true, false);
-	PlayState.instance.camGame.shake(0.002, 0.1);
-	moveToBack();
-}
 function moveToBack() {
 	PlayState.instance.remove(bf);
 	PlayState.instance.addBehindDad(bf);
 }
+
 function moveToFront() {
 	PlayState.instance.remove(dad);
 	PlayState.instance.addBehindBF(dad);

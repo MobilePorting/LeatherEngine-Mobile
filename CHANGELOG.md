@@ -11,6 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
  - Characters that dance left and right not playing the dance right animation
+ - Blazin crashing
 
 ## [0.5.0pre] - 11/9/2024
 

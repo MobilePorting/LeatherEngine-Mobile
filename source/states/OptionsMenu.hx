@@ -327,7 +327,7 @@ class OptionsMenu extends MusicBeatState {
 	{
 		sys.io.File.saveContent(lime.system.System.applicationStorageDirectory + 'storagetype.txt', Options.getData("storageType"));
 	
-		var lastStoragePath:String = StorageUtil.getStorageDirectory(lastStorageType);
+		var lastStoragePath:String = StorageType.fromStrForce(lastStorageType);
 	
 		try
 		{

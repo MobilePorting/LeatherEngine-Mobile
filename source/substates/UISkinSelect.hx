@@ -198,7 +198,7 @@ class UISkinSelect extends MusicBeatSubstate
         {
             var rating = new FlxSprite(50, 180 + (i * 100));
 
-            rating.loadGraphic(Paths.image("ui skins/" + ui_Skin + "/ratings/" + rating_List[i], 'shared'));
+            rating.loadGraphic(Paths.gpuBitmap("ui skins/" + ui_Skin + "/ratings/" + rating_List[i], 'shared'));
 
             rating.y -= 10;
             rating.alpha = 0;
@@ -213,7 +213,7 @@ class UISkinSelect extends MusicBeatSubstate
 
         var combo = new FlxSprite(900, 180);
 
-        combo.loadGraphic(Paths.image("ui skins/" + ui_Skin + "/ratings/combo", 'shared'));
+        combo.loadGraphic(Paths.gpuBitmap("ui skins/" + ui_Skin + "/ratings/combo", 'shared'));
 
         combo.y -= 10;
         combo.alpha = 0;
@@ -229,7 +229,7 @@ class UISkinSelect extends MusicBeatSubstate
         {
             var number = new FlxSprite(930 + ((i % 3) * 60), 330 + ((Math.floor(i / 3)) * 75));
 
-            number.loadGraphic(Paths.image("ui skins/" + ui_Skin + "/numbers/num" + i, 'shared'));
+            number.loadGraphic(Paths.gpuBitmap("ui skins/" + ui_Skin + "/numbers/num" + i, 'shared'));
 
             number.setGraphicSize(Std.int(number.width * Std.parseFloat(ui_settings[1])));
 			number.antialiasing = ui_settings[3] == "true";

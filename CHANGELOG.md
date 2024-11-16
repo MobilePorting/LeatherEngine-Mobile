@@ -8,7 +8,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [0.5.0] - unreleased
 
 ### Added
-
+ - Split vocal files per character
 ### Fixed
  - Characters that dance left and right not playing the dance right animation
  - Blazin crashing
@@ -133,6 +133,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - The mouse pointer will automatically hide itself during gameplay.
 - The window title will show `(DEBUG)` when compiling to debug mode.
 - Note splash texture now uses the one from vslice.
+- Marvelous rating is now pink.
 
 ### Removed
 

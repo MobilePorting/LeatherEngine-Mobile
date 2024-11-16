@@ -228,7 +228,11 @@ class ModchartUtilities {
 
 		lua_Sounds.set("Inst", FlxG.sound.music);
 		
-		lua_Sounds.set("Voices", PlayState.instance.vocals);
+		lua_Sounds.set("Voices", PlayState.instance.vocals.members[0]);
+
+		for(sound in 0...PlayState.instance.vocals.length){
+			lua_Sounds.set("Voices"+sound,PlayState.instance.vocals.members[sound]);
+		}
 
 		trace('Loading script at path \'${path}\'');
 		// trace("lua version: " + Lua.version());
@@ -520,7 +524,7 @@ class ModchartUtilities {
 				var Sprite:FlxSprite = new FlxSprite(x, y);
 				
 				if (filename != null && filename.length > 0)
-					Sprite.loadGraphic(Paths.image(PlayState.instance.stage.stage + "/" + filename, "stages"));
+					Sprite.loadGraphic(Paths.gpuBitmap(PlayState.instance.stage.stage + "/" + filename, "stages"));
 
 				Sprite.scale.set(size, sizeY == null ? size : sizeY);
 				Sprite.antialiasing = Options.getData("antialiasing");
@@ -744,7 +748,7 @@ class ModchartUtilities {
 				var Sprite:FlxSprite = new FlxSprite(x, y);
 
 				if (filename != null && filename.length > 0)
-					Sprite.loadGraphic(Paths.image(filename));
+					Sprite.loadGraphic(Paths.gpuBitmap(filename));
 
 				Sprite.scale.set(size, sizeY == null ? size : sizeY);
 				Sprite.antialiasing = Options.getData("antialiasing");
@@ -831,7 +835,7 @@ class ModchartUtilities {
 				var Sprite:FlxSprite = new FlxSprite(x, y);
 
 				if (filename != null && filename.length > 0)
-					Sprite.loadGraphic(Paths.image(filename));
+					Sprite.loadGraphic(Paths.gpuBitmap(filename));
 
 				Sprite.scale.set(size, sizeY == null ? size : sizeY);
 				Sprite.antialiasing = Options.getData("antialiasing");
@@ -3504,7 +3508,11 @@ class ModchartUtilities {
 		lua_Characters.set("dad", PlayState.dad.getMainCharacter());
 
 		lua_Sounds.set("Inst", FlxG.sound.music);
-		lua_Sounds.set("Voices", PlayState.instance.vocals);
+		lua_Sounds.set("Voices", PlayState.instance.vocals.members[0]);
+
+		for(sound in 0...PlayState.instance.vocals.length){
+			lua_Sounds.set("Voices"+sound,PlayState.instance.vocals.members[sound]);
+		}
 
 		for (object in PlayState.instance.stage.stage_Objects) {
 			lua_Sprites.set(object[0], object[1]);

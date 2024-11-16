@@ -203,8 +203,8 @@ class TitleState extends MusicBeatState {
 		titleText.updateHitbox();
 		titleText.shader = swagShader.shader;
 
-		add(logoBl);
 		add(gfDance);
+		add(logoBl);
 		add(titleText);
 
 		credGroup = new FlxGroup();
@@ -214,7 +214,7 @@ class TitleState extends MusicBeatState {
 		blackScreen = new FlxSprite().makeGraphic(FlxG.width, FlxG.height, FlxColor.BLACK);
 		credGroup.add(blackScreen);
 
-		newgrounds = new FlxSprite(0, FlxG.height * 0.52).loadGraphic(Paths.image('title/newgrounds_logo'));
+		newgrounds = new FlxSprite(0, FlxG.height * 0.52).loadGraphic(Paths.gpuBitmap('title/newgrounds_logo'));
 		newgrounds.scale.set(0.8, 0.8);
 		newgrounds.updateHitbox();
 		newgrounds.screenCenter(X);

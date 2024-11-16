@@ -37,7 +37,7 @@ function createPost() {
 	objects.push(abot);
 
 	FlxG.sound.music = new FlxSound().loadEmbedded(Paths.inst(PlayState.SONG.song,
-		(PlayState.SONG.specialAudioName == null ? PlayState.instance.storyDifficultyStr.toLowerCase() : PlayState.SONG.specialAudioName)));
+		(PlayState.SONG.specialAudioName == null ? PlayState.instance.storyDifficultyStr.toLowerCase() : PlayState.SONG.specialAudioName), PlayState.instance.boyfriend.curCharacter));
 	FlxG.sound.music.play();
 	FlxG.sound.music.volume = 0;
 	abotViz = new ABotVis();
@@ -83,8 +83,7 @@ function dance() {
 function startSong() {
 	FlxG.sound.music.play();
 	FlxG.sound.music.volume = 1;
-    movePupilsLeft();
-
+	movePupilsLeft();
 }
 
 function updatePost(elapsed:Float) {
@@ -118,7 +117,7 @@ function updatePost(elapsed:Float) {
 function turnChange(turn:String) {
 	switch (turn) {
 		case 'dad':
-			(PlayState.SONG.chartType == 0) ? movePupilsRight() : movePupilsLeft(); //workaround to some really strange issue where its flipped on vslice charts?
+			(PlayState.SONG.chartType == 0) ? movePupilsRight() : movePupilsLeft(); // workaround to some really strange issue where its flipped on vslice charts?
 		case 'bf':
 			(PlayState.SONG.chartType == 0) ? movePupilsLeft() : movePupilsRight();
 		default:

@@ -64,13 +64,13 @@ class HealthIcon extends TrackerSprite {
 			animatedIcon = true;
 		} else {
 			if (Assets.exists(Paths.image('icons/' + char + '-icons'))) // LE ICONS
-				loadGraphic(Paths.image('icons/' + char + '-icons'));
+				loadGraphic(Paths.gpuBitmap('icons/' + char + '-icons'));
 			else if (Assets.exists(Paths.image('icons/' + 'icon-' + char))) // BASE GAME ICONS
-				loadGraphic(Paths.image('icons/' + 'icon-' + char));
+				loadGraphic(Paths.gpuBitmap('icons/' + 'icon-' + char));
 			else if (Assets.exists(Paths.image('icons/' + char))) // just the name as file name
-				loadGraphic(Paths.image('icons/' + char));
+				loadGraphic(Paths.gpuBitmap('icons/' + char));
 			else // UNKNOWN ICON
-				loadGraphic(Paths.image('icons/placeholder-icon'));
+				loadGraphic(Paths.gpuBitmap('icons/placeholder-icon'));
 
 			if (height != 150) // damn weird edge cases >:(
 				loadGraphic(graphic, true, Std.int(width / 2), Std.int(height));

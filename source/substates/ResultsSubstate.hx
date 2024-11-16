@@ -295,7 +295,7 @@ class ResultsSubstate extends MusicBeatSubstate {
 		}
 
 		var diffSpr:String = 'diff_${params?.difficultyId ?? 'Normal'}';
-		difficulty.loadGraphic(Paths.image("resultScreen/" + diffSpr));
+		difficulty.loadGraphic(Paths.gpuBitmap("resultScreen/" + diffSpr));
 		if (!Assets.exists(Paths.image("resultScreen/" + diffSpr))) {
 			difficulty = new FlxBitmapText(FlxBitmapFont.fromMonospace(Paths.image("resultScreen/tardlingSpritesheet"), fontLetters, FlxPoint.get(49, 62)));
 			cast(difficulty, FlxBitmapText).text = params?.difficultyId ?? 'Normal';
@@ -322,7 +322,7 @@ class ResultsSubstate extends MusicBeatSubstate {
 			maskShaderDifficulty.swagMaskX += difficulty.width;
 		}
 
-		var blackTopBar:FlxSprite = new FlxSprite().loadGraphic(Paths.image("resultScreen/topBarBlack"));
+		var blackTopBar:FlxSprite = new FlxSprite().loadGraphic(Paths.gpuBitmap("resultScreen/topBarBlack"));
 		blackTopBar.y = -blackTopBar.height;
 		FlxTween.tween(blackTopBar, {y: 0}, 7 / 24, {ease: FlxEase.quartOut, startDelay: 3 / 24});
 		blackTopBar.antialiasing = Options.getData("antialiasing");
@@ -397,7 +397,13 @@ class ResultsSubstate extends MusicBeatSubstate {
 		});
 
 		new FlxTimer().start(rank.getFlashDelay() ?? 1, _ -> {
-			displayRankText();
+			try {
+				displayRankText();
+			} catch (e) {
+				#if debug
+				trace(e, ERROR);
+				#end
+			}
 		});
 
 		highscoreNew.frames = Paths.getSparrowAtlas("resultScreen/highscoreNew");

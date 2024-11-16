@@ -41,7 +41,7 @@ class ClearPercentCounter extends FlxTypedSpriteGroup<FlxSprite>
 
     this.small = small;
 
-    var clearPercentText:FlxSprite = new FlxSprite(0, 0).loadGraphic(Paths.image('resultScreen/clearPercent/clearPercentText${small ? 'Small' : ''}'));
+    var clearPercentText:FlxSprite = new FlxSprite(0, 0).loadGraphic(Paths.gpuBitmap('resultScreen/clearPercent/clearPercentText${small ? 'Small' : ''}'));
     clearPercentText.x = small ? 40 : 0;
     clearPercentText.antialiasing = Options.getData("antialiasing");
     add(clearPercentText);

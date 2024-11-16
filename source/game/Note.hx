@@ -124,15 +124,15 @@ class Note extends FlxSkewedSprite {
 
 		if (PlayState.instance.types.contains(arrow_Type)) {
 			if (Assets.exists(Paths.image('ui skins/' + song.ui_Skin + "/arrows/" + arrow_Type, 'shared'))) {
-				frames = Paths.getSparrowAtlas('ui skins/' + song.ui_Skin + "/arrows/" + arrow_Type, 'shared', song.modchartingTools);
+				frames = Paths.getSparrowAtlas('ui skins/' + song.ui_Skin + "/arrows/" + arrow_Type, 'shared' #if MODCHARTING_TOOLS ,song.modchartingTools || FlxG.state is modcharting.ModchartEditorState #end);
 			} else {
-				frames = Paths.getSparrowAtlas('ui skins/${song.ui_Skin}/arrows/default', 'shared', song.modchartingTools);
+				frames = Paths.getSparrowAtlas('ui skins/${song.ui_Skin}/arrows/default', 'shared'  #if MODCHARTING_TOOLS ,song.modchartingTools || FlxG.state is modcharting.ModchartEditorState #end);
 			}
 		} else {
 			if (Assets.exists(Paths.image("ui skins/default/arrows/" + arrow_Type, 'shared'))) {
-				frames = Paths.getSparrowAtlas("ui skins/default/arrows/" + arrow_Type, 'shared', song.modchartingTools);
+				frames = Paths.getSparrowAtlas("ui skins/default/arrows/" + arrow_Type, 'shared' #if MODCHARTING_TOOLS ,song.modchartingTools || FlxG.state is modcharting.ModchartEditorState #end);
 			} else {
-				frames = Paths.getSparrowAtlas('ui skins/${song.ui_Skin}/arrows/default', 'shared', song.modchartingTools);
+				frames = Paths.getSparrowAtlas('ui skins/${song.ui_Skin}/arrows/default', 'shared' #if MODCHARTING_TOOLS ,song.modchartingTools || FlxG.state is modcharting.ModchartEditorState #end);
 			}
 		}
 

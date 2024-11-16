@@ -10,7 +10,6 @@ import flixel.system.FlxAssets.FlxGraphicAsset;
 import openfl.utils.AssetType;
 import openfl.utils.Assets as OpenFlAssets;
 import openfl.display.BitmapData;
-import openfl.display3D.textures.RectangleTexture;
 
 /**
  * Assets paths helper class
@@ -116,7 +115,7 @@ class Paths {
 			}
 		}	
 		var graphic:FlxGraphic = FlxGraphic.fromBitmapData(bitmap, false, file, false);
-		graphic.persist = true;
+		graphic.persist = Options.getData("memoryLeaks");
 		graphics.set(file, graphic);
 		return graphic;
 	}
@@ -127,30 +126,49 @@ class Paths {
 	inline static public function ndll(key:String, ?library:String):String
 		return getPath('ndlls/$key.ndll', TEXT, library);
 
-	static public function voices(song:String, ?difficulty:String):String {
-		if (difficulty != null) {
-			if (difficulty.toLowerCase() == 'nightmare') {
-				if (Assets.exists('songs:assets/songs/${song.toLowerCase()}/Voices-erect.ogg'))
-					return 'songs:assets/songs/${song.toLowerCase()}/Voices-erect.ogg';
-			}
-			if (Assets.exists('songs:assets/songs/${song.toLowerCase()}/Voices-$difficulty.ogg'))
-				return 'songs:assets/songs/${song.toLowerCase()}/Voices-$difficulty.ogg';
+	static public function voices(song:String, ?difficulty:String, ?character:String, ?mix:String):String {
+		var voicesPath:String = 'songs:assets/songs/${song.toLowerCase()}/';
+		var voicesFile:String = 'Voices';
+
+		if(character != null && mix != null && (Assets.exists('$voicesPath$voicesFile-$character.ogg') || Assets.exists('$voicesPath$voicesFile-$character-$mix.ogg'))){
+			voicesFile += '-$character';
 		}
 
-		return 'songs:assets/songs/${song.toLowerCase()}/Voices.ogg';
+		if(mix != null && Assets.exists('$voicesPath$voicesFile-$mix.ogg')){
+			voicesFile += '-$mix';
+		}
+
+		if (difficulty != null) {
+			if (difficulty.toLowerCase() == 'nightmare') {
+				if (Assets.exists('$voicesPath$voicesFile-erect.ogg'))
+					voicesFile += '-erect';
+			}
+			if (Assets.exists('Voices-$difficulty.ogg'))
+				voicesFile += '-$difficulty';
+		}
+
+		return '$voicesPath$voicesFile.ogg';
 	}
 
-	static public function inst(song:String, ?difficulty:String):String {
-		if (difficulty != null) {
-			if (difficulty.toLowerCase() == 'nightmare') {
-				if (Assets.exists('songs:assets/songs/${song.toLowerCase()}/Inst-erect.ogg'))
-					return 'songs:assets/songs/${song.toLowerCase()}/Inst-erect.ogg';
-			}
-			if (Assets.exists('songs:assets/songs/${song.toLowerCase()}/Inst-$difficulty.ogg'))
-				return 'songs:assets/songs/${song.toLowerCase()}/Inst-$difficulty.ogg';
+	static public function inst(song:String, ?difficulty:String, ?mix:String):String {
+		var instPath:String = 'songs:assets/songs/${song.toLowerCase()}/';
+		var instFile:String = 'Inst';
+
+		if(mix != null && Assets.exists('$instPath$instFile-$mix.ogg')){
+			instFile += '-$mix';
 		}
 
-		return 'songs:assets/songs/${song.toLowerCase()}/Inst.ogg';
+		if (difficulty != null) {
+			if (difficulty.toLowerCase() == 'nightmare') {
+				if (Assets.exists('$instPath$instFile-erect.ogg'))
+					instFile += '-erect';
+			}
+			if (Assets.exists('Inst-$difficulty.ogg'))
+				instFile += '-$difficulty';
+		}
+
+
+		return '$instPath$instFile.ogg';
 	}
 
 	static public function songEvents(song:String, ?difficulty:String):String {

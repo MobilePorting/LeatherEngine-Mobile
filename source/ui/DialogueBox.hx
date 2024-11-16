@@ -15,28 +15,28 @@ using StringTools;
 
 class DialogueBox extends FlxSpriteGroup
 {
-	var cutscene_Data:Cutscene;
-	var current_Section:DialogueSection;
-	var section_Index:Int = 0;
+	public var cutscene_Data:Cutscene;
+	public var current_Section:DialogueSection;
+	public var section_Index:Int = 0;
 
-	var box:FlxSprite;
+	public var box:FlxSprite;
 
-	var portraitRight:DialoguePortrait;
-	var portraitLeft:DialoguePortrait;
+	public var portraitRight:DialoguePortrait;
+	public var portraitLeft:DialoguePortrait;
 
-	var dialogue:FlxTypeText;
-	var dialogue_Shadow:FlxText;
+	public var dialogue:FlxTypeText;
+	public var dialogue_Shadow:FlxText;
 
-	var alphabet:Alphabet;
+	public var alphabet:Alphabet;
 
-	var exiting:Bool = false;
-	var starting:Bool = true;
+	public var exiting:Bool = false;
+	public var starting:Bool = true;
 
-	var bgFade:FlxSprite;
+	public var bgFade:FlxSprite;
 
-	var hand:FlxSprite;
+	public var hand:FlxSprite;
 
-	var music:FlxSound;
+	public var music:FlxSound;
 
 	public function new(cutscene:Cutscene)
 	{
@@ -256,7 +256,7 @@ class DialogueBox extends FlxSpriteGroup
 
 		if(current_Section.has_Hand)
 		{
-			hand = new FlxSprite().loadGraphic(Paths.image("cutscenes/" + current_Section.hand_Sprite.sprite, "shared"));
+			hand = new FlxSprite().loadGraphic(Paths.gpuBitmap("cutscenes/" + current_Section.hand_Sprite.sprite, "shared"));
 			hand.antialiasing = current_Section.hand_Sprite.antialiased;
 
 			if(current_Section.hand_Sprite.scale == null)
@@ -342,9 +342,9 @@ class DialoguePortrait extends FlxSprite
 		scrollFactor.set(0,0); // cuz its ui lmao
 	}
 
-	public function loadPortrait(path:String)
+	public inline function loadPortrait(path:String)
 	{
 		// possibly add if statement for animated dialogue sprites in future (this is y its in a function lol)
-		loadGraphic(Paths.image("cutscenes/" + path, "shared"));
+		loadGraphic(Paths.gpuBitmap("cutscenes/" + path, "shared"));
 	}
 }

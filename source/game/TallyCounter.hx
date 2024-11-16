@@ -1,18 +1,14 @@
 package game;
 
 import flixel.FlxSprite;
-import flixel.group.FlxGroup.FlxTypedGroup;
-import flixel.group.FlxSpriteGroup.FlxTypedSpriteGroup;
-import flixel.math.FlxMath;
-import flixel.tweens.FlxEase;
-import flixel.tweens.FlxTween;
+import flixel.group.FlxSpriteGroup;
 import flixel.text.FlxText.FlxTextAlign;
 import utilities.MathUtil;
 
 /**
  * Numerical counters used next to each judgement in the Results screen.
  */
-class TallyCounter extends FlxTypedSpriteGroup<FlxSprite>
+class TallyCounter extends FlxSpriteGroup
 {
   public var curNumber:Float = 0;
   public var neededNumber:Int = 0;

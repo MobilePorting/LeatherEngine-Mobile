@@ -1,17 +1,14 @@
 package ui;
 
 #if MODDING_ALLOWED
+import flixel.FlxObject;
 import openfl.display.BitmapData;
 import flixel.FlxSprite;
 
-class ModIcon extends FlxSprite {
-	/**
-	 * Used for ModMenu! If you use it elsewhere, prob gonna annoying
-	 */
-	public var sprTracker:FlxSprite;
+class ModIcon extends TrackerSprite {
 
-	public function new(modID:String = 'Template Mod') {
-		super();
+	public function new(modID:String = 'Template Mod', ?tracker:FlxSprite, ?xOff:Float, ?yOff:Float, ?dir:TrackerSprite.TrackerDirection) {
+		super(tracker, xOff, yOff, dir);
 
 		loadGraphic(BitmapData.fromFile("mods/" + modID + "/_polymod_icon.png"));
 		setGraphicSize(150, 150);

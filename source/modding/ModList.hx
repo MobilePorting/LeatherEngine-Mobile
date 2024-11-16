@@ -44,7 +44,8 @@ class ModList {
 				activeMods.push(modName);
 		}
 		activeMods.push("Friday Night Funkin'");
-		activeMods.push(Options.getData("curMod"));
+		if (Options.getData("curMod") != "Friday Night Funkin'")
+			activeMods.push(Options.getData("curMod"));
 		return activeMods;
 	}
 

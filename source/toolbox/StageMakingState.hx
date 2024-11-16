@@ -527,7 +527,7 @@ class StageMakingState extends MusicBeatState {
 						if (Object.start_Animation != "" && Object.start_Animation != null && Object.start_Animation != "null")
 							Sprite.animation.play(Object.start_Animation);
 					} else
-						Sprite.loadGraphic(Paths.image(stage_Name + "/" + fileInput.text, "stages"));
+						Sprite.loadGraphic(Paths.gpuBitmap(stage_Name + "/" + fileInput.text, "stages"));
 
 					if (Object.updateHitbox || Object.updateHitbox == null)
 						Sprite.updateHitbox();

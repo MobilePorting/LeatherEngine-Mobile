@@ -15,9 +15,14 @@ class PolymodHandler {
             framework: OPENFL,
 			errorCallback: function(error:PolymodError)
 			{
-				#if debug
-                trace(error.message);
-                #end
+				switch(error.severity){
+                    case ERROR:
+                        trace(error.message, PrintType.ERROR);
+                    case WARNING:
+                        trace(error.message, PrintType.WARNING);
+                    default:
+                        trace(error.message);
+                }
 			},
             frameworkParams: {
                 assetLibraryPaths: [

@@ -18,6 +18,7 @@ import states.OptionsMenu;
 import flixel.FlxG;
 import flixel.group.FlxGroup;
 import ui.ModIcon;
+import flixel.util.typeLimit.NextState;
 
 /**
  * The base option class that all options inherit from.
@@ -148,9 +149,9 @@ class GameSubStateOption extends Option {
  */
 class GameStateOption extends Option {
 	// OPTIONS //
-	public var gameState:FlxState;
+	public var gameState:NextState;
 
-	public function new(_optionName:String = "", _gameState:Dynamic) {
+	public function new(_optionName:String = "", _gameState:NextState) {
 		super(_optionName, null);
 
 		// SETTING VALUES //
@@ -203,9 +204,9 @@ class ModOption extends FlxTypedGroup<FlxSprite> {
 
 	// options //
 	public var optionName:String = "";
-	public var optionValue:String = "Template Mod";
+	public var optionValue:String = "Unknown Mod";
 
-	public function new(_optionName:String = "", _optionValue:String = "Template Mod") {
+	public function new(_optionName:String = "", _optionValue:String = "Unknown Mod") {
 		super();
 
 		// SETTING VALUES //
@@ -217,7 +218,7 @@ class ModOption extends FlxTypedGroup<FlxSprite> {
 		alphabetText.isMenuItem = true;
 		add(alphabetText);
 
-		modIcon = new ModIcon(optionValue);
+		modIcon = new ModIcon(optionValue, alphabetText);
 		modIcon.sprTracker = alphabetText;
 		add(modIcon);
 

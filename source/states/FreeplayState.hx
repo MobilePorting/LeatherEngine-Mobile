@@ -267,7 +267,7 @@ class FreeplayState extends MusicBeatState {
 			new FlxTimer().start(1, function(_) songsReady = true);
 		}
 
-		if (songs.length != 0 && curSelected >= 0) {
+		if (songs.length != 0 && curSelected >= 0 && curSelected < songs.length) {
 			selectedColor = songs[curSelected].color;
 			bg.color = selectedColor;
 		} else {
@@ -300,6 +300,8 @@ class FreeplayState extends MusicBeatState {
 		super.create();
 		call("createPost");
 	}
+
+	public var mix:String = null;
 
 	public var infoText:FlxText;
 
@@ -419,10 +421,21 @@ class FreeplayState extends MusicBeatState {
 			if (virtualPad.buttonX.justPressed || FlxG.keys.justPressed.SPACE) {
 				destroyFreeplayVocals();
 
-				if (Assets.exists(Paths.voices(songs[curSelected].songName.toLowerCase(), curDiffString.toLowerCase())))
-					vocals = new FlxSound().loadEmbedded(Paths.voices(songs[curSelected].songName.toLowerCase(), curDiffString.toLowerCase()));
-				else
-					vocals = new FlxSound();
+				var poop:String = Highscore.formatSong(songs[curSelected].songName.toLowerCase(), curDiffString, mix);
+
+				// TODO: CHANGE THIS
+				if (Assets.exists(Paths.json("song data/" + songs[curSelected].songName.toLowerCase() + "/" + poop))) {
+					PlayState.SONG = SongLoader.loadFromJson(curDiffString, songs[curSelected].songName.toLowerCase(), mix);
+					Conductor.changeBPM(PlayState.SONG.bpm, curSpeed);
+				}
+
+				vocals = new FlxSound();
+
+				var voicesPath:String = Paths.voices(songs[curSelected].songName.toLowerCase(),
+					PlayState.SONG.specialAudioName ?? curDiffString.toLowerCase(), mix);
+
+				if (Assets.exists(voicesPath))
+					vocals.loadEmbedded(voicesPath);
 
 				vocals.persist = false;
 				vocals.looped = true;
@@ -430,7 +443,7 @@ class FreeplayState extends MusicBeatState {
 
 				FlxG.sound.list.add(vocals);
 
-				FlxG.sound.music = new FlxSound().loadEmbedded(Paths.inst(songs[curSelected].songName.toLowerCase(), curDiffString.toLowerCase()));
+				FlxG.sound.music = new FlxSound().loadEmbedded(Paths.inst(songs[curSelected].songName.toLowerCase(), curDiffString.toLowerCase(), mix));
 				FlxG.sound.music.persist = true;
 				FlxG.sound.music.looped = true;
 				FlxG.sound.music.volume = 0.7;
@@ -441,14 +454,6 @@ class FreeplayState extends MusicBeatState {
 				vocals.play();
 
 				lastSelectedSong = curSelected;
-
-				var poop:String = Highscore.formatSong(songs[curSelected].songName.toLowerCase(), curDiffString);
-
-				// TODO: CHANGE THIS
-				if (Assets.exists(Paths.json("song data/" + songs[curSelected].songName.toLowerCase() + "/" + poop))) {
-					PlayState.SONG = SongLoader.loadFromJson(curDiffString, songs[curSelected].songName.toLowerCase());
-					Conductor.changeBPM(PlayState.SONG.bpm, curSpeed);
-				}
 			}
 			#end
 
@@ -480,14 +485,14 @@ class FreeplayState extends MusicBeatState {
 		 * @param diff 
 		 */
 	public function playSong(songName:String, diff:String) {
-		if (!CoolUtil.songExists(songName, diff)) {
+		if (!CoolUtil.songExists(songName, diff, mix)) {
 			CoolUtil.coolError(songName.toLowerCase() + " doesn't match with any song audio files!\nTry fixing it's name in freeplaySonglist.txt",
 				"Leather Engine's No Crash, We Help Fix Stuff Tool");
 			return;
 		}
-		PlayState.SONG = SongLoader.loadFromJson(diff, songName.toLowerCase());
-		if (!Assets.exists(Paths.inst(PlayState.SONG.song, diff.toLowerCase()))) {
-			if (Assets.exists(Paths.inst(songName.toLowerCase(), diff.toLowerCase())))
+		PlayState.SONG = SongLoader.loadFromJson(diff, songName.toLowerCase(), mix);
+		if (!Assets.exists(Paths.inst(PlayState.SONG.song, diff.toLowerCase(), mix))) {
+			if (Assets.exists(Paths.inst(songName.toLowerCase(), diff.toLowerCase(), mix)))
 				CoolUtil.coolError(PlayState.SONG.song.toLowerCase() + " (JSON) does not match " + songName + " (FREEPLAY)\nTry making them the same.",
 					"Leather Engine's No Crash, We Help Fix Stuff Tool");
 			else
@@ -509,7 +514,7 @@ class FreeplayState extends MusicBeatState {
 
 		PlayState.loadChartEvents = true;
 		destroyFreeplayVocals();
-		LoadingState.loadAndSwitchState(new PlayState());
+		FlxG.switchState(() -> new PlayState());
 	}
 
 	override function closeSubState() {

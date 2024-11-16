@@ -41,7 +41,7 @@ class NewModState extends MusicBeatState{
     public var UI_box:FlxUITabMenu;
 
     public var modIconText:FlxText;
-    public var modIcon:FlxSprite = new FlxSprite().loadGraphic(Paths.image('template mod'));
+    public var modIcon:FlxSprite = new FlxSprite().loadGraphic(Paths.gpuBitmap('template mod'));
     public var browseButton:FlxButton;
     public var modIconPath:String = Paths.image('template mod');
 

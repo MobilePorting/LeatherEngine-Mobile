@@ -132,7 +132,7 @@ class StageGroup extends FlxGroup {
 							} else if (Object.file_Name.startsWith('#')) {
 								Sprite.makeGraphic(Std.int(Object.scale), Std.int(Object.scale), FlxColor.fromString(Object.file_Name));
 							} else
-								Sprite.loadGraphic(Paths.image((stage_Data.imageDirectory ?? stage) + "/" + Object.file_Name, "stages"));
+								Sprite.loadGraphic(Paths.gpuBitmap((stage_Data.imageDirectory ?? stage) + "/" + Object.file_Name, "stages"));
 
 							if (Object.uses_Frame_Width)
 								Sprite.setGraphicSize(Std.int(Sprite.frameWidth * Object.scale));

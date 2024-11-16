@@ -1,6 +1,7 @@
 package ui;
 
 import flixel.FlxSprite;
+import flixel.FlxObject;
 
 /**
 * An FlxSprite that tracks another sprite's position and scale to appear next to it.
@@ -10,7 +11,7 @@ class TrackerSprite extends FlxSprite
     /**
 	 * Sprite being tracked.
 	 */
-    public var sprTracker:FlxSprite;
+    public var sprTracker:FlxObject;
 
 	/**
 	 * Variable that is used to change the amount of x added to the end of the tracker sprite for an offset.
@@ -74,7 +75,7 @@ class TrackerSprite extends FlxSprite
                     setPosition((sprTracker.x + (sprTracker.width / 2) - (width / 2)), sprTracker.y - sprTracker.height + yOffset);
                 case DOWN:
                     setPosition((sprTracker.x + (sprTracker.width / 2) - (width / 2)), sprTracker.y + sprTracker.height - yOffset);
-                case NONE:
+                default:
                     setPosition(x,y); // do nothing lol
             }
         }

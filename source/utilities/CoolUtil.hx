@@ -399,13 +399,17 @@ class CoolUtil {
 		return 'v' + Application.current.meta.get('version');
 	}
 
-	public static function songExists(song:String, difficulty:String):Bool {
+	public static function songExists(song:String, difficulty:String, ?mix:String):Bool {
 		song = song.toLowerCase();
 		difficulty = difficulty.toLowerCase();
 		var exists:Bool = false;
 		var songPath:String = 'song data/$song';
 		var difficultyExtension:String = difficulty == 'normal' ? '' : '-$difficulty';
 		var difficultyExtensionMeta:String = (difficulty == 'nightmare' || difficulty == 'erect') ? '-erect' : '';
+
+		if(mix != null && Assets.exists('$difficultyExtensionMeta-$mix')){
+			difficultyExtensionMeta += '-$mix';
+		}
 
 		// legacy charts
 		if (Assets.exists(Paths.json('$songPath/$song$difficultyExtension'))) {

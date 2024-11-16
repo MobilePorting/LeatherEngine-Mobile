@@ -182,6 +182,7 @@ function playerOneMiss(a, b, c) {
 	}
 }
 
+
 var alternate:Bool = false;
 
 function doAlternate():String {

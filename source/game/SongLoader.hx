@@ -5,10 +5,13 @@ import haxe.Json;
 import lime.utils.Assets;
 
 class SongLoader {
-	public static function loadFromJson(difficulty:String, ?folder:String):SongData {
+	public static function loadFromJson(difficulty:String, ?folder:String, ?mix:String):SongData {
 		var chartSuffix:String = '';
 		if(difficulty.toLowerCase() == 'erect' || difficulty.toLowerCase() == 'nightmare'){
 			chartSuffix = '-erect';
+		}
+		if(mix != null){
+			chartSuffix += '-${mix.toLowerCase()}';
 		}
 		folder = folder.toLowerCase();
 		difficulty = difficulty.toLowerCase();
@@ -20,26 +23,29 @@ class SongLoader {
 		var raw:String = Assets.getText(path).trim();
 		if (raw == '') { // should never happen but just in case
 			raw = Assets.getText(Paths.json('song data/tutorial/tutorial')).trim();
-			return parseRaw(raw, folder, difficulty, true);
+			return parseRaw(raw, folder, difficulty, mix, true);
 		}
 
-		return parseRaw(raw, folder, difficulty);
+		return parseRaw(raw, folder, difficulty, mix);
 	}
 
-	public static function parseRaw(raw:String, songName:String, difficulty:String, force:Bool = false):SongData {
+	public static function parseRaw(raw:String, songName:String, difficulty:String, ?mix:String, force:Bool = false):SongData {
 		var parsedJSON:Dynamic = Json.parse(raw);
 
 		if (parsedJSON.song == null) { // invalid chart OR (more likely) new format!
-			return parseFNFC(parsedJSON, songName, difficulty);
+			return parseFNFC(parsedJSON, songName, difficulty, mix);
 		} else {
 			return parseLegacy(parsedJSON, songName, force);
 		}
 	}
 
-	public static function parseFNFC(parsedJSON:Dynamic, songName:String, difficulty:String):SongData {
+	public static function parseFNFC(parsedJSON:Dynamic, songName:String, difficulty:String, ?mix:String):SongData {
 		var chartSuffix:String = '';
 		if(difficulty.toLowerCase() == 'erect' || difficulty.toLowerCase() == 'nightmare'){
 			chartSuffix = '-erect';
+		}
+		if(mix != null){
+			chartSuffix += '-${mix.toLowerCase()}';
 		}
 		var metaPath:String = Paths.json('song data/$songName/$songName-metadata$chartSuffix');
 		if (!Assets.exists(metaPath)) {
@@ -95,11 +101,9 @@ class SongLoader {
 			output.ui_Skin = metadata.playData.noteStyle;
 		}
 
-		var section:Section = output.notes[0];
-		var notes:Array<FNFCNote> = cast Reflect.field(song.notes, difficulty);
-		for (note in notes) {
-			// [time, dir, length, type]
-			section.sectionNotes.push([note.t, note.d, note.l, 0, note.k ?? 'default']);
+		var notes:Array<FNFCNote> =  cast Reflect.field(song.notes, difficulty);
+		for(note in notes){
+			output.notes[0].sectionNotes.push([note.t, note.d, note.l, 0, note.k ?? 'default']);
 		}
 
 		// engine specific shit

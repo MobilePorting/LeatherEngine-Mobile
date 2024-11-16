@@ -71,7 +71,7 @@ class TimeBar extends FlxSpriteGroup{
         // Sets up the time bar according to the style of the time bar.
         switch (Options.getData("timeBarStyle").toLowerCase()){
             default:
-                bg.loadGraphic(Paths.image('ui skins/${song.ui_Skin}/other/healthBar'));
+                bg.loadGraphic(Paths.gpuBitmap('ui skins/${song.ui_Skin}/other/healthBar'));
                 text.y = bg.y = Options.getData("downscroll") ? FlxG.height - (bg.height + 1) : 1;
 
             case 'psych engine':
@@ -84,7 +84,7 @@ class TimeBar extends FlxSpriteGroup{
 				text.y = bg.y - (text.height / 4);
 
             case 'old kade engine':
-                bg.loadGraphic(Paths.image('ui skins/${song.ui_Skin}/other/healthBar'));
+                bg.loadGraphic(Paths.gpuBitmap('ui skins/${song.ui_Skin}/other/healthBar'));
                 barColorLeft = FlxColor.GRAY;
                 barColorRight = FlxColor.LIME;
                 text.y = bg.y = Options.getData("downscroll") ? FlxG.height * 0.9 + 45 : 10;

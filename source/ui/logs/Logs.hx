@@ -1,5 +1,6 @@
 package ui.logs;
 
+import openfl.text.TextField;
 import lime.app.Application;
 import openfl.events.Event;
 import flixel.util.FlxColor;
@@ -10,8 +11,8 @@ import openfl.display.BitmapData;
 
 class Logs extends Sprite {
     public var logs:Array<String> = [];
-    var bg:Bitmap;
-    var logText:LogText;
+    public var bg:Bitmap;
+    public var logText:LogText;
 
     public static var instance:Logs = null;    
 
@@ -33,15 +34,17 @@ class Logs extends Sprite {
 
         logText = new LogText(0, 60, {width: FlxG.width - 20, height: FlxG.height - 34}, "", 15, LEFT);
 		addChild(logText);
-
+    
         addEventListener(Event.ENTER_FRAME, onFrameUpdate);
         FlxG.stage.window.onResize.add(onStageResized);
     }
 
-    private function onFrameUpdate(_):Void{
-        if (FlxG.keys.justPressed.F3 && Options.getData("developer"))
+    public function onFrameUpdate(_):Void{
+        if(!Options.getData("developer")) return;
+
+        if (FlxG.keys.justPressed.F3)
             visible = !visible;
-        else if (FlxG.keys.justPressed.F4 && Options.getData("developer")){
+        else if (FlxG.keys.justPressed.F4){
             logs = [];
             logText.text = '';
         }

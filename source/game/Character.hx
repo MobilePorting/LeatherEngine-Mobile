@@ -564,7 +564,7 @@ class Character extends FlxSprite {
 
 	public function getMainCharacter():Character
 	{
-		if (otherCharacters?.length > 0)
+		if (otherCharacters?.length > 0 && mainCharacterID > 0)
 		{
 			return otherCharacters[mainCharacterID];
 		}

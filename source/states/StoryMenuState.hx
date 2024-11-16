@@ -214,7 +214,7 @@ class StoryMenuState extends MusicBeatState {
 		leftArrow.antialiasing = Options.getData("antialiasing");
 
 		difficultySprite = new FlxSprite(leftArrow.x + leftArrow.width + 4, leftArrow.y);
-		difficultySprite.loadGraphic(Paths.image("campaign menu/difficulties/default/normal"));
+		difficultySprite.loadGraphic(Paths.gpuBitmap("campaign menu/difficulties/default/normal"));
 		difficultySprite.updateHitbox();
 		difficultySprite.antialiasing = Options.getData("antialiasing");
 		changeDifficulty();
@@ -348,7 +348,7 @@ class StoryMenuState extends MusicBeatState {
 	function changeDifficulty(change:Int = 0):Void {
 		curDifficulty = FlxMath.wrap(curDifficulty + change, 0, curDifficulties.length - 1);
 
-		difficultySprite.loadGraphic(Paths.image("campaign menu/difficulties/" + curDifficulties[curDifficulty][1]));
+		difficultySprite.loadGraphic(Paths.gpuBitmap("campaign menu/difficulties/" + curDifficulties[curDifficulty][1]));
 		difficultySprite.updateHitbox();
 		difficultySprite.alpha = 0;
 
@@ -407,7 +407,7 @@ class StoryMenuState extends MusicBeatState {
 		intendedScore = Highscore.getWeekScore(curWeek, curDifficulties[curDifficulty][0], currentGroup.pathName + "Week");
 
 		if (currentGroup.weeks[curWeek].backgroundImage != null) {
-			bgSprite.loadGraphic(Paths.image('campaign menu/backgrounds/${currentGroup.weeks[curWeek].backgroundImage}'));
+			bgSprite.loadGraphic(Paths.gpuBitmap('campaign menu/backgrounds/${currentGroup.weeks[curWeek].backgroundImage}'));
 			bgSprite.setGraphicSize(0, 400);
 			bgSprite.visible = true;
 		} else

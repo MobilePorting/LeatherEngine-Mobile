@@ -318,11 +318,6 @@ class Controls extends FlxActionSet {
 		}
 	}
 
-	static function init():Void {
-		var actions = new FlxActionManager();
-		FlxG.inputs.add(actions);
-	}
-
 	/**
 	 * Calls a function passing each action bound by the specified control
 	 * @param control

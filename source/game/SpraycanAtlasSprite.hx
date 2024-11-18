@@ -44,9 +44,9 @@ class SpraycanAtlasSprite extends FlxAtlasSprite {
 		explodeEZ.animation.play("idle");
 
 		PlayState.instance.stage.add(explodeEZ);
-		explodeEZ.animation.finishCallback = (name:String) -> {
+		explodeEZ.animation.onFinish.add((name:String) -> {
 			explodeEZ.kill();
-		};
+		});
 	}
 
 	public function playCanStart():Void {

@@ -146,9 +146,9 @@ class ChartingState extends MusicBeatState {
 		lilBf.frames = Paths.getSparrowAtlas("charter/lil_bf", "shared");
 		lilBf.animation.addByPrefix("idle", "idle", 12, true);
 		lilBf.animation.play("idle", true);
-		lilBf.animation.finishCallback = function(name:String) {
+		lilBf.animation.onFinish.add(function(name:String) {
 			lilBf.animation.play(name, true, false, lilBf.animation.getByName(name).numFrames - 2);
-		}
+		});
 		lilBf.scrollFactor.set();
 		add(lilBf);
 
@@ -156,9 +156,9 @@ class ChartingState extends MusicBeatState {
 		lilOpp.frames = Paths.getSparrowAtlas("charter/lil_opp", "shared");
 		lilOpp.animation.addByPrefix("idle", "idle", 12, true);
 		lilOpp.animation.play("idle", true);
-		lilOpp.animation.finishCallback = function(name:String) {
+		lilOpp.animation.onFinish.add(function(name:String) {
 			lilOpp.animation.play(name, true, false, lilOpp.animation.getByName(name).numFrames - 2);
-		}
+		});
 		lilOpp.scrollFactor.set();
 		add(lilOpp);
 

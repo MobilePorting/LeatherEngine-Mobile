@@ -168,10 +168,10 @@ class DialogueBox extends FlxSpriteGroup
 		if(current_Section.box_Anim != null && current_Section.box_Anim != "")
 			box.animation.addByPrefix("loop", current_Section.box_Anim, current_Section.box_FPS, true);
 
-		box.animation.finishCallback = function(animName:String) {
+		box.animation.onFinish.add(function(animName:String) {
 			if(animName == "open")
 				box.animation.play("loop");
-		}
+		});
 			
 		box.animation.play("loop", true);
 

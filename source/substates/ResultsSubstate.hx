@@ -262,11 +262,11 @@ class ResultsSubstate extends MusicBeatSubstate {
 				gfGood.visible = false;
 				// gfGood.zIndex = 500;
 				gfGood.antialiasing = Options.getData("antialiasing");
-				gfGood.animation.finishCallback = _ -> {
+				gfGood.animation.onFinish.add((animName:String) -> {
 					if (gfGood != null) {
 						gfGood.animation.play('clap', true, false, 9);
 					}
-				};
+				});
 				add(gfGood);
 
 				bfGood = new FlxSprite(640, -200);
@@ -275,11 +275,11 @@ class ResultsSubstate extends MusicBeatSubstate {
 				bfGood.visible = false;
 				// bfGood.zIndex = 501;
 				bfGood.antialiasing = Options.getData("antialiasing");
-				bfGood.animation.finishCallback = function(_) {
+				bfGood.animation.onFinish.add(function(_) {
 					if (bfGood != null) {
 						bfGood.animation.play('fall', true, false, 14);
 					}
-				};
+				});
 				add(bfGood);
 
 			case SHIT:
@@ -384,7 +384,7 @@ class ResultsSubstate extends MusicBeatSubstate {
 			try {
 				scorePopin.visible = true;
 				scorePopin.animation.play("score");
-				scorePopin.animation.finishCallback = anim -> {};
+				scorePopin.animation.onFinish.add(anim -> {});
 			} catch (e) {
 				#if debug
 				trace(e, ERROR);
@@ -420,7 +420,7 @@ class ResultsSubstate extends MusicBeatSubstate {
 				try {
 					highscoreNew.visible = true;
 					highscoreNew.animation.play("new");
-					highscoreNew.animation.finishCallback = _ -> highscoreNew.animation.play("new", true, false, 16);
+					highscoreNew.animation.onFinish.add((animName:String) -> highscoreNew.animation.play("new", true, false, 16));
 				} catch (e) {}
 			} else {
 				highscoreNew.visible = false;
@@ -576,7 +576,7 @@ class ResultsSubstate extends MusicBeatSubstate {
 			// ratingsPopin.animation.play("idle");
 			// ratingsPopin.visible = true;
 
-			ratingsPopin.animation.finishCallback = anim -> {
+			ratingsPopin.animation.onFinish.add((animName:String) -> {
 				// scorePopin.animation.play("score");
 
 				// scorePopin.visible = true;
@@ -587,7 +587,7 @@ class ResultsSubstate extends MusicBeatSubstate {
 				} else {
 					highscoreNew.visible = false;
 				}
-			};
+			});
 		}
 
 		// refresh();

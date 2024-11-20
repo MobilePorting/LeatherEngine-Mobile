@@ -314,8 +314,11 @@ class HUDAdjustment extends MusicBeatState {
 		offsets.alignment = RIGHT;
 		offsets.antialiasing = Options.getData("antialiasing");
 		add(offsets);
+		
+		final escape:String = controls.mobileC ? 'B' : 'ESCAPE';
+		final space:String = controls.mobileC ? 'C' : 'SPACE';
 
-		guide = new FlxText(0, 0, 0, "Press ESCAPE to exit and save.\nPress SPACE to reset to defaults.");
+		guide = new FlxText(0, 0, 0, "Press " + escape + " to exit and save.\nPress " + space +" to reset to defaults.");
 		guide.borderStyle = OUTLINE;
 		guide.borderSize = 1;
 		guide.size = 24;
@@ -327,7 +330,7 @@ class HUDAdjustment extends MusicBeatState {
 		guide.y = FlxG.height - guide.height - 4;
 		add(guide);
 
-		addVirtualPad(NONE, B);
+		addVirtualPad(NONE, B_C);
 	}
 
 	public function get_ratingText():String {
@@ -371,7 +374,7 @@ class HUDAdjustment extends MusicBeatState {
 		if (FlxG.sound.music != null)
 			Conductor.songPosition = FlxG.sound.music.time;
 
-		if (FlxG.keys.justPressed.ESCAPE) {
+		if (virtualPad.buttonB.justPressed || FlxG.keys.justPressed.ESCAPE) {
 			Options.setData([Math.round(rating.x - initRatingX), Math.round(rating.y - initRatingY)], "ratingsOffset");
 			Options.setData([
 				Math.round(accuracyText.x - initAccuracyTextX),
@@ -385,7 +388,7 @@ class HUDAdjustment extends MusicBeatState {
 			Options.setData(_ratingText.alignment, "ratingTextAlign");
 			FlxG.switchState((Main.previousState is substates.PauseSubState.PauseOptions ? substates.PauseSubState.PauseOptions.new : OptionsMenu.new));
 		}
-		if (FlxG.keys.justPressed.SPACE) {
+		if (virtualPad.buttonC.justPressed || FlxG.keys.justPressed.SPACE) {
 			Options.setData([0, 0], "ratingsOffset");
 			Options.setData([0, 0], "accuracyTextOffset");
 			Options.setData([0, 0], "comboOffset");

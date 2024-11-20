@@ -29,9 +29,9 @@ class ControlMenuSubstate extends MusicBeatSubstate
     public var selectedControl:Int = 0;
     public var selectingStuff:Bool = false;
 
-    final buttonESC:String = controls.mobileC ? 'B' : 'ESCAPE';
+    final escape:String = controls.mobileC ? 'B' : 'ESCAPE';
 
-    public var coolText:FlxText = new FlxText(0,25,0,"Use LEFT and RIGHT to change number of keys\n" + escape + " to save binds and exit menu" ((contols.mobileC) ? "\nRESET+SHIFT to Reset Binds to default\n" : ""), 32);
+    public var coolText:FlxText = new FlxText(0,25,0,"Use LEFT and RIGHT to change number of keys\nESCAPE to save binds and exit menu\nRESET+SHIFT to Reset Binds to default\n", 32);
 
     public var killKey:FlxSprite = new FlxSprite();
     public var killBind:String = Options.getData("kill", "binds");
@@ -60,7 +60,7 @@ class ControlMenuSubstate extends MusicBeatSubstate
 
         super();
 
-        coolText.text = 'Use LEFT and RIGHT to change number of keys\n$buttonESC to save binds and exit menu\nRESET+SHIFT to Reset Binds to default\n';
+        coolText.text = 'Use LEFT and RIGHT to change number of keys\n$escape to save binds and exit menu\n${(!controls.mobileC) ? 'RESET+SHIFT to Reset Binds to default\n' : ''}';
         coolText.setFormat(Paths.font("vcr.ttf"), 32, FlxColor.WHITE, CENTER, OUTLINE, FlxColor.BLACK);
         coolText.screenCenter(X);
         

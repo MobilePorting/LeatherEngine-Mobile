@@ -212,5 +212,9 @@ class HScript {
 		interp.variables.set("add", function(object:FlxBasic) {
 			FlxG.state.add(object);
 		});
+
+		interp.variables.set("remove", function(object:FlxBasic) {
+			FlxG.state.remove(object);
+		});
 	}
 }

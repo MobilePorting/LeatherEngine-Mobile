@@ -14,9 +14,9 @@ import openfl.utils.Assets;
 
 class ControlMenuSubstate extends MusicBeatSubstate
 {
-    var key_Count:Int = 4;
-    var arrow_Group:FlxTypedGroup<FlxSprite> = new FlxTypedGroup<FlxSprite>();
-    var text_Group:FlxTypedGroup<FlxText> = new FlxTypedGroup<FlxText>();
+    public var keyCount:Int = 4;
+    public var strumGroup:FlxTypedGroup<StrumNote> = new FlxTypedGroup<StrumNote>();
+    public var textGroup:FlxTypedGroup<FlxText> = new FlxTypedGroup<FlxText>();
 
     public var ui_settings:Array<String>;
     public var mania_size:Array<String>;
@@ -24,32 +24,28 @@ class ControlMenuSubstate extends MusicBeatSubstate
 
     public var arrow_Configs:Map<String, Array<String>> = new Map<String, Array<String>>();
 
-    var binds:Array<Array<String>> = Options.getData("binds", "binds");
+    public var binds:Array<Array<String>> = Options.getData("binds", "binds");
 
-    var selectedControl:Int = 0;
-    var selectingStuff:Bool = false;
+    public var selectedControl:Int = 0;
+    public var selectingStuff:Bool = false;
 
     final buttonESC:String = controls.mobileC ? 'B' : 'ESCAPE';
 
-    var coolText:FlxText = new FlxText(0,25,0,'Use LEFT and RIGHT to change number of keys\nESCAPE to save binds and exit menu\nRESET+SHIFT to Reset Binds to default\n', 32);
+    public var coolText:FlxText = new FlxText(0,25,0,"Use LEFT and RIGHT to change number of keys\n" + escape + " to save binds and exit menu" ((contols.mobileC) ? "\nRESET+SHIFT to Reset Binds to default\n" : ""), 32);
 
-    var killKey:FlxSprite = new FlxSprite();
-    var killBind:String = Options.getData("kill", "binds");
-    var killText:FlxText = new FlxText();
+    public var killKey:FlxSprite = new FlxSprite();
+    public var killBind:String = Options.getData("kill", "binds");
+    public var killText:FlxText = new FlxText();
 
-    var fullscreenKey:FlxSprite = new FlxSprite();
-    var fullscreenBind:String = Options.getData("fullscreenBind", "binds");
-    var fullscreenText:FlxText = new FlxText();
+    public var fullscreenKey:FlxSprite = new FlxSprite();
+    public var fullscreenBind:String = Options.getData("fullscreenBind", "binds");
+    public var fullscreenText:FlxText = new FlxText();
 
-    var pauseKey:FlxSprite = new FlxSprite();
-    var pauseBind:String = Options.getData("pauseBind", "binds");
-    var pauseText:FlxText = new FlxText();
+    public var pauseKey:FlxSprite = new FlxSprite();
+    public var pauseBind:String = Options.getData("pauseBind", "binds");
+    public var pauseText:FlxText = new FlxText();
 
-    var screenshotKey:FlxSprite = new FlxSprite();
-    var screenshotBind:String = Options.getData("screenshotBind", "binds");
-    var screenshotText:FlxText = new FlxText();
-
-    var mania_gap:Array<String>;
+    public var mania_gap:Array<String>;
 
     public function new()
     {
@@ -77,15 +73,15 @@ class ControlMenuSubstate extends MusicBeatSubstate
 
         #if PRELOAD_ALL
         create_Arrows();
-        add(arrow_Group);
+        add(strumGroup);
         #else
         Assets.loadLibrary("shared").onComplete(function (_) {
             create_Arrows();
-            add(arrow_Group);
+            add(strumGroup);
         });
         #end
         
-        add(text_Group);
+        add(textGroup);
         add(coolText);
 
         setupKeySprite(fullscreenKey, -190);
@@ -147,30 +143,11 @@ class ControlMenuSubstate extends MusicBeatSubstate
         pauseText.x = pauseKey.x + (pauseKey.width / 2) - (pauseText.width / 2);
         pauseText.y = pauseKey.y;
 
-        var screenshotIcon:FlxSprite = new FlxSprite();
-        screenshotIcon.frames = Paths.getSparrowAtlas("Bind_Menu_Assets", "preload");
-        screenshotIcon.animation.addByPrefix("idle", "Screenshot", 24);
-        screenshotIcon.animation.play("idle");
-        screenshotIcon.updateHitbox();
-
-        screenshotIcon.x = screenshotKey.x + (screenshotKey.width / 2) - (screenshotIcon.width / 2);
-        screenshotIcon.y = screenshotKey.y - screenshotIcon.height - 16;
-
-        screenshotText.setFormat(Paths.font("vcr.ttf"), 38, FlxColor.WHITE, LEFT, OUTLINE, FlxColor.BLACK);
-
-        screenshotText.text = screenshotBind;
-        screenshotText.x = screenshotKey.x + (screenshotKey.width / 2) - (screenshotText.width / 2);
-        screenshotText.y = screenshotKey.y;
-
-        /*add(screenshotKey);
-        add(screenshotIcon);
-        add(screenshotText);*/
-
         add(pauseKey);
         add(pauseIcon);
         add(pauseText);
 
-        addVirtualPad(NONE, B);
+        addVirtualPad(LEFT_RIGHT, B);
     }
 
     override function update(elapsed:Float) {
@@ -182,7 +159,7 @@ class ControlMenuSubstate extends MusicBeatSubstate
         var back = controls.BACK;
         var shift = FlxG.keys.pressed.SHIFT;
 
-        if(arrow_Group != null)
+        if(strumGroup != null)
         {
             if(reset && shift)
             {
@@ -190,7 +167,6 @@ class ControlMenuSubstate extends MusicBeatSubstate
                 fullscreenBind = "F11";
                 killBind = "R";
                 pauseBind = "ENTER";
-                screenshotBind = "F2";
             }
             
             if(back)
@@ -199,7 +175,6 @@ class ControlMenuSubstate extends MusicBeatSubstate
                 Options.setData(fullscreenBind, "fullscreenBind", "binds");
                 Options.setData(killBind, "kill", "binds");
                 Options.setData(pauseBind, "pauseBind", "binds");
-                Options.setData(screenshotBind, "screenshotBind", "binds");
     
                 PlayerSettings.player1.controls.loadKeyBinds();
     
@@ -238,17 +213,8 @@ class ControlMenuSubstate extends MusicBeatSubstate
             else
                 pauseKey.color = FlxColor.WHITE;
 
-            if(FlxG.mouse.overlaps(screenshotKey) && FlxG.mouse.justPressed && !selectingStuff)
-            {
-                selectedControl = -3;
-                selectingStuff = true;
-            }
-            else if(FlxG.mouse.overlaps(screenshotKey))
-                screenshotKey.color = FlxColor.GRAY;
-            else
-                screenshotKey.color = FlxColor.WHITE;
     
-            for(x in arrow_Group)
+            for(x in strumGroup)
             {
                 if(FlxG.mouse.overlaps(x) && FlxG.mouse.justPressed && !selectingStuff)
                 {
@@ -267,7 +233,7 @@ class ControlMenuSubstate extends MusicBeatSubstate
                 var curKey = FlxG.keys.getIsDown()[0].ID.toString();
     
                 if(selectedControl > -1)
-                    this.binds[key_Count - 1][selectedControl] = curKey;
+                    this.binds[keyCount - 1][selectedControl] = curKey;
                 else
                 {
                     switch(selectedControl)
@@ -278,8 +244,6 @@ class ControlMenuSubstate extends MusicBeatSubstate
                             killBind = curKey;
                         case -3:
                             pauseBind = curKey;
-                        case -4:
-                            screenshotBind = curKey;
                     }
                 }
             }
@@ -287,16 +251,16 @@ class ControlMenuSubstate extends MusicBeatSubstate
             if(!selectingStuff && (leftP || rightP))
             {
                 if(leftP)
-                    key_Count --;
+                    keyCount --;
     
                 if(rightP)
-                    key_Count ++;
+                    keyCount ++;
     
-                if(key_Count < 1)
-                    key_Count = 1;
+                if(keyCount < 1)
+                    keyCount = 1;
     
-                if(key_Count > NoteVariables.Note_Count_Directions.length)
-                    key_Count = NoteVariables.Note_Count_Directions.length;
+                if(keyCount > NoteVariables.Note_Count_Directions.length)
+                    keyCount = NoteVariables.Note_Count_Directions.length;
     
                 create_Arrows();
             }
@@ -310,9 +274,9 @@ class ControlMenuSubstate extends MusicBeatSubstate
 
     function update_Text()
     {
-        for(i in 0...text_Group.length)
+        for(i in 0...textGroup.length)
         {
-            text_Group.members[i].text = binds[key_Count - 1][i];
+            textGroup.members[i].text = binds[keyCount - 1][i];
         }
 
         fullscreenText.text = fullscreenBind;
@@ -326,74 +290,51 @@ class ControlMenuSubstate extends MusicBeatSubstate
         pauseText.text = pauseBind;
         pauseText.x = pauseKey.x + (pauseKey.width / 2) - (pauseText.width / 2);
         pauseText.y = pauseKey.y + (pauseKey.height / 2) - (pauseText.height / 2);
-
-        screenshotText.text = screenshotBind;
-        screenshotText.x = screenshotKey.x + (screenshotKey.width / 2) - (screenshotKey.width / 2);
-        screenshotText.y = screenshotKey.y + (screenshotKey.height / 2) - (screenshotKey.height / 2);
     }
 
-    function create_Arrows(?new_Key_Count)
+    function create_Arrows(?new_keyCount)
     {
-        if(new_Key_Count != null)
-            key_Count = new_Key_Count;
+        if(new_keyCount != null)
+            keyCount = new_keyCount;
 
-        arrow_Group.clear();
+        strumGroup.clear();
         
-        text_Group.forEach(function(text:FlxText) {
-            text_Group.remove(text);
+        textGroup.forEach(function(text:FlxText) {
+            textGroup.remove(text);
             text.kill();
             text.destroy();
         });
 
-        text_Group.clear();
+        textGroup.clear();
 
         var strumLine:FlxSprite = new FlxSprite(0, FlxG.height / 2);
 
-		for (i in 0...key_Count)
+		for (i in 0...keyCount)
         {
-            var babyArrow:StrumNote = new StrumNote(0, strumLine.y, i, "default", ui_settings, mania_size, key_Count);
-
-            babyArrow.frames = Paths.getSparrowAtlas("ui skins/default/arrows/default", 'shared');
-
-			babyArrow.antialiasing = ui_settings[3] == "true";
-
-			babyArrow.setGraphicSize(Std.int((babyArrow.width * Std.parseFloat(ui_settings[0])) * (Std.parseFloat(ui_settings[2]) - (Std.parseFloat(mania_size[key_Count-1])))));
-			babyArrow.updateHitbox();
-			
-			var animation_Base_Name = NoteVariables.Note_Count_Directions[key_Count - 1][Std.int(Math.abs(i))].toLowerCase();
-
-			babyArrow.animation.addByPrefix('static', animation_Base_Name + " static");
-			babyArrow.animation.addByPrefix('pressed', NoteVariables.Other_Note_Anim_Stuff[key_Count - 1][i] + ' press', 24, false);
-			babyArrow.animation.addByPrefix('confirm', NoteVariables.Other_Note_Anim_Stuff[key_Count - 1][i] + ' confirm', 24, false);
-			
-			babyArrow.playAnim('static');
-
-			babyArrow.x += (babyArrow.width + (2 + Std.parseFloat(mania_gap[key_Count - 1]))) * Math.abs(i) + Std.parseFloat(mania_offset[key_Count - 1]);
+            var babyArrow:StrumNote = new StrumNote(0, strumLine.y, i, "default", ui_settings, mania_size, keyCount);
+			babyArrow.x += (babyArrow.width + (2 + Std.parseFloat(mania_gap[keyCount - 1]))) * Math.abs(i) + Std.parseFloat(mania_offset[keyCount - 1]);
 			babyArrow.y = strumLine.y - (babyArrow.height / 2);
-
             babyArrow.y -= 10;
             babyArrow.alpha = 0;
             FlxTween.tween(babyArrow, {y: babyArrow.y + 10, alpha: 1}, 1, {ease: FlxEase.circOut, startDelay: 0.5 + (0.2 * i)});
-
 			babyArrow.ID = i;
-
-			babyArrow.x += 100 - ((key_Count - 4) * 16) + (key_Count >= 10 ? 30 : 0);
+			babyArrow.x += 100 - ((keyCount - 4) * 16) + (keyCount >= 10 ? 30 : 0);
 			babyArrow.x += ((FlxG.width / 2) * 0.5);
+            strumGroup.add(babyArrow);
 
-            arrow_Group.add(babyArrow);
-
-            //var coolWidth = Std.int(40 - ((key_Count - 5) * 2) + (key_Count == 10 ? 30 : 0));
+            //var coolWidth = Std.int(40 - ((keyCount - 5) * 2) + (keyCount == 10 ? 30 : 0));
                                                     // funny 4 key math i guess, full num is 2.836842105263158 (width / previous key width thingy which was 38)
             var coolWidth = Math.ceil(babyArrow.width / 2.83684);
 
-            var coolText = new FlxText((babyArrow.x + (babyArrow.width / 2)) - (coolWidth / 2), babyArrow.y - (coolWidth / 2), coolWidth, binds[key_Count - 1][i], coolWidth);
+            var coolText:FlxText = new FlxText((babyArrow.x + (babyArrow.width / 2)) - (coolWidth / 2), babyArrow.y - (coolWidth / 2), coolWidth, binds[keyCount - 1][i], coolWidth);
+            coolText.borderStyle = SHADOW_XY(6, 6);
             add(coolText);
 
-            text_Group.add(coolText);
+            textGroup.add(coolText);
         }
     }
 
-    function setupKeySprite(key:FlxSprite, ?x:Float = 0.0)
+    public function setupKeySprite(key:FlxSprite, ?x:Float = 0.0)
     {
         key.frames = Paths.getSparrowAtlas("Bind_Menu_Assets", "preload");
         key.animation.addByPrefix("idle", "Button", 24);

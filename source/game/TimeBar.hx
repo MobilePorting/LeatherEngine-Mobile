@@ -62,7 +62,7 @@ class TimeBar extends FlxSpriteGroup{
     override public function new(song:SongData, difficulty:String = "NORMAL"){
         super();
 
-        text = new FlxText(0, 0, 0, '${song.song} - $difficulty${Options.getData('botplay') ? ' (BOT)' : ''}');
+        text = new FlxText(0, 0, 0, '${song.song} ~ $difficulty${Options.getData('botplay') ? ' (BOT)' : ''}');
 		text.setFormat(Paths.font("vcr.ttf"), Options.getData("biggerInfoText") ? 20 : 16, FlxColor.WHITE, CENTER, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
 		text.screenCenter(X);
 		text.scrollFactor.set();

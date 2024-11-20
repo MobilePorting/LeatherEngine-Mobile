@@ -38,7 +38,8 @@ class StrumNote extends FlxSkewedSprite {
 
 	public var modAngle:Float = 0;
 
-	public function new(x:Float, y:Float, leData:Int, ?ui_Skin:String, ?ui_settings:Array<String>, ?mania_size:Array<String>, ?keyCount:Int, ?isPlayer:Float) {
+	public function new(x:Float, y:Float, noteData:Int, ?ui_Skin:String, ?ui_settings:Array<String>, ?mania_size:Array<String>, ?keyCount:Int, ?isPlayer:Float) {
+		super(x, y);
 		if (ui_Skin == null)
 			ui_Skin = PlayState.SONG.ui_Skin;
 
@@ -51,8 +52,8 @@ class StrumNote extends FlxSkewedSprite {
 		if (keyCount == null)
 			keyCount = PlayState.SONG.keyCount;
 
-		noteData = leData;
-
+		
+		this.noteData = noteData;
 		this.ui_Skin = ui_Skin;
 		this.ui_settings = ui_settings;
 		this.mania_size = mania_size;
@@ -66,10 +67,23 @@ class StrumNote extends FlxSkewedSprite {
 			}
 		}
 
-		super(x, y);
+		frames = Assets.exists(Paths.image("ui skins/" + ui_Skin + "/arrows/strums")) ? Paths.getSparrowAtlas('ui skins/' + ui_Skin
+			+ "/arrows/strums") : Paths.getSparrowAtlas('ui skins/' + ui_Skin + "/arrows/default");
+
+		var animation_Base_Name:String = NoteVariables.Note_Count_Directions[keyCount - 1][Std.int(Math.abs(noteData))].toLowerCase();
+
+		animation.addByPrefix('static', animation_Base_Name + " static");
+		animation.addByPrefix('pressed', NoteVariables.Other_Note_Anim_Stuff[keyCount - 1][noteData] + ' press', 24, false);
+		animation.addByPrefix('confirm', NoteVariables.Other_Note_Anim_Stuff[keyCount - 1][noteData] + ' confirm', 24, false);
+
+
+		antialiasing = ui_settings[3] == "true";
+
+		setGraphicSize(Std.int((width * Std.parseFloat(ui_settings[0])) * (Std.parseFloat(ui_settings[2]) - (Std.parseFloat(mania_size[keyCount - 1])))));
+		updateHitbox();
 		noteColor = NoteColors.getNoteColor(NoteVariables.Other_Note_Anim_Stuff[keyCount - 1][noteData]);
 		shader = affectedbycolor ? colorSwap.shader : null;
-
+		
 		if (affectedbycolor && PlayState.instance != null && colorSwap != null) {
 			if (noteColor != null) {
 				colorSwap.r = noteColor[0];
@@ -77,6 +91,7 @@ class StrumNote extends FlxSkewedSprite {
 				colorSwap.b = noteColor[2];
 			}
 		}
+		playAnim('static');
 	}
 
 	override function update(elapsed:Float) {

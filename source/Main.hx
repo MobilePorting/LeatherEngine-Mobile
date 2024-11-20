@@ -16,6 +16,7 @@ import openfl.text.TextFormat;
 import states.TitleState;
 import ui.SimpleInfoDisplay;
 import ui.logs.Logs;
+import flixel.FlxState;
 #if mobile
 import mobile.states.CopyState;
 #end
@@ -24,6 +25,8 @@ class Main extends Sprite {
 	public static var game:FlxGame;
 	public static var display:SimpleInfoDisplay;
 	public static var logsOverlay:Logs;
+
+	public static var previousState:FlxState;
 	
 	public function new() {
 		super();
@@ -41,6 +44,8 @@ class Main extends Sprite {
 		Log.trace = CoolUtil.haxe_print;
 
 		game = new FlxGame(1280, 720, #if (mobile && MODDING_ALLOWED) !CopyState.checkExistingFiles() ? CopyState : #end TitleState, 60, 60, true);
+
+		FlxG.signals.preStateSwitch.add(() -> {Main.previousState = FlxG.state;});
 
 
 		// FlxG.game._customSoundTray wants just the class, it calls new from

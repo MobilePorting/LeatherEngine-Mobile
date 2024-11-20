@@ -256,11 +256,6 @@
       "save": "binds"
     },
     {
-      "option": "screenshotBind",
-      "value": "F2",
-      "save": "binds"
-    },
-    {
       "option": "save",
       "value": "{}",
       "save": "autosave"
@@ -294,16 +289,24 @@
       "value": false
     },
     {
-      "option": "ratingsSettings",
-      "value": [517, 310, 1, 1]
+      "option": "ratingsOffset",
+      "value": [0, 0]
     },
     {
-      "option": "comboSettings",
-      "value": [300, 600, 1, 1]
+      "option": "accuracyTextOffset",
+      "value": [0, 0]
     },
     {
-      "option": "msSettings",
-      "value": [517, 310, 1, 1]
+      "option": "comboOffset",
+      "value": [0, 0]
+    },
+    {
+      "option": "ratingTextOffset",
+      "value": [0, 0]
+    },
+    {
+      "option": "ratingTextAlign",
+      "value": "left"
     },
     {
       "option": "mobileCAlpha",

@@ -10,7 +10,6 @@ import flixel.FlxObject;
 import flixel.FlxSprite;
 import flixel.FlxSubState;
 import flixel.addons.transition.FlxTransitionableState;
-import flixel.graphics.FlxGraphic;
 import flixel.group.FlxGroup;
 import flixel.group.FlxSpriteGroup;
 import flixel.input.FlxInput.FlxInputState;
@@ -18,6 +17,7 @@ import flixel.math.FlxMath;
 import flixel.math.FlxPoint;
 import flixel.math.FlxRect;
 import flixel.sound.FlxSound;
+import flixel.system.FlxAssets.FlxGraphicAsset;
 import flixel.text.FlxText;
 import flixel.tweens.FlxEase;
 import flixel.tweens.FlxTween;
@@ -362,12 +362,6 @@ class PlayState extends MusicBeatState {
 	**/
 	public var altAnim:String = "";
 
-	/**
-		how big to stretch the pixel art assets
-
-		@author ninjamuffin99 probably
-	**/
-	@:noCompletion public static var daPixelZoom:Float = 6;
 
 	/**
 		Whether or not you are currently in a cutscene.
@@ -742,15 +736,15 @@ class PlayState extends MusicBeatState {
 		type_Configs.set("default", CoolUtil.coolTextFile(Paths.txt("arrow types/default")));
 
 		// preload ratings
-		uiMap.set("marvelous", FlxGraphic.fromAssetKey(Paths.image("ui skins/" + SONG.ui_Skin + "/ratings/marvelous")));
-		uiMap.set("sick", FlxGraphic.fromAssetKey(Paths.image("ui skins/" + SONG.ui_Skin + "/ratings/sick")));
-		uiMap.set("good", FlxGraphic.fromAssetKey(Paths.image("ui skins/" + SONG.ui_Skin + "/ratings/good")));
-		uiMap.set("bad", FlxGraphic.fromAssetKey(Paths.image("ui skins/" + SONG.ui_Skin + "/ratings/bad")));
-		uiMap.set("shit", FlxGraphic.fromAssetKey(Paths.image("ui skins/" + SONG.ui_Skin + "/ratings/shit")));
+		uiMap.set("marvelous", Paths.gpuBitmap("ui skins/" + SONG.ui_Skin + "/ratings/marvelous"));
+		uiMap.set("sick", Paths.gpuBitmap("ui skins/" + SONG.ui_Skin + "/ratings/sick"));
+		uiMap.set("good", Paths.gpuBitmap("ui skins/" + SONG.ui_Skin + "/ratings/good"));
+		uiMap.set("bad", Paths.gpuBitmap("ui skins/" + SONG.ui_Skin + "/ratings/bad"));
+		uiMap.set("shit", Paths.gpuBitmap("ui skins/" + SONG.ui_Skin + "/ratings/shit"));
 
 		// preload numbers
 		for (i in 0...10)
-			uiMap.set(Std.string(i), FlxGraphic.fromAssetKey(Paths.image("ui skins/" + SONG.ui_Skin + "/numbers/num" + Std.string(i))));
+			uiMap.set(Std.string(i), Paths.gpuBitmap("ui skins/" + SONG.ui_Skin + "/numbers/num" + Std.string(i)));
 
 		curStage = SONG.stage;
 
@@ -1048,7 +1042,10 @@ class PlayState extends MusicBeatState {
 			ratingText = new FlxText(4, 0, 0, "bruh");
 			ratingText.setFormat(Paths.font("vcr.ttf"), 16, FlxColor.WHITE, LEFT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
 			ratingText.screenCenter(Y);
+			ratingText.x += Options.getData("ratingTextOffset")[0];
+			ratingText.y += Options.getData("ratingTextOffset")[1];
 			ratingText.antialiasing = Options.getData("antialiasing");
+			ratingText.alignment = Options.getData("ratingTextAlign");
 			ratingText.scrollFactor.set();
 			add(ratingText);
 
@@ -1726,26 +1723,7 @@ class PlayState extends MusicBeatState {
 
 		for (i in 0...usedKeyCount) {
 			var babyArrow:StrumNote = new StrumNote(0, strumLine.y, i, null, null, null, usedKeyCount, pos);
-
-			babyArrow.frames = Assets.exists(Paths.image("ui skins/" + SONG.ui_Skin + "/arrows/strums")) ? Paths.getSparrowAtlas('ui skins/' + SONG.ui_Skin
-				+ "/arrows/strums") : Paths.getSparrowAtlas('ui skins/' + SONG.ui_Skin + "/arrows/default");
-
-			babyArrow.antialiasing = ui_settings[3] == "true";
-
-			babyArrow.setGraphicSize(Std.int((babyArrow.width * Std.parseFloat(ui_settings[0])) * (Std.parseFloat(ui_settings[2])
-				- (Std.parseFloat(mania_size[usedKeyCount - 1])))));
-			babyArrow.updateHitbox();
-
-			var animation_Base_Name:String = NoteVariables.Note_Count_Directions[usedKeyCount - 1][Std.int(Math.abs(i))].toLowerCase();
-
-			babyArrow.animation.addByPrefix('static', animation_Base_Name + " static");
-			babyArrow.animation.addByPrefix('pressed', NoteVariables.Other_Note_Anim_Stuff[usedKeyCount - 1][i] + ' press', 24, false);
-			babyArrow.animation.addByPrefix('confirm', NoteVariables.Other_Note_Anim_Stuff[usedKeyCount - 1][i] + ' confirm', 24, false);
-
 			babyArrow.scrollFactor.set();
-
-			babyArrow.playAnim('static');
-
 			babyArrow.x += (babyArrow.width
 				+ (2 + Std.parseFloat(mania_gap[usedKeyCount - 1]))) * Math.abs(i)
 				+ Std.parseFloat(mania_offset[usedKeyCount - 1]);
@@ -2788,18 +2766,18 @@ class PlayState extends MusicBeatState {
 		}
 	}
 
-	var endingSong:Bool = false;
+	public var endingSong:Bool = false;
 
-	var rating:FlxSprite = new FlxSprite();
-	var ratingTween:VarTween;
+	public var rating:FlxSprite = new FlxSprite();
+	public var ratingTween:VarTween;
 
-	var accuracyText:FlxText = new FlxText(0, 0, 0, "bruh", 24);
-	var accuracyTween:VarTween;
+	public var accuracyText:FlxText = new FlxText(0, 0, 0, "bruh", 24);
+	public var accuracyTween:VarTween;
 
-	var numbers:Array<FlxSprite> = [];
-	var number_Tweens:Array<VarTween> = [];
+	public var numbers:Array<FlxSprite> = [];
+	public var number_Tweens:Array<VarTween> = [];
 
-	@:noCompletion public var uiMap:Map<String, FlxGraphic> = [];
+	public var uiMap:Map<String, FlxGraphicAsset> = [];
 
 	public function popUpScore(strumtime:Float, noteData:Int, ?setNoteDiff:Float):Void {
 		var noteDiff:Float = (strumtime - Conductor.songPosition);
@@ -2881,23 +2859,25 @@ class PlayState extends MusicBeatState {
 		rating.loadGraphic(uiMap.get(daRating), false, 0, 0, true, daRating);
 
 		rating.screenCenter();
-		rating.x = Options.getData("ratingsSettings")[0];
-		rating.x -= (Options.getData("middlescroll") ? 350 : (characterPlayingAs == 0 ? 0 : -150));
-		rating.y = Options.getData("ratingsSettings")[1];
-		rating.y -= 60;
+		var initRatingX:Float = rating.x -= (Options.getData("middlescroll") ? 350 : (Options.getData("playAs") == 0 ? 0 : -150));
+		var initRatingY:Float = rating.y -= 60;
+		rating.x += Options.getData("ratingsOffset")[0];
+		rating.y += Options.getData("ratingsOffset")[1];
 		rating.velocity.y = FlxG.random.int(30, 60);
 		rating.velocity.x = FlxG.random.int(-10, 10);
 
 		var noteMath:Float = FlxMath.roundDecimal(noteDiff, 2);
 
 		if (Options.getData("displayMs")) {
-			accuracyText.setPosition(rating.x, rating.y + 100);
 			accuracyText.text = noteMath + " ms" + (Options.getData("botplay") ? " (BOT)" : "");
+			accuracyText.setPosition(initRatingX + Options.getData("accuracyTextOffset")[0], initRatingY + 100 + Options.getData("accuracyTextOffset")[1]);
 
-			if (Math.abs(noteMath) == noteMath)
+			if(noteMath != 0)
+				accuracyText.color = FlxColor.PINK;
+			else if (Math.abs(noteMath) == noteMath)
 				accuracyText.color = FlxColor.CYAN;
 			else
-				accuracyText.color = FlxColor.ORANGE;
+				accuracyText.color = 0xFF8800;
 
 			accuracyText.borderStyle = FlxTextBorderStyle.OUTLINE;
 			accuracyText.borderSize = 1;
@@ -2930,12 +2910,13 @@ class PlayState extends MusicBeatState {
 
 			numScore.loadGraphic(uiMap.get(Std.string(i)), false, 0, 0, true, Std.string(i));
 
-			numScore.x = Options.getData("comboSettings")[0];
-			numScore.y = Options.getData("comboSettings")[1];
+			numScore.screenCenter();
 			numScore.x -= (Options.getData("middlescroll") ? 350 : (characterPlayingAs == 0 ? 0 : -150));
 
 			numScore.x += (43 * daLoop) - 90;
 			numScore.y += 80;
+			numScore.x += Options.getData("comboOffset")[0];
+			numScore.y += Options.getData("comboOffset")[1];
 
 			numScore.setGraphicSize(Std.int(numScore.width * Std.parseFloat(ui_settings[1])));
 			numScore.updateHitbox();
@@ -2997,8 +2978,6 @@ class PlayState extends MusicBeatState {
 
 	public function updateScoreText() {
 		scoreTxt.text = '<  ${Options.getData('showScore') ? 'Score:${songScore} ~ ' : ''}Misses:${misses} ~ Accuracy:${accuracy}% ~ ${ratingStr}  >';
-		// scoreTxt.text = "Score: " + songScore + " | " + "Misses: " + misses + " | " + "Accuracy: " + accuracy + "% | " + ratingStr;
-
 		scoreTxt.screenCenter(X);
 	}
 
@@ -3676,10 +3655,11 @@ class PlayState extends MusicBeatState {
 		call("beatHit", [curBeat]);
 	}
 
-	function updateRatingText() {
+	public function updateRatingText() {
 		if (Options.getData("sideRatings")) {
-			ratingText.text = returnStupidRatingText();
+			ratingText.text = getRatingText();
 			ratingText.screenCenter(Y);
+			ratingText.y += Options.getData("ratingTextOffset")[1];
 		}
 	}
 
@@ -3722,7 +3702,7 @@ class PlayState extends MusicBeatState {
 		openSubState(res);
 	}
 
-	public function returnStupidRatingText():String {
+	public function getRatingText():String {
 		var ratingArray:Array<Int> = [
 			ratings.get("marvelous"),
 			ratings.get("sick"),
@@ -3981,14 +3961,11 @@ class PlayState extends MusicBeatState {
 					}
 					#end
 
-					@:privateAccess
-					{
-						iconP2.scale.set(1, 1);
-						iconP2.changeIconSet(dad.icon);
+					iconP2.scale.set(1, 1);
+					iconP2.changeIconSet(dad.icon);
 
-						healthBar.createFilledBar(dad.barColor, boyfriend.barColor);
-						healthBar.updateFilledBar();
-					}
+					healthBar.createFilledBar(dad.barColor, boyfriend.barColor);
+					healthBar.updateFilledBar();
 				case "bf" | "boyfriend" | "player" | "0":
 					{
 						var oldBF = boyfriend;

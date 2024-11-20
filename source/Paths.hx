@@ -115,7 +115,7 @@ class Paths {
 			}
 		}	
 		var graphic:FlxGraphic = FlxGraphic.fromBitmapData(bitmap, false, file, false);
-		graphic.persist = Options.getData("memoryLeaks");
+		graphic.persist = true;
 		graphics.set(file, graphic);
 		return graphic;
 	}

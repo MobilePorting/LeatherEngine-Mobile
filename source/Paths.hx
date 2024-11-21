@@ -143,7 +143,7 @@ class Paths {
 				if (Assets.exists('$voicesPath$voicesFile-erect.ogg'))
 					voicesFile += '-erect';
 			}
-			if (Assets.exists('Voices-$difficulty.ogg'))
+			if (Assets.exists('$voicesPath$voicesFile-$difficulty.ogg'))
 				voicesFile += '-$difficulty';
 		}
 
@@ -163,7 +163,7 @@ class Paths {
 				if (Assets.exists('$instPath$instFile-erect.ogg'))
 					instFile += '-erect';
 			}
-			if (Assets.exists('Inst-$difficulty.ogg'))
+			if (Assets.exists('$instPath$instFile-$difficulty.ogg'))
 				instFile += '-$difficulty';
 		}
 

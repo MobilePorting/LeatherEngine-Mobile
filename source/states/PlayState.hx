@@ -894,6 +894,14 @@ class PlayState extends MusicBeatState {
 		playerStrums = new FlxTypedGroup<StrumNote>();
 		enemyStrums = new FlxTypedGroup<StrumNote>();
 
+		#if (MODCHARTING_TOOLS)
+		if (SONG.modchartingTools
+			|| Assets.exists(Paths.json("song data/" + SONG.song.toLowerCase() + "/modchart"))
+			|| Assets.exists(Paths.json("song data/" + SONG.song.toLowerCase() + "/modchart-" + storyDifficultyStr.toLowerCase()))) {
+			SONG.modchartingTools = true;
+		}
+		#end
+
 		generareNoteChangeEvents();
 		generateSong(SONG.song);
 		generateEvents();
@@ -954,6 +962,7 @@ class PlayState extends MusicBeatState {
 		// TODO: Deprecate and convert this to new script system on script load.
 		#if LUA_ALLOWED
 		if (Assets.exists(Paths.lua("modcharts/" + PlayState.SONG.modchartPath))) {
+			trace("The 'modcharts' folder is deprecated! Use the 'scripts' folder instead!", WARNING);
 			luaScriptArray.push(new ModchartUtilities(PolymodAssets.getPath(Paths.lua("modcharts/" + PlayState.SONG.modchartPath))));
 		} else if (Assets.exists(Paths.lua("scripts/" + PlayState.SONG.modchartPath))) {
 			luaScriptArray.push(new ModchartUtilities(PolymodAssets.getPath(Paths.lua("scripts/" + PlayState.SONG.modchartPath))));
@@ -977,6 +986,7 @@ class PlayState extends MusicBeatState {
 		if (SONG.modchartingTools
 			|| Assets.exists(Paths.json("song data/" + SONG.song.toLowerCase() + "/modchart"))
 			|| Assets.exists(Paths.json("song data/" + SONG.song.toLowerCase() + "/modchart-" + storyDifficultyStr.toLowerCase()))) {
+			SONG.modchartingTools = true;
 			playfieldRenderer = new PlayfieldRenderer(strumLineNotes, notes, this);
 			playfieldRenderer.cameras = [camHUD];
 			add(playfieldRenderer);
@@ -1704,7 +1714,7 @@ class PlayState extends MusicBeatState {
 		SONG.validScore = SONG.validScore == true ? songMultiplier >= 1 : false;
 	}
 
-	public function sortNotes(Obj1:Note, Obj2:Note):Int {
+	public inline function sortNotes(Obj1:Note, Obj2:Note):Int {
 		return FlxSort.byValues(FlxSort.ASCENDING, Obj1.strumTime, Obj2.strumTime);
 	}
 
@@ -2872,12 +2882,10 @@ class PlayState extends MusicBeatState {
 			accuracyText.text = noteMath + " ms" + (Options.getData("botplay") ? " (BOT)" : "");
 			accuracyText.setPosition(initRatingX + Options.getData("accuracyTextOffset")[0], initRatingY + 100 + Options.getData("accuracyTextOffset")[1]);
 
-			if(noteMath != 0)
-				accuracyText.color = FlxColor.PINK;
-			else if (Math.abs(noteMath) == noteMath)
+			if (Math.abs(noteMath) == noteMath)
 				accuracyText.color = FlxColor.CYAN;
 			else
-				accuracyText.color = 0xFF8800;
+				accuracyText.color = FlxColor.ORANGE;
 
 			accuracyText.borderStyle = FlxTextBorderStyle.OUTLINE;
 			accuracyText.borderSize = 1;

@@ -193,7 +193,7 @@ class Note extends FlxSkewedSprite {
 		if (PlayState.instance.type_Configs.get(arrow_Type)[3] != null)
 			heldMissDamage = Std.parseFloat(PlayState.instance.type_Configs.get(arrow_Type)[3]);
 
-		if (Options.getData("downscroll") && sustainNote)
+		if (Options.getData("downscroll") && sustainNote && !inEditor)
 			flipY = true;
 
 		if (isSustainNote && prevNote != null) {

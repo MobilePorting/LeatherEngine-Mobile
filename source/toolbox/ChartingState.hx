@@ -128,8 +128,6 @@ class ChartingState extends MusicBeatState {
 			Assets.loadLibrary("shared").onComplete(function(_) {});
 		#end
 
-
-
 		menuBG = new FlxSprite().makeBackground(0x3D3D3D);
 
 		menuBG.updateHitbox();
@@ -1018,14 +1016,13 @@ class ChartingState extends MusicBeatState {
 		if (openfl.Assets.cache.hasSound(Paths.voices(daSong, difficulty_name)))
 			openfl.Assets.cache.removeSound(Paths.voices(daSong, difficulty_name));
 
-		FlxG.sound.music = new FlxSound().loadEmbedded(Paths.inst(daSong,  _song.specialAudioName ?? difficulty_name, _song.player1));
+		FlxG.sound.music = new FlxSound().loadEmbedded(Paths.inst(daSong, _song.specialAudioName ?? difficulty_name, _song.player1));
 		FlxG.sound.music.persist = true;
 
 		vocals = new SoundGroup(2);
-		if (_song.needsVoices){
+		if (_song.needsVoices) {
 			for (character in ['player', 'opponent', _song.player1, _song.player2]) {
-				var soundPath:String = Paths.voices(daSong, _song.specialAudioName ?? difficulty_name, character,
-				_song.player1);
+				var soundPath:String = Paths.voices(daSong, _song.specialAudioName ?? difficulty_name, character, _song.player1);
 				if (!addedVocals.contains(soundPath)) {
 					vocals.add(new FlxSound().loadEmbedded(soundPath));
 					addedVocals.push(soundPath);
@@ -1033,7 +1030,7 @@ class ChartingState extends MusicBeatState {
 			}
 		}
 
-		//FlxG.sound.list.add(vocals);
+		// FlxG.sound.list.add(vocals);
 
 		FlxG.sound.music.pause();
 		vocals.pause();
@@ -1747,15 +1744,16 @@ class ChartingState extends MusicBeatState {
 
 		var json:CharacterConfig = cast Json.parse(rawJson);
 
-		return (json.healthIcon != null && json.healthIcon != "" ? json.healthIcon : char);
+		return (json.healthIcon ?? char);
 	}
 
-	function updateNoteUI():Void {
+	public function updateNoteUI():Void {
 		if (curSelectedNote != null)
 			stepperSusLength.value = curSelectedNote[2];
 	}
 
-	function updateGrid():Void {
+	public function updateGrid():Void {
+		var uiSettings:Array<String> = CoolUtil.coolTextFile(Paths.txt("ui skins/" + _song.ui_Skin + "/config"));
 		remove(gridBG);
 		gridBG.kill();
 		gridBG.destroy();
@@ -1855,6 +1853,7 @@ class ChartingState extends MusicBeatState {
 
 			note.x = Math.floor((daNoteInfo + 1) * GRID_SIZE) + Std.parseFloat(PlayState.instance.arrow_Configs.get(daType)[1]);
 			note.y = Math.floor(getYfromStrum((daStrumTime - sectionStartTime())) + Std.parseFloat(PlayState.instance.arrow_Configs.get(daType)[3]));
+			note.antialiasing = uiSettings[3] == "true";
 
 			note.rawNoteData = daNoteInfo;
 
@@ -1886,6 +1885,7 @@ class ChartingState extends MusicBeatState {
 				var sustainNote:Note = new Note(daStrumTime + (Conductor.stepCrochet * susNote) + Conductor.stepCrochet, goodNoteInfo, oldNote, true, 0,
 					daType, _song, [0], mustPress, true);
 				sustainNote.scale.set(note.scale.x, note.scale.y);
+				sustainNote.antialiasing = uiSettings[3] == "true";
 				sustainNote.updateHitbox();
 				sustainNote.x = note.x + (GRID_SIZE / 2) - Std.parseFloat(PlayState.instance.arrow_Configs.get(daType)[1]) - sustainNote.width / 2;
 				sustainNote.y = note.height

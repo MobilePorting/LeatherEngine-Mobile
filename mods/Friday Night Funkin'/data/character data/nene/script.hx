@@ -1,4 +1,4 @@
-import game.graphics.ABotVis;
+import game.ABotVis;
 import flixe.sound.FlxSound;
 
 var pupilState:Int = 0;

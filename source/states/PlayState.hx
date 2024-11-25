@@ -977,6 +977,10 @@ class PlayState extends MusicBeatState {
 		add(ratingsGroup);
 		add(strumLineNotes);
 
+		playfieldRenderer = new PlayfieldRenderer(strumLineNotes, notes, this);
+		playfieldRenderer.cameras = [camHUD];
+		add(playfieldRenderer);
+
 		var cache_splash:NoteSplash = new NoteSplash();
 		cache_splash.kill();
 
@@ -2186,7 +2190,7 @@ class PlayState extends MusicBeatState {
 				if (!note.mustPress && note.strumTime <= Conductor.songPosition && note.shouldHit) {
 					camZooming = true;
 
-					var singAnim:String = NoteVariables.Character_Animation_Arrays[getCorrectKeyCount(false) - 1][Std.int(Math.abs(note.noteData))]
+					var singAnim:String = NoteVariables.characterAnimations[getCorrectKeyCount(false) - 1][Std.int(Math.abs(note.noteData))]
 						+ (characterPlayingAs == 0 ? altAnim : "") + note.singAnimSuffix;
 					if (note.singAnimPrefix != 'sing') {
 						singAnim = singAnim.replace('sing', note.singAnimPrefix);
@@ -3358,37 +3362,37 @@ class PlayState extends MusicBeatState {
 				if (characterPlayingAs == 0) {
 					if (boyfriend.otherCharacters != null && !(boyfriend.otherCharacters.length - 1 < note.character)) {
 						if (note.characters.length <= 1)
-							boyfriend.otherCharacters[note.character].playAnim(NoteVariables.Character_Animation_Arrays[getCorrectKeyCount(true) - 1][direction]
+							boyfriend.otherCharacters[note.character].playAnim(NoteVariables.characterAnimations[getCorrectKeyCount(true) - 1][direction]
 								+ "miss", true);
 						else {
 							for (character in note.characters) {
 								if (boyfriend.otherCharacters.length - 1 >= character)
-									boyfriend.otherCharacters[character].playAnim(NoteVariables.Character_Animation_Arrays[getCorrectKeyCount(true) - 1][direction]
+									boyfriend.otherCharacters[character].playAnim(NoteVariables.characterAnimations[getCorrectKeyCount(true) - 1][direction]
 										+ "miss", true);
 							}
 						}
 					} else
-						boyfriend.playAnim(NoteVariables.Character_Animation_Arrays[getCorrectKeyCount(true) - 1][direction] + "miss", true);
+						boyfriend.playAnim(NoteVariables.characterAnimations[getCorrectKeyCount(true) - 1][direction] + "miss", true);
 				} else {
 					if (dad.otherCharacters != null && !(dad.otherCharacters.length - 1 < note.character))
 						if (note.characters.length <= 1)
-							dad.otherCharacters[note.character].playAnim(NoteVariables.Character_Animation_Arrays[getCorrectKeyCount(true) - 1][direction]
+							dad.otherCharacters[note.character].playAnim(NoteVariables.characterAnimations[getCorrectKeyCount(true) - 1][direction]
 								+ "miss", true);
 						else {
 							for (character in note.characters) {
 								if (dad.otherCharacters.length - 1 >= character)
-									dad.otherCharacters[character].playAnim(NoteVariables.Character_Animation_Arrays[getCorrectKeyCount(true) - 1][direction]
+									dad.otherCharacters[character].playAnim(NoteVariables.characterAnimations[getCorrectKeyCount(true) - 1][direction]
 										+ "miss", true);
 							}
 						}
 					else
-						dad.playAnim(NoteVariables.Character_Animation_Arrays[getCorrectKeyCount(true) - 1][direction] + "miss", true);
+						dad.playAnim(NoteVariables.characterAnimations[getCorrectKeyCount(true) - 1][direction] + "miss", true);
 				}
 			} else {
 				if (characterPlayingAs == 0)
-					boyfriend.playAnim(NoteVariables.Character_Animation_Arrays[getCorrectKeyCount(true) - 1][direction] + "miss", true);
+					boyfriend.playAnim(NoteVariables.characterAnimations[getCorrectKeyCount(true) - 1][direction] + "miss", true);
 				else
-					dad.playAnim(NoteVariables.Character_Animation_Arrays[getCorrectKeyCount(true) - 1][direction] + "miss", true);
+					dad.playAnim(NoteVariables.characterAnimations[getCorrectKeyCount(true) - 1][direction] + "miss", true);
 			}
 
 			calculateAccuracy();
@@ -3433,7 +3437,7 @@ class PlayState extends MusicBeatState {
 				note.character
 			];
 
-			var singAnim:String = NoteVariables.Character_Animation_Arrays[getCorrectKeyCount(true) - 1][Std.int(Math.abs(note.noteData % getCorrectKeyCount(true)))]
+			var singAnim:String = NoteVariables.characterAnimations[getCorrectKeyCount(true) - 1][Std.int(Math.abs(note.noteData % getCorrectKeyCount(true)))]
 				+ (characterPlayingAs == 1 ? altAnim : "")
 				+ note.singAnimSuffix;
 			if (note.singAnimPrefix != 'sing') {

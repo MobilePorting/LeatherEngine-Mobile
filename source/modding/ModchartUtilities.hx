@@ -511,7 +511,7 @@ class ModchartUtilities {
 
 		setLuaFunction("getSingDirectionID", function(id:Int) {
 			var thing = ['singLEFT', 'singDOWN', 'singUP', 'singRIGHT'];
-			var singDir = NoteVariables.Character_Animation_Arrays[PlayState.SONG.playerKeyCount - 1][Std.int(Math.abs(id % PlayState.SONG.playerKeyCount))];
+			var singDir = NoteVariables.characterAnimations[PlayState.SONG.playerKeyCount - 1][Std.int(Math.abs(id % PlayState.SONG.playerKeyCount))];
 			return thing.indexOf(singDir);
 		});
 

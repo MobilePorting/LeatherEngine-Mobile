@@ -163,7 +163,7 @@ class ControlMenuSubstate extends MusicBeatSubstate
         {
             if(reset && shift)
             {
-                binds = NoteVariables.Default_Binds;
+                binds = NoteVariables.defaultBinds;
                 fullscreenBind = "F11";
                 killBind = "R";
                 pauseBind = "ENTER";
@@ -259,8 +259,8 @@ class ControlMenuSubstate extends MusicBeatSubstate
                 if(keyCount < 1)
                     keyCount = 1;
     
-                if(keyCount > NoteVariables.Note_Count_Directions.length)
-                    keyCount = NoteVariables.Note_Count_Directions.length;
+                if(keyCount > NoteVariables.maniaDirections.length)
+                    keyCount = NoteVariables.maniaDirections.length;
     
                 create_Arrows();
             }

@@ -70,18 +70,18 @@ class StrumNote extends FlxSkewedSprite {
 		frames = Assets.exists(Paths.image("ui skins/" + ui_Skin + "/arrows/strums")) ? Paths.getSparrowAtlas('ui skins/' + ui_Skin
 			+ "/arrows/strums") : Paths.getSparrowAtlas('ui skins/' + ui_Skin + "/arrows/default");
 
-		var animation_Base_Name:String = NoteVariables.Note_Count_Directions[keyCount - 1][Std.int(Math.abs(noteData))].toLowerCase();
+		var animation_Base_Name:String = NoteVariables.maniaDirections[keyCount - 1][Std.int(Math.abs(noteData))].toLowerCase();
 
 		animation.addByPrefix('static', animation_Base_Name + " static");
-		animation.addByPrefix('pressed', NoteVariables.Other_Note_Anim_Stuff[keyCount - 1][noteData] + ' press', 24, false);
-		animation.addByPrefix('confirm', NoteVariables.Other_Note_Anim_Stuff[keyCount - 1][noteData] + ' confirm', 24, false);
+		animation.addByPrefix('pressed', NoteVariables.animationDirections[keyCount - 1][noteData] + ' press', 24, false);
+		animation.addByPrefix('confirm', NoteVariables.animationDirections[keyCount - 1][noteData] + ' confirm', 24, false);
 
 
 		antialiasing = ui_settings[3] == "true";
 
 		setGraphicSize(Std.int((width * Std.parseFloat(ui_settings[0])) * (Std.parseFloat(ui_settings[2]) - (Std.parseFloat(mania_size[keyCount - 1])))));
 		updateHitbox();
-		noteColor = NoteColors.getNoteColor(NoteVariables.Other_Note_Anim_Stuff[keyCount - 1][noteData]);
+		noteColor = NoteColors.getNoteColor(NoteVariables.animationDirections[keyCount - 1][noteData]);
 		shader = affectedbycolor ? colorSwap.shader : null;
 		
 		if (affectedbycolor && PlayState.instance != null && colorSwap != null) {

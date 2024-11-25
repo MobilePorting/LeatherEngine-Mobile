@@ -295,13 +295,14 @@ class ResultsSubstate extends MusicBeatSubstate {
 		}
 
 		var diffSpr:String = 'diff_${params?.difficultyId ?? 'Normal'}';
-		difficulty.loadGraphic(Paths.gpuBitmap("resultScreen/" + diffSpr));
 		if (!Assets.exists(Paths.image("resultScreen/" + diffSpr))) {
 			difficulty = new FlxBitmapText(FlxBitmapFont.fromMonospace(Paths.image("resultScreen/tardlingSpritesheet"), fontLetters, FlxPoint.get(49, 62)));
 			cast(difficulty, FlxBitmapText).text = params?.difficultyId ?? 'Normal';
 			cast(difficulty, FlxBitmapText).letterSpacing = -15;
 			difficulty.angle = -4.4;
 		}
+		else
+			difficulty.loadGraphic(Paths.gpuBitmap("resultScreen/" + diffSpr));
 		difficulty.antialiasing = Options.getData("antialiasing");
 		add(difficulty);
 

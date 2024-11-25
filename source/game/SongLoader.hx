@@ -156,7 +156,7 @@ class SongLoader {
 			song.chartOffset = 0.0;
 
 		// guarenteed safe value
-		song.keyCount = Math.floor(Math.min(song.keyCount, NoteVariables.Note_Count_Directions.length));
+		song.keyCount = Math.floor(Math.min(song.keyCount, NoteVariables.maniaDirections.length));
 
 		if (song.events == null)
 			song.events = [];

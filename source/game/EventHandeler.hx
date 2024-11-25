@@ -1,5 +1,6 @@
 package game;
 
+import utilities.NoteVariables;
 import game.TimeBar;
 import flixel.graphics.FlxGraphic;
 import openfl.utils.Assets;
@@ -38,7 +39,7 @@ class EventHandeler {
 				}
 			case "set gf speed":
 				if (Std.parseInt(event[2]) != null)
-					PlayState.instance.gfSpeed = Std.parseInt(event[2]);
+					game.gfSpeed = Std.parseInt(event[2]);
 			case "character will idle":
 				var char = PlayState.getCharFromEvent(event[2]);
 
@@ -50,13 +51,13 @@ class EventHandeler {
 				var hudCamZoomThing:Float = Std.parseFloat(event[3]);
 
 				if (Math.isNaN(defaultCamZoomThing))
-					defaultCamZoomThing = PlayState.instance.defaultCamZoom;
+					defaultCamZoomThing = game.defaultCamZoom;
 
 				if (Math.isNaN(hudCamZoomThing))
 					hudCamZoomThing = 1;
 
-				PlayState.instance.defaultCamZoom = defaultCamZoomThing;
-				PlayState.instance.defaultHudCamZoom = hudCamZoomThing;
+				game.defaultCamZoom = defaultCamZoomThing;
+				game.defaultHudCamZoom = hudCamZoomThing;
 			case "change character alpha":
 				var char = PlayState.getCharFromEvent(event[2]);
 
@@ -82,7 +83,7 @@ class EventHandeler {
 					time = 1;
 
 				if (Options.getData("flashingLights"))
-					PlayState.instance.camGame.flash(FlxColor.fromString(event[2].toLowerCase()), time);
+					game.camGame.flash(FlxColor.fromString(event[2].toLowerCase()), time);
 			case "camera fade":
 				var time = Std.parseFloat(event[3]);
 
@@ -90,7 +91,7 @@ class EventHandeler {
 					time = 1;
 
 				if (Options.getData("flashingLights"))
-					PlayState.instance.camGame.fade(FlxColor.fromString(event[2].toLowerCase()), time);
+					game.camGame.fade(FlxColor.fromString(event[2].toLowerCase()), time);
 			#end
 			case "add camera zoom":
 				if (game.cameraZooms && ((FlxG.camera.zoom < 1.35 && game.camZooming) || !game.camZooming)) {
@@ -237,6 +238,13 @@ class EventHandeler {
 				PlayState.playerStrums.clear();
 				PlayState.enemyStrums.clear();
 				PlayState.strumLineNotes.clear();
+
+				#if MODCHARTING_TOOLS
+				if(game.playfieldRenderer != null){
+					game.playfieldRenderer = new modcharting.PlayfieldRenderer(PlayState.strumLineNotes, game.notes, game);
+				}
+				#end
+
 				game.splash_group.clear();
 				game.binds = Options.getData("binds", "binds")[PlayState.SONG.playerKeyCount - 1];
 				if (Options.getData("middlescroll")) {
@@ -251,6 +259,9 @@ class EventHandeler {
 						game.generateStaticArrows(0, true);
 					}
 				}
+				#if MODCHARTING_TOOLS
+				modcharting.NoteMovement.getDefaultStrumPos(game);
+				#end
 				#if LUA_ALLOWED
 				game.setLuaVar("playerKeyCount", newPlayerKeyCount);
 				game.setLuaVar("keyCount", newKeyCount);
@@ -306,15 +317,15 @@ class EventHandeler {
 				game.type_Configs.set("default", CoolUtil.coolTextFile(Paths.txt("arrow types/default")));
 
 				// reload ratings
-				game.uiMap.set("marvelous", FlxGraphic.fromAssetKey(Paths.image("ui skins/" + PlayState.SONG.ui_Skin + "/ratings/marvelous")));
-				game.uiMap.set("sick", FlxGraphic.fromAssetKey(Paths.image("ui skins/" + PlayState.SONG.ui_Skin + "/ratings/sick")));
-				game.uiMap.set("good", FlxGraphic.fromAssetKey(Paths.image("ui skins/" + PlayState.SONG.ui_Skin + "/ratings/good")));
-				game.uiMap.set("bad", FlxGraphic.fromAssetKey(Paths.image("ui skins/" + PlayState.SONG.ui_Skin + "/ratings/bad")));
-				game.uiMap.set("shit", FlxGraphic.fromAssetKey(Paths.image("ui skins/" + PlayState.SONG.ui_Skin + "/ratings/shit")));
+				game.uiMap.set("marvelous", Paths.gpuBitmap("ui skins/" + PlayState.SONG.ui_Skin + "/ratings/marvelous"));
+				game.uiMap.set("sick", Paths.gpuBitmap("ui skins/" + PlayState.SONG.ui_Skin + "/ratings/sick"));
+				game.uiMap.set("good", Paths.gpuBitmap("ui skins/" + PlayState.SONG.ui_Skin + "/ratings/good"));
+				game.uiMap.set("bad", Paths.gpuBitmap("ui skins/" + PlayState.SONG.ui_Skin + "/ratings/bad"));
+				game.uiMap.set("shit", Paths.gpuBitmap("ui skins/" + PlayState.SONG.ui_Skin + "/ratings/shit"));
 
 				// preload numbers
 				for (i in 0...10)
-					game.uiMap.set(Std.string(i), FlxGraphic.fromAssetKey(Paths.image("ui skins/" + PlayState.SONG.ui_Skin + "/numbers/num" + Std.string(i))));
+					game.uiMap.set(Std.string(i), Paths.gpuBitmap("ui skins/" + PlayState.SONG.ui_Skin + "/numbers/num" + Std.string(i)));
 				game.timeBar = new TimeBar(PlayState.SONG, PlayState.storyDifficultyStr);
 
 				PlayState.playerStrums.clear();
@@ -332,6 +343,64 @@ class EventHandeler {
 						game.generateStaticArrows(1, false, false);
 						game.generateStaticArrows(0, true, false);
 					}
+				}
+
+				for (note in game.notes.members) {
+					var oldAnim:String = note.animation.curAnim.name;
+					note.frames = Note.getFrames(note);
+
+					var lmaoStuff:Float = Std.parseFloat(game.ui_settings[0]) * (Std.parseFloat(game.ui_settings[2])
+						- (Std.parseFloat(game.mania_size[( note.mustPress ? PlayState.SONG.playerKeyCount : PlayState.SONG.keyCount) - 1])));
+
+					if (note.isSustainNote)
+						note.scale.set(lmaoStuff,
+							Std.parseFloat(game.ui_settings[0]) * (Std.parseFloat(game.ui_settings[2]) - (Std.parseFloat(game.mania_size[3]))));
+					else
+						note.scale.set(lmaoStuff, lmaoStuff);
+
+					note.updateHitbox();
+
+					note.antialiasing = game.ui_settings[3] == "true";
+
+					var localKeyCount:Int = note.mustPress ? note.song.playerKeyCount : note.song.keyCount;
+
+					note.animation.addByPrefix("default", NoteVariables.animationDirections[localKeyCount - 1][note.noteData] + "0", 24);
+					note.animation.addByPrefix("hold", NoteVariables.animationDirections[localKeyCount - 1][note.noteData] + " hold0", 24);
+					note.animation.addByPrefix("holdend", NoteVariables.animationDirections[localKeyCount - 1][note.noteData] + " hold end0", 24);
+
+					note.shader = note.affectedbycolor ? note.colorSwap.shader : null;
+
+					note.animation.play(oldAnim);
+
+				}
+
+				for (note in game.unspawnNotes) {
+					var oldAnim:String = note.animation.curAnim.name;
+					note.frames = Note.getFrames(note);
+
+					var lmaoStuff:Float = Std.parseFloat(game.ui_settings[0]) * (Std.parseFloat(game.ui_settings[2])
+						- (Std.parseFloat(game.mania_size[( note.mustPress ? PlayState.SONG.playerKeyCount : PlayState.SONG.keyCount) - 1])));
+
+					if (note.isSustainNote)
+						note.scale.set(lmaoStuff,
+							Std.parseFloat(game.ui_settings[0]) * (Std.parseFloat(game.ui_settings[2]) - (Std.parseFloat(game.mania_size[3]))));
+					else
+						note.scale.set(lmaoStuff, lmaoStuff);
+
+					note.updateHitbox();
+
+					note.antialiasing = game.ui_settings[3] == "true";
+
+					
+					var localKeyCount:Int = note.mustPress ? note.song.playerKeyCount : note.song.keyCount;
+
+					note.animation.addByPrefix("default", NoteVariables.animationDirections[localKeyCount - 1][note.noteData] + "0", 24);
+					note.animation.addByPrefix("hold", NoteVariables.animationDirections[localKeyCount - 1][note.noteData] + " hold0", 24);
+					note.animation.addByPrefix("holdend", NoteVariables.animationDirections[localKeyCount - 1][note.noteData] + " hold end0", 24);
+
+					note.shader = note.affectedbycolor ? note.colorSwap.shader : null;
+
+					note.animation.play(oldAnim);
 				}
 			// FNFC stuff
 			case 'focuscamera':

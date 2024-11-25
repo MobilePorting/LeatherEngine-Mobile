@@ -47,7 +47,7 @@ class NoteSplash extends FlxSprite {
 		this.target = target;
 		graphic.destroyOnNoUse = false;
 
-		animation.addByPrefix("default", "note splash " + NoteVariables.Other_Note_Anim_Stuff[localKeyCount - 1][noteData] + "0", FlxG.random.int(22, 26),
+		animation.addByPrefix("default", "note splash " + NoteVariables.animationDirections[localKeyCount - 1][noteData] + "0", FlxG.random.int(22, 26),
 			false);
 		animation.play("default", true);
 
@@ -61,7 +61,7 @@ class NoteSplash extends FlxSprite {
 
 		shader = affectedbycolor ? colorSwap.shader : null;
 
-		noteColor = NoteColors.getNoteColor(NoteVariables.Other_Note_Anim_Stuff[PlayState.SONG.keyCount - 1][noteData]);
+		noteColor = NoteColors.getNoteColor(NoteVariables.animationDirections[PlayState.SONG.keyCount - 1][noteData]);
 		if(colorSwap != null && noteColor != null){
 			colorSwap.r = noteColor[0];
 			colorSwap.g = noteColor[1];

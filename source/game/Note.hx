@@ -66,6 +66,8 @@ class Note extends FlxSkewedSprite {
 
 	public var inEditor:Bool = false;
 
+	public var song:SongData;
+
 	#if MODCHARTING_TOOLS
 	/**
 	 * The mesh used for sustains to make them stretchy
@@ -95,6 +97,23 @@ class Note extends FlxSkewedSprite {
 	 */
 	public static var beats:Array<Int> = [4, 8, 12, 16, 24, 32, 48, 64, 96, 128, 192];
 
+	public static function getFrames(note:Note):FlxAtlasFrames{
+		if (PlayState.instance.types.contains(note.arrow_Type)) {
+			if (Assets.exists(Paths.image('ui skins/' + note.song.ui_Skin + "/arrows/" + note.arrow_Type, 'shared'))) {
+				return Paths.getSparrowAtlas('ui skins/' + note.song.ui_Skin + "/arrows/" + note.arrow_Type, 'shared' #if MODCHARTING_TOOLS ,note.song.modchartingTools || FlxG.state is modcharting.ModchartEditorState #end);
+			} else {
+				return Paths.getSparrowAtlas('ui skins/${note.song.ui_Skin}/arrows/default', 'shared'  #if MODCHARTING_TOOLS ,note.song.modchartingTools || FlxG.state is modcharting.ModchartEditorState #end);
+			}
+		} else {
+			if (Assets.exists(Paths.image("ui skins/default/arrows/" + note.arrow_Type, 'shared'))) {
+				return Paths.getSparrowAtlas("ui skins/default/arrows/" + note.arrow_Type, 'shared' #if MODCHARTING_TOOLS ,note.song.modchartingTools || FlxG.state is modcharting.ModchartEditorState #end);
+			} else {
+				return Paths.getSparrowAtlas('ui skins/${note.song.ui_Skin}/arrows/default', 'shared' #if MODCHARTING_TOOLS ,note.song.modchartingTools || FlxG.state is modcharting.ModchartEditorState #end);
+			}
+		}
+		return  Paths.getSparrowAtlas('ui skins/default/arrows/default', 'shared' #if MODCHARTING_TOOLS ,note.song.modchartingTools || FlxG.state is modcharting.ModchartEditorState #end);
+	}
+
 	public function new(strumTime:Float, noteData:Int, ?prevNote:Note, ?sustainNote:Bool = false, ?character:Int = 0, ?arrowType:String = "default",
 			?song:SongData, ?characters:Array<Int>, ?mustPress:Bool = false, ?inEditor:Bool = false) {
 		super();
@@ -118,27 +137,17 @@ class Note extends FlxSkewedSprite {
 
 		this.noteData = noteData;
 
+		this.song = song;
+
 		x += 100;
 		// MAKE SURE ITS DEFINITELY OFF SCREEN?
 		y = -2000;
 
-		if (PlayState.instance.types.contains(arrow_Type)) {
-			if (Assets.exists(Paths.image('ui skins/' + song.ui_Skin + "/arrows/" + arrow_Type, 'shared'))) {
-				frames = Paths.getSparrowAtlas('ui skins/' + song.ui_Skin + "/arrows/" + arrow_Type, 'shared' #if MODCHARTING_TOOLS ,song.modchartingTools || FlxG.state is modcharting.ModchartEditorState #end);
-			} else {
-				frames = Paths.getSparrowAtlas('ui skins/${song.ui_Skin}/arrows/default', 'shared'  #if MODCHARTING_TOOLS ,song.modchartingTools || FlxG.state is modcharting.ModchartEditorState #end);
-			}
-		} else {
-			if (Assets.exists(Paths.image("ui skins/default/arrows/" + arrow_Type, 'shared'))) {
-				frames = Paths.getSparrowAtlas("ui skins/default/arrows/" + arrow_Type, 'shared' #if MODCHARTING_TOOLS ,song.modchartingTools || FlxG.state is modcharting.ModchartEditorState #end);
-			} else {
-				frames = Paths.getSparrowAtlas('ui skins/${song.ui_Skin}/arrows/default', 'shared' #if MODCHARTING_TOOLS ,song.modchartingTools || FlxG.state is modcharting.ModchartEditorState #end);
-			}
-		}
+		frames = Note.getFrames(this);
 
-		animation.addByPrefix("default", NoteVariables.Other_Note_Anim_Stuff[localKeyCount - 1][noteData] + "0", 24);
-		animation.addByPrefix("hold", NoteVariables.Other_Note_Anim_Stuff[localKeyCount - 1][noteData] + " hold0", 24);
-		animation.addByPrefix("holdend", NoteVariables.Other_Note_Anim_Stuff[localKeyCount - 1][noteData] + " hold end0", 24);
+		animation.addByPrefix("default", NoteVariables.animationDirections[localKeyCount - 1][noteData] + "0", 24);
+		animation.addByPrefix("hold", NoteVariables.animationDirections[localKeyCount - 1][noteData] + " hold0", 24);
+		animation.addByPrefix("holdend", NoteVariables.animationDirections[localKeyCount - 1][noteData] + " hold end0", 24);
 
 		var lmaoStuff:Float = Std.parseFloat(PlayState.instance.ui_settings[0]) * (Std.parseFloat(PlayState.instance.ui_settings[2])
 			- (Std.parseFloat(PlayState.instance.mania_size[localKeyCount - 1])));
@@ -235,7 +244,7 @@ class Note extends FlxSkewedSprite {
 
 		var realKeyCount:Int = mustPress ? song.playerKeyCount : song.keyCount;
 
-		var noteColor = NoteColors.getNoteColor(NoteVariables.Other_Note_Anim_Stuff[realKeyCount - 1][noteData]);
+		var noteColor = NoteColors.getNoteColor(NoteVariables.animationDirections[realKeyCount - 1][noteData]);
 
 		if (colorSwap != null && noteColor != null) {
 			colorSwap.r = noteColor[0];

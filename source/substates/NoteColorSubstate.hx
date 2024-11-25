@@ -92,13 +92,13 @@ class NoteColorSubstate extends MusicBeatSubstate
         {
             if(reset)
             {
-                current_ColorVals = NoteColors.defaultColors.get(NoteVariables.Other_Note_Anim_Stuff[key_Count - 1][selectedControl]);
+                current_ColorVals = NoteColors.defaultColors.get(NoteVariables.animationDirections[key_Count - 1][selectedControl]);
 
                 arrow_Group.members[selectedControl].colorSwap.r = current_ColorVals[0];
                 arrow_Group.members[selectedControl].colorSwap.g = current_ColorVals[1];
                 arrow_Group.members[selectedControl].colorSwap.b = current_ColorVals[2];
 
-                NoteColors.setNoteColor(NoteVariables.Other_Note_Anim_Stuff[key_Count - 1][selectedControl], current_ColorVals);
+                NoteColors.setNoteColor(NoteVariables.animationDirections[key_Count - 1][selectedControl], current_ColorVals);
             }
 
             if(back && selectingStuff)
@@ -135,8 +135,8 @@ class NoteColorSubstate extends MusicBeatSubstate
                 if(key_Count < 1)
                     key_Count = 1;
     
-                if(key_Count > NoteVariables.Note_Count_Directions.length)
-                    key_Count = NoteVariables.Note_Count_Directions.length;
+                if(key_Count > NoteVariables.maniaDirections.length)
+                    key_Count = NoteVariables.maniaDirections.length;
     
                 create_Arrows();
             }
@@ -165,7 +165,7 @@ class NoteColorSubstate extends MusicBeatSubstate
                         arrow_Group.members[selectedControl].colorSwap.b = current_ColorVals[selectedValue];
                 }
 
-                NoteColors.setNoteColor(NoteVariables.Other_Note_Anim_Stuff[key_Count - 1][selectedControl], current_ColorVals);
+                NoteColors.setNoteColor(NoteVariables.animationDirections[key_Count - 1][selectedControl], current_ColorVals);
             }
 
             if(!selectingStuff && (leftP || rightP))
@@ -229,7 +229,7 @@ class NoteColorSubstate extends MusicBeatSubstate
 
     inline function updateColorValsBase()
     {
-        current_ColorVals = NoteColors.getNoteColor(NoteVariables.Other_Note_Anim_Stuff[key_Count - 1][selectedControl]);
+        current_ColorVals = NoteColors.getNoteColor(NoteVariables.animationDirections[key_Count - 1][selectedControl]);
     }
 
     function create_Arrows(?new_Key_Count)
@@ -252,9 +252,9 @@ class NoteColorSubstate extends MusicBeatSubstate
 			babyArrow.setGraphicSize(Std.int((babyArrow.width * Std.parseFloat(ui_settings[0])) * (Std.parseFloat(ui_settings[2]) - (Std.parseFloat(mania_size[key_Count-1])))));
 			babyArrow.updateHitbox();
 
-			babyArrow.animation.addByPrefix('default', NoteVariables.Other_Note_Anim_Stuff[key_Count - 1][i] + "0");
-			babyArrow.animation.addByPrefix('pressed', NoteVariables.Other_Note_Anim_Stuff[key_Count - 1][i] + ' press', 24, false);
-			babyArrow.animation.addByPrefix('confirm', NoteVariables.Other_Note_Anim_Stuff[key_Count - 1][i] + ' confirm', 24, false);
+			babyArrow.animation.addByPrefix('default', NoteVariables.animationDirections[key_Count - 1][i] + "0");
+			babyArrow.animation.addByPrefix('pressed', NoteVariables.animationDirections[key_Count - 1][i] + ' press', 24, false);
+			babyArrow.animation.addByPrefix('confirm', NoteVariables.animationDirections[key_Count - 1][i] + ' confirm', 24, false);
 			
 			babyArrow.playAnim('default');
 

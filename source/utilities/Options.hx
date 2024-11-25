@@ -109,13 +109,13 @@ class Options {
 
 	@:noCompletion public static function fixBinds() {
 		if (getData("binds", "binds") == null)
-			setData(NoteVariables.Default_Binds, "binds", "binds");
+			setData(NoteVariables.defaultBinds, "binds", "binds");
 		else {
 			var bindArray:Array<Dynamic> = getData("binds", "binds");
 
-			if (bindArray.length < NoteVariables.Default_Binds.length) {
-				for (i in Std.int(bindArray.length - 1)...NoteVariables.Default_Binds.length) {
-					bindArray[i] = NoteVariables.Default_Binds[i];
+			if (bindArray.length < NoteVariables.defaultBinds.length) {
+				for (i in Std.int(bindArray.length - 1)...NoteVariables.defaultBinds.length) {
+					bindArray[i] = NoteVariables.defaultBinds[i];
 				}
 
 				setData(bindArray, "binds", "binds");

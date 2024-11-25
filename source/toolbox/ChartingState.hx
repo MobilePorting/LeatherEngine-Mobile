@@ -414,12 +414,12 @@ class ChartingState extends MusicBeatState {
 		stepperSpeed.name = 'song_speed';
 
 		var stepperKeyCount:FlxUINumericStepper = new FlxUINumericStepper(10, stepperSpeed.y + stepperSpeed.height, 1, 4, 1,
-			NoteVariables.Note_Count_Directions.length);
+			NoteVariables.maniaDirections.length);
 		stepperKeyCount.value = _song.keyCount;
 		stepperKeyCount.name = 'song_keycount';
 
 		var stepperPlayerKeyCount:FlxUINumericStepper = new FlxUINumericStepper(stepperKeyCount.x + (stepperKeyCount.width * 2) + 2, stepperKeyCount.y, 1, 4,
-			1, NoteVariables.Note_Count_Directions.length);
+			1, NoteVariables.maniaDirections.length);
 		stepperPlayerKeyCount.value = _song.playerKeyCount;
 		stepperPlayerKeyCount.name = 'song_playerkeycount';
 
@@ -1301,9 +1301,9 @@ class ChartingState extends MusicBeatState {
 					if (note.rawNoteData % (_song.keyCount + _song.playerKeyCount) < _song.keyCount
 						&& _song.notes[curSection].mustHitSection
 						|| note.rawNoteData % (_song.keyCount + _song.playerKeyCount) >= _song.keyCount && !_song.notes[curSection].mustHitSection) {
-						lilBf.animation.play(NoteVariables.Other_Note_Anim_Stuff[_song.keyCount - 1][note.noteData], true);
+						lilBf.animation.play(NoteVariables.animationDirections[_song.keyCount - 1][note.noteData], true);
 					} else {
-						lilOpp.animation.play(NoteVariables.Other_Note_Anim_Stuff[_song.keyCount - 1][note.noteData], true);
+						lilOpp.animation.play(NoteVariables.animationDirections[_song.keyCount - 1][note.noteData], true);
 					}
 				});
 			}
@@ -1841,10 +1841,10 @@ class ChartingState extends MusicBeatState {
 				goodNoteInfo = daNoteInfo - _song.playerKeyCount;
 
 			var note:Note = new Note(daStrumTime, goodNoteInfo, null, false, 0, daType, _song, [0], mustPress, true);
-			lilBf.animation.addByPrefix(NoteVariables.Other_Note_Anim_Stuff[_song.keyCount - 1][note.noteData],
-				NoteVariables.Other_Note_Anim_Stuff[_song.keyCount - 1][note.noteData] + "0", 12);
-			lilOpp.animation.addByPrefix(NoteVariables.Other_Note_Anim_Stuff[_song.keyCount - 1][note.noteData],
-				NoteVariables.Other_Note_Anim_Stuff[_song.keyCount - 1][note.noteData] + "0", 12);
+			lilBf.animation.addByPrefix(NoteVariables.animationDirections[_song.keyCount - 1][note.noteData],
+				NoteVariables.animationDirections[_song.keyCount - 1][note.noteData] + "0", 12);
+			lilOpp.animation.addByPrefix(NoteVariables.animationDirections[_song.keyCount - 1][note.noteData],
+				NoteVariables.animationDirections[_song.keyCount - 1][note.noteData] + "0", 12);
 			note.sustainLength = daSus;
 
 			note.setGraphicSize((Std.parseInt(PlayState.instance.arrow_Configs.get(daType)[4]) ?? Std.parseInt(PlayState.instance.arrow_Configs.get(daType)[4])),

@@ -977,10 +977,6 @@ class PlayState extends MusicBeatState {
 		add(ratingsGroup);
 		add(strumLineNotes);
 
-		playfieldRenderer = new PlayfieldRenderer(strumLineNotes, notes, this);
-		playfieldRenderer.cameras = [camHUD];
-		add(playfieldRenderer);
-
 		var cache_splash:NoteSplash = new NoteSplash();
 		cache_splash.kill();
 

@@ -13,6 +13,7 @@ import flixel.FlxSprite;
 import flixel.addons.effects.FlxSkewedSprite;
 import flixel.graphics.frames.FlxAtlasFrames;
 import flixel.math.FlxMath;
+import flixel.math.FlxRect;
 
 using StringTools;
 
@@ -87,8 +88,17 @@ class Note extends FlxSkewedSprite {
 	 * @see https://step-mania.fandom.com/wiki/Notes
 	 */
 	public static var quantColors:Array<Array<Int>> = [
-		[255, 35, 15], [19, 75, 255], [138, 7, 224], [71, 250, 22], [214, 0, 211], [246, 121, 4], [0, 200, 172], [38, 168, 41], [187, 187, 187],
-		[167, 199, 231], [128, 128, 0],
+		[255, 35, 15],
+		[19, 75, 255],
+		[138, 7, 224],
+		[71, 250, 22],
+		[214, 0, 211],
+		[246, 121, 4],
+		[0, 200, 172],
+		[38, 168, 41],
+		[187, 187, 187],
+		[167, 199, 231],
+		[128, 128, 0],
 	];
 
 	/**
@@ -97,21 +107,26 @@ class Note extends FlxSkewedSprite {
 	 */
 	public static var beats:Array<Int> = [4, 8, 12, 16, 24, 32, 48, 64, 96, 128, 192];
 
-	public static function getFrames(note:Note):FlxAtlasFrames{
+	public static function getFrames(note:Note):FlxAtlasFrames {
 		if (PlayState.instance.types.contains(note.arrow_Type)) {
 			if (Assets.exists(Paths.image('ui skins/' + note.song.ui_Skin + "/arrows/" + note.arrow_Type, 'shared'))) {
-				return Paths.getSparrowAtlas('ui skins/' + note.song.ui_Skin + "/arrows/" + note.arrow_Type, 'shared' #if MODCHARTING_TOOLS ,note.song.modchartingTools || FlxG.state is modcharting.ModchartEditorState #end);
+				return Paths.getSparrowAtlas('ui skins/' + note.song.ui_Skin + "/arrows/" + note.arrow_Type,
+					'shared' #if MODCHARTING_TOOLS, note.song.modchartingTools || FlxG.state is modcharting.ModchartEditorState #end);
 			} else {
-				return Paths.getSparrowAtlas('ui skins/${note.song.ui_Skin}/arrows/default', 'shared'  #if MODCHARTING_TOOLS ,note.song.modchartingTools || FlxG.state is modcharting.ModchartEditorState #end);
+				return Paths.getSparrowAtlas('ui skins/${note.song.ui_Skin}/arrows/default',
+					'shared' #if MODCHARTING_TOOLS, note.song.modchartingTools || FlxG.state is modcharting.ModchartEditorState #end);
 			}
 		} else {
 			if (Assets.exists(Paths.image("ui skins/default/arrows/" + note.arrow_Type, 'shared'))) {
-				return Paths.getSparrowAtlas("ui skins/default/arrows/" + note.arrow_Type, 'shared' #if MODCHARTING_TOOLS ,note.song.modchartingTools || FlxG.state is modcharting.ModchartEditorState #end);
+				return Paths.getSparrowAtlas("ui skins/default/arrows/" + note.arrow_Type,
+					'shared' #if MODCHARTING_TOOLS, note.song.modchartingTools || FlxG.state is modcharting.ModchartEditorState #end);
 			} else {
-				return Paths.getSparrowAtlas('ui skins/${note.song.ui_Skin}/arrows/default', 'shared' #if MODCHARTING_TOOLS ,note.song.modchartingTools || FlxG.state is modcharting.ModchartEditorState #end);
+				return Paths.getSparrowAtlas('ui skins/${note.song.ui_Skin}/arrows/default',
+					'shared' #if MODCHARTING_TOOLS, note.song.modchartingTools || FlxG.state is modcharting.ModchartEditorState #end);
 			}
 		}
-		return  Paths.getSparrowAtlas('ui skins/default/arrows/default', 'shared' #if MODCHARTING_TOOLS ,note.song.modchartingTools || FlxG.state is modcharting.ModchartEditorState #end);
+		return Paths.getSparrowAtlas('ui skins/default/arrows/default',
+			'shared' #if MODCHARTING_TOOLS, note.song.modchartingTools || FlxG.state is modcharting.ModchartEditorState #end);
 	}
 
 	public function new(strumTime:Float, noteData:Int, ?prevNote:Note, ?sustainNote:Bool = false, ?character:Int = 0, ?arrowType:String = "default",
@@ -307,6 +322,17 @@ class Note extends FlxSkewedSprite {
 					wasGoodHit = true;
 			}
 		}
+	}
+
+	/**
+	 * Override the setter to disable rounding on clipRect
+	 * @author CCobaltDev
+	 */
+	@:noCompletion override function set_clipRect(rect:FlxRect):FlxRect {
+		clipRect = rect;
+		if (frames != null)
+			frame = frames.frames[animation.frameIndex];
+		return rect;
 	}
 }
 

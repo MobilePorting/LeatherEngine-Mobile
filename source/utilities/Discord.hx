@@ -3,9 +3,9 @@ package utilities;
 #if DISCORD_ALLOWED
 import Sys.sleep;
 import discord_rpc.DiscordRpc;
-import flixel.FlxG;
 import openfl.Assets;
 import haxe.Json;
+import sys.thread.Thread;
 
 using StringTools;
 
@@ -95,7 +95,7 @@ class DiscordClient {
 	}
 
 	public static function initialize() {
-		var DiscordDaemon = sys.thread.Thread.create(() -> {
+		Thread.create(() -> {
 			new DiscordClient();
 		});
 
@@ -108,7 +108,7 @@ class DiscordClient {
 			return;
 		}
 
-		var startTimestamp:Float = if (hasStartTimestamp) Date.now().getTime() else 0;
+		var startTimestamp:Float = hasStartTimestamp ? Date.now().getTime() : 0;
 
 		if (endTimestamp > 0) {
 			endTimestamp = startTimestamp + endTimestamp;
@@ -117,7 +117,7 @@ class DiscordClient {
 			var keyLol = value.key;
 			var textLol = value.text;
 			DiscordRpc.presence({
-				details: details,
+				details: details, 
 				state: state,
 				largeImageKey: keyLol,
 				largeImageText: textLol,

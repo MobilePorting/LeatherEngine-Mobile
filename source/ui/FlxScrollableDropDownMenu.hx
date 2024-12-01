@@ -4,6 +4,7 @@ import flixel.addons.ui.StrNameLabel;
 import flixel.addons.ui.FlxUIButton;
 import flixel.FlxG;
 import flixel.addons.ui.FlxUIDropDownMenu;
+import flixel.addons.ui.FlxUI9SliceSprite;
 
 /**
  * A FlxUIDropDownMenu that is extended to have scrolling capabilities.
@@ -13,11 +14,11 @@ class FlxScrollableDropDownMenu extends FlxUIDropDownMenu  {
     private var currentScroll:Int = 0; //Handles the scrolling
     public var canScroll:Bool = true;
 
-	public function new(X:Float = 0, Y:Float = 0, DataList:Array<flixel.addons.ui.StrNameLabel>, ?Callback:String -> Void, ?Header:FlxUIDropDownHeader, ?DropPanel:flixel.addons.ui.FlxUI9SliceSprite, ?ButtonList:Array<FlxUIButton>, ?UIControlCallback:(Bool, FlxUIDropDownMenu) -> Void) {
+	public function new(X:Float = 0, Y:Float = 0, DataList:Array<StrNameLabel>, ?Callback:String -> Void, ?Header:FlxUIDropDownHeader, ?DropPanel:FlxUI9SliceSprite, ?ButtonList:Array<FlxUIButton>, ?UIControlCallback:(Bool, FlxUIDropDownMenu) -> Void) {
 		super(X, Y, DataList, Callback, Header, DropPanel, ButtonList, UIControlCallback);
 		dropDirection = Down;
 	}
-    
+
     override private function set_dropDirection(dropDirection):FlxUIDropDownMenuDropDirection
         {
             this.dropDirection = Down;

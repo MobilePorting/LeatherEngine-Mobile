@@ -396,11 +396,11 @@ class ModchartUtilities {
 
 		// callbacks
 		setLuaFunction("trace", function(str:Dynamic = "", ?printType:String = "LOG") {
-			trace(str, Logs.printTypeFromSting(printType));
+			trace(str, printType.toUpperCase());
 		});
 
 		setLuaFunction("print", function(str:Dynamic = "", ?printType:String = "LOG") {
-			trace(str, Logs.printTypeFromSting(printType));
+			trace(str, printType.toUpperCase());
 		});
 
 		setLuaFunction("flashCamera", function(camera:String = "", color:String = "#FFFFFF", time:Float = 1, force:Bool = false) {

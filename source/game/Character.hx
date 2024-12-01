@@ -81,9 +81,7 @@ class Character extends FlxSprite {
 
 		switch (curCharacter) {
 			case '':
-				trace("NO VALUE THINGY LOL DONT LOAD SHIT");
 				deathCharacter = "bf-dead";
-
 			default:
 				if (isPlayer)
 					flipX = !flipX;
@@ -175,8 +173,7 @@ class Character extends FlxSprite {
 		if (Options.getData("optimizedChars") && Assets.exists(Paths.json("character data/optimized_" + characterName + "/config")))
 			characterName = "optimized_" + characterName;
 
-		var rawJson = Assets.getText(Paths.json("character data/" + characterName + "/config")).trim();
-		this.config = cast Json.parse(rawJson);
+		this.config = cast Json.parse(Assets.getText(Paths.json("character data/" + characterName + "/config")).trim());
 		loadCharacterConfiguration(this.config);
 	}
 

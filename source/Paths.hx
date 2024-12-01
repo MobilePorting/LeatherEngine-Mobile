@@ -100,8 +100,8 @@ class Paths {
 	 */
 	static public function gpuBitmap(key:String, ?library:String, avoidGPU:Bool = false):FlxGraphicAsset {
 		var file:String = image(key, library);
-		var bitmap:BitmapData = OpenFlAssets.getBitmapData(file);
-		if (!Options.getData("gpuCaching") || avoidGPU || bitmap.image == null) {
+		var bitmap:BitmapData = Assets.exists(file) ? OpenFlAssets.getBitmapData(file) : null;
+		if (!Options.getData("gpuCaching") || avoidGPU || bitmap?.image == null) {
 			bitmap = null;
 			return file;
 		}

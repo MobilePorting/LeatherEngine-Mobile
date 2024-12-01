@@ -33,11 +33,11 @@ class LogFrontEnd extends flixel.system.frontEnds.LogFrontEnd {
 				FlxG.debugger.visible = true;
             #end
 			
-            /*if (style.callbackFunction != null)
+            if (style.callbackFunction != null)
                 style.callbackFunction();
                 
             if (style.callback != null)
-                style.callback(data);*/
+                style.callback(data);
 
         #if FLX_DEBUG
 		}

@@ -204,7 +204,7 @@ class AlphaCharacter extends FlxSprite {
 	public function new(x:Float, y:Float, scaleMult:Float = 1) {
 		super(x, y);
 
-		frames = Paths.getSparrowAtlas('alphabet', "preload", true);
+		frames = Paths.getSparrowAtlas('alphabet');
 
 		antialiasing = Options.getData("antialiasing");
 

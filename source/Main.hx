@@ -17,6 +17,7 @@ import states.TitleState;
 import ui.SimpleInfoDisplay;
 import ui.logs.Logs;
 import flixel.FlxState;
+//import ui.logs.LogFrontEnd;
 #if mobile
 import mobile.states.CopyState;
 #end

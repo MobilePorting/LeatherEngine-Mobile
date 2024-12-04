@@ -117,9 +117,9 @@ function updatePost(elapsed:Float) {
 function turnChange(turn:String) {
 	switch (turn) {
 		case 'dad':
-			(PlayState.SONG.chartType == 0) ? movePupilsRight() : movePupilsLeft(); // workaround to some really strange issue where its flipped on vslice charts?
+			(PlayState.SONG.chartType == "LEGACY") ? movePupilsRight() : movePupilsLeft(); // workaround to some really strange issue where its flipped on vslice charts?
 		case 'bf':
-			(PlayState.SONG.chartType == 0) ? movePupilsLeft() : movePupilsRight();
+			(PlayState.SONG.chartType == "LEGACY") ? movePupilsLeft() : movePupilsRight();
 		default:
 			trace('no match!');
 	}

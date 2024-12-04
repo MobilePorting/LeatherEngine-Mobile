@@ -174,14 +174,14 @@ class Paths {
 	static public function songEvents(song:String, ?difficulty:String):String {
 		if (difficulty != null) {
 			if (difficulty.toLowerCase() == 'nightmare') {
-				if (Assets.exists(Paths.json("song data/" + song.toLowerCase() + '/events-erect')))
-					return Paths.json("song data/" + song.toLowerCase() + '/events-erect');
+				if (Assets.exists(json("song data/" + song.toLowerCase() + '/events-erect')))
+					return json("song data/" + song.toLowerCase() + '/events-erect');
 			}
-			if (Assets.exists(Paths.json("song data/" + song.toLowerCase() + '/events-${difficulty.toLowerCase()}')))
-				return Paths.json("song data/" + song.toLowerCase() + '/events-${difficulty.toLowerCase()}');
+			if (Assets.exists(json("song data/" + song.toLowerCase() + '/events-${difficulty.toLowerCase()}')))
+				return json("song data/" + song.toLowerCase() + '/events-${difficulty.toLowerCase()}');
 		}
 
-		return Paths.json("song data/" + song.toLowerCase() + "/events");
+		return json("song data/" + song.toLowerCase() + "/events");
 	}
 
 	inline static public function getSparrowAtlas(key:String, ?library:String, avoidGPU:Bool = false):FlxAtlasFrames {
@@ -216,6 +216,25 @@ class Paths {
 
 	inline static public function getEaselJSAtlas(key:String, ?library:String):FlxAtlasFrames {
 		return FlxAnimateFrames.fromEaselJS(getPath('images/$key.js', TEXT, library));
+	}
+
+	static public function getAtlas(path:String):FlxAtlasFrames{
+		if (Assets.exists(file("images/characters/" + path + ".txt", TEXT))) {
+			return getPackerAtlas('characters/' + path);
+		}
+		else if (Assets.exists(file("images/characters/" + path + ".json", TEXT))){
+			return getJsonAtlas('characters/' + path);
+		}
+		else if (Assets.exists(file("images/characters/" + path + ".plist", TEXT))){
+			return getCocos2DAtlas('characters/' + path);
+		} 
+		else if (Assets.exists(file("images/characters/" + path + ".eas", TEXT))){
+			return getEdgeAnimateAtlas('characters/' + path);
+		} 
+		else if (Assets.exists(file("images/characters/" + path + ".js", TEXT))){
+			return getEaselJSAtlas('characters/' + path);
+		} 
+		return getSparrowAtlas('characters/' + path);
 	}
 
 	inline static public function existsInMod(path:String, mod:String):Bool {

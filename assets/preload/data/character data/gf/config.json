@@ -2,6 +2,7 @@
     "cameraOffset": [-40, -250],
     "barColor": [186, 49, 104],
     "mainCharacterID": 1,
+    "followMainCharacter": true,
     "characters": [
         {
             "name": "speakers",

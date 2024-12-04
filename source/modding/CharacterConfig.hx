@@ -30,6 +30,7 @@ typedef CharacterConfig =
 	var antialiased:Null<Bool>;
 	var antialiasing:Null<Bool>;
 	var mainCharacterID:Null<Int>;
+	var followMainCharacter:Null<Bool>;
 	/**
 	 * Any extra spritesheets to be with the main sheet.
 	 */

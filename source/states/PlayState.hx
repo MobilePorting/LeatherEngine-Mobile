@@ -1676,7 +1676,6 @@ class PlayState extends MusicBeatState {
 
 				var swagNote:Note = new Note(daStrumTime, noteData, oldNote, false, char, songNotes[4], null, chars, gottaHitNote);
 				swagNote.sustainLength = songNotes[2];
-				swagNote.scrollFactor.set(0, 0);
 
 				unspawnNotes.push(swagNote);
 
@@ -1929,7 +1928,7 @@ class PlayState extends MusicBeatState {
 	public var prevPlayerXVals:Map<String, Float> = [];
 	public var prevEnemyXVals:Map<String, Float> = [];
 
-	public var speed:Float = 1.0;
+	public var speed(default, set):Float = 1.0;
 
 	#if LUA_ALLOWED
 	public var generatedSomeDumbEventLuas:Bool = false;
@@ -2103,7 +2102,7 @@ class PlayState extends MusicBeatState {
 				camFollow.y *= 0.5;
 				if (PlayState.SONG.notes[Std.int(curStep / Conductor.stepsPerSection)].mustHitSection) {
 					if (Options.getData("cameraTracksDirections") && boyfriend.getMainCharacter().hasAnims()) {
-						switch (boyfriend.curAnimName().toLowerCase()) {
+						switch (boyfriend.getMainCharacter().curAnimName().toLowerCase()) {
 							case "singleft":
 								camFollow.x -= 50;
 							case "singright":
@@ -2116,7 +2115,7 @@ class PlayState extends MusicBeatState {
 					}
 				} else {
 					if (Options.getData("cameraTracksDirections") && dad.getMainCharacter().hasAnims()) {
-						switch (dad.curAnimName().toLowerCase()) {
+						switch (dad.getMainCharacter().curAnimName().toLowerCase()) {
 							case "singleft":
 								camFollow.x -= 50;
 							case "singright":
@@ -2145,7 +2144,7 @@ class PlayState extends MusicBeatState {
 			vocals.stop();
 			FlxG.sound.music.stop();
 
-			openSubState(new GameOverSubstate(boyfriend.getMainCharacter().getScreenPosition().x, boyfriend.getMainCharacter().getScreenPosition().y));
+			openSubState(new GameOverSubstate(boyfriend.getScreenPosition().x, boyfriend.getScreenPosition().y));
 
 			#if DISCORD_ALLOWED
 			// Game Over doesn't get his own variable because it's only used here
@@ -2171,12 +2170,14 @@ class PlayState extends MusicBeatState {
 				note.active = true;
 				note.y = coolStrum.y + Note.calculateY(note);
 				if (note.isSustainNote) {
-					var swagRect:FlxRect = new FlxRect(0, 0, note.frameWidth * 2, note.frameHeight * 2);
+					var swagRect:FlxRect = new FlxRect(0, 0, note.frameWidth, note.frameHeight);
 					// TODO: make this not... this
 					if (Options.getData("downscroll")) {
 						swagRect.height = (coolStrum.y + (coolStrum.width / 2) - note.y) / note.scale.y;
 						swagRect.y = note.frameHeight - swagRect.height - (note.animation.curAnim.name.endsWith("end") ? note.offset.y: 0);
 					} else {
+						swagRect.width = note.width / note.scale.x;
+						swagRect.height = note.height / note.scale.y;
 						swagRect.y = (coolStrum.y + Note.swagWidth / 2 - note.y) / note.scale.y;
 						swagRect.height -= swagRect.y;
 					}
@@ -3751,8 +3752,6 @@ class PlayState extends MusicBeatState {
 				return PlayState.gf.getMainCharacter();
 			case "dad" | "opponent" | "player2" | "1":
 				return PlayState.dad.getMainCharacter();
-			case "bf" | "boyfriend" | "player" | "player1" | "0":
-				return PlayState.boyfriend.getMainCharacter();
 		}
 
 		return PlayState.boyfriend.getMainCharacter();
@@ -4419,6 +4418,18 @@ class PlayState extends MusicBeatState {
 
 	public function addBehindBF(behind:FlxBasic) {
 		insert(members.indexOf(boyfriend), behind);
+	}
+
+	@:noCompletion function set_speed(speed:Float):Float{
+		if(notes?.members != null && unspawnNotes != null){
+			for(note in notes.members){
+				note.speed = speed;
+			}
+			for(note in unspawnNotes){
+				note.speed = speed;
+			}
+		}
+		return this.speed = speed;
 	}
 
 	public function openChartEditor():Void

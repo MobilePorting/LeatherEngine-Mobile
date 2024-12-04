@@ -1,7 +1,6 @@
 package game;
 
 import openfl.utils.Assets;
-import flixel.util.FlxColor;
 import utilities.Options;
 import shaders.NoteColors;
 import shaders.ColorSwap;
@@ -9,7 +8,6 @@ import game.SongLoader.SongData;
 import utilities.NoteVariables;
 import states.PlayState;
 import flixel.FlxG;
-import flixel.FlxSprite;
 import flixel.addons.effects.FlxSkewedSprite;
 import flixel.graphics.frames.FlxAtlasFrames;
 import flixel.math.FlxMath;
@@ -68,6 +66,8 @@ class Note extends FlxSkewedSprite {
 	public var inEditor:Bool = false;
 
 	public var song:SongData;
+
+	public var speed(default, set):Float = 1;
 
 	#if MODCHARTING_TOOLS
 	/**
@@ -134,7 +134,7 @@ class Note extends FlxSkewedSprite {
 		super();
 		if (prevNote == null)
 			prevNote = this;
-
+		
 		this.prevNote = prevNote;
 		this.inEditor = inEditor;
 		this.character = character;
@@ -142,17 +142,18 @@ class Note extends FlxSkewedSprite {
 		this.arrow_Type = arrowType;
 		this.characters = characters;
 		this.mustPress = mustPress;
-
+		
 		isSustainNote = sustainNote;
-
+		
 		if (song == null)
 			song = PlayState.SONG;
-
+		
 		var localKeyCount:Int = mustPress ? song.playerKeyCount : song.keyCount;
-
+		
 		this.noteData = noteData;
-
+		
 		this.song = song;
+		speed = song.speed;
 
 		x += 100;
 		// MAKE SURE ITS DEFINITELY OFF SCREEN?
@@ -233,7 +234,6 @@ class Note extends FlxSkewedSprite {
 				if (prevNote.animation != null)
 					prevNote.animation.play("hold");
 
-				var speed:Float = song.speed;
 
 				if (Options.getData("useCustomScrollSpeed"))
 					speed = Options.getData("customScrollSpeed") / PlayState.songMultiplier;
@@ -274,7 +274,7 @@ class Note extends FlxSkewedSprite {
 	 * @return The Y value. NOTE: Will return the negative value if downscroll is enabled.
 	 */
 	public static function calculateY(note:Note):Float {
-		return (Options.getData("downscroll") ? 1 : -1) * (0.45 * (Conductor.songPosition - note.strumTime) * FlxMath.roundDecimal(PlayState.instance.speed,
+		return (Options.getData("downscroll") ? 1 : -1) * (0.45 * (Conductor.songPosition - note.strumTime) * FlxMath.roundDecimal(note.speed,
 			2));
 	}
 
@@ -333,6 +333,18 @@ class Note extends FlxSkewedSprite {
 		if (frames != null)
 			frame = frames.frames[animation.frameIndex];
 		return rect;
+	}
+
+	@:noCompletion function set_speed(speed:Float):Float {
+		if(isSustainNote && !inEditor && animation != null && !animation?.curAnim?.name?.endsWith('end')){
+			scale.y = Std.parseFloat(PlayState.instance.ui_settings[0]) * (Std.parseFloat(PlayState.instance.ui_settings[2])
+			- (Std.parseFloat(PlayState.instance.mania_size[3])));
+			scale.y *= Conductor.stepCrochet / 100 * 1.5 * speed;
+			updateHitbox();
+			centerOffsets();
+			centerOrigin();
+		}
+		return this.speed = speed;
 	}
 }
 

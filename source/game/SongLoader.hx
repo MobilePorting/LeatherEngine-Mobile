@@ -239,9 +239,9 @@ typedef Section = {
 	var changeTimeScale:Bool;
 }
 
-enum abstract ChartType(Int){
-	var LEGACY = 0;
-	var VSLICE = 1;
+enum abstract ChartType(String) to String from String{
+	var LEGACY = "LEGACY";
+	var VSLICE = "VSLICE";
 }
 
 typedef SongData = {

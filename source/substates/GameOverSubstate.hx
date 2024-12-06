@@ -25,9 +25,6 @@ class GameOverSubstate extends MusicBeatSubstate {
 
 	public static var instance:GameOverSubstate = null;
 
-	var gameOverRoll:Bool = FlxG.random.bool((1 / 4096) * 100);
-	var fakeout:FlxAtlasSprite;
-
 	public function new(x:Float, y:Float) {
 		instance = this;
 		super();
@@ -36,7 +33,7 @@ class GameOverSubstate extends MusicBeatSubstate {
 		FlxG.camera.scroll.set();
 		FlxG.camera.target = null;
 
-		if (Options.getData("quickRestart") && !gameOverRoll) {
+		if (Options.getData("quickRestart")) {
 			PlayState.instance.call("onRetry", []);
 			PlayState.SONG.speed = PlayState.previousScrollSpeedLmao;
 			FlxG.resetState();
@@ -55,29 +52,10 @@ class GameOverSubstate extends MusicBeatSubstate {
 		if (FlxG.sound.music.active)
 			FlxG.sound.music.stop();
 
-		if (gameOverRoll) {
-			bf.visible = false;
-			var soundlol:FlxSound = new FlxSound().loadEmbedded(Paths.sound("deaths/fakeout_death", "shared"));
-			soundlol.play();
-			soundlol.onComplete = () -> {
-				addVirtualPad(NONE, A_B);
-				addVirtualPadCamera();
-				bfDies();
-				fakeout.visible = false;
-			}
-			fakeout = new FlxAtlasSprite(bf.x * 1.5, bf.y * 1.75, Paths.getTextureAtlas('characters/bfFakeOut', 'shared'), {
-				FrameRate: 24.0,
-				Reversed: false,
-				ShowPivot: false,
-				Antialiasing: Options.getData("antialiasing"),
-				ScrollFactor: new FlxPoint(bf.scrollFactor.x, bf.scrollFactor.y),
-			});
-			fakeout.anim.addBySymbol('fakeoutDeath', 'fake out death BF', 24, false);
-			fakeout.anim.play('fakeoutDeath', true);
-			add(fakeout);
-		} else {
-			bfDies();
-		}
+		bfDies();
+
+		addVirtualPad(NONE, A_B);
+		addVirtualPadCamera();
 	}
 
 	function bfDies() {
@@ -90,9 +68,6 @@ class GameOverSubstate extends MusicBeatSubstate {
 
 		Conductor.changeBPM(100);
 		bf.playAnim('firstDeath', true);
-
-		addVirtualPad(NONE, A_B);
-		addVirtualPadCamera();
 	}
 
 	override function update(elapsed:Float) {

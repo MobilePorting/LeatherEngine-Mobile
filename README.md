@@ -1,8 +1,8 @@
 # Leather Engine Mobile
 
-![](https://img.shields.io/github/repo-size/MobilePorting/LeatherEngine-LTS-Mobile) ![](https://badgen.net/github/open-issues/MobilePorting/LeatherEngine-LTS-Mobile) ![](https://badgen.net/badge/license/GPL-3.0/green)
-[![CI build](https://github.com/MobilePorting/LeatherEngine-LTS-Mobile/actions/workflows/main.yml/badge.svg)](https://github.com/MobilePorting/LeatherEngine-LTS-Mobile/actions/workflows/main.yml)
-[![github-pages](https://github.com/MobilePorting/LeatherEngine-LTS-Mobile/actions/workflows/pages.yml/badge.svg)](https://github.com/MobilePorting/LeatherEngine-LTS-Mobile/actions/workflows/pages.yml)
+![](https://img.shields.io/github/repo-size/MobilePorting/LeatherEngine-Mobile) ![](https://badgen.net/github/open-issues/MobilePorting/LeatherEngine-Mobile) ![](https://badgen.net/badge/license/GPL-3.0/green)
+[![CI build](https://github.com/MobilePorting/LeatherEngine-Mobile/actions/workflows/main.yml/badge.svg)](https://github.com/MobilePorting/LeatherEngine-Mobile/actions/workflows/main.yml)
+[![github-pages](https://github.com/MobilePorting/LeatherEngine-Mobile/actions/workflows/pages.yml/badge.svg)](https://github.com/MobilePorting/LeatherEngine-Mobile/actions/workflows/pages.yml)
 [![Discord](https://img.shields.io/discord/1142524994258215053.svg?logo=discord)](https://discord.gg/S6vdEvXhzt)
 
 ![Logo](https://github.com/Leather128/LeatherEngine/blob/58ec86c56829fb47b32d6313b16b50c8aa242f24/art/Logo.png)

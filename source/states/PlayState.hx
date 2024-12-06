@@ -362,7 +362,6 @@ class PlayState extends MusicBeatState {
 	**/
 	public var altAnim:String = "";
 
-
 	/**
 		Whether or not you are currently in a cutscene.
 	**/
@@ -1582,18 +1581,18 @@ class PlayState extends MusicBeatState {
 				var soundPath:String = Paths.voices(PlayState.SONG.song, SONG.specialAudioName ?? storyDifficultyStr.toLowerCase(), character,
 					boyfriend.curCharacter);
 				if (!addedVocals.contains(soundPath)) {
-					vocals.add(new FlxSound().loadEmbedded(soundPath));
+					vocals.add(FlxG.sound.list.add(new FlxSound().loadEmbedded(soundPath)));
 					addedVocals.push(soundPath);
 				}
 			}
 		}
 
 		// LOADING MUSIC FOR CUSTOM SONGS
-		if (FlxG.sound.music != null)
-			if (FlxG.sound.music.active)
-				FlxG.sound.music.stop();
+		if (FlxG.sound.music != null && FlxG.sound.music.active)
+			FlxG.sound.music.stop();
 
-		FlxG.sound.music = new FlxSound().loadEmbedded(Paths.inst(SONG.song, SONG.specialAudioName ?? storyDifficultyStr.toLowerCase(), boyfriend.curCharacter));
+		FlxG.sound.music = new FlxSound().loadEmbedded(Paths.inst(SONG.song, SONG.specialAudioName ?? storyDifficultyStr.toLowerCase(),
+			boyfriend.curCharacter));
 		FlxG.sound.music.persist = true;
 
 		notes = new FlxTypedGroup<Note>();
@@ -1684,8 +1683,9 @@ class PlayState extends MusicBeatState {
 				for (susNote in 0...Math.floor(swagNote.sustainLength / Std.int(Conductor.stepCrochet))) {
 					oldNote = unspawnNotes[unspawnNotes.length - 1];
 
-					var sustainNote:Note = new Note(daStrumTime + (Conductor.stepCrochet * susNote) + (Conductor.stepCrochet  / FlxMath.roundDecimal(speed, 2)), noteData, oldNote, true, char,
-						songNotes[4], null, chars, gottaHitNote);
+					var sustainNote:Note = new Note(daStrumTime + (Conductor.stepCrochet * susNote) + (Conductor.stepCrochet / FlxMath.roundDecimal(speed,
+						2)), noteData, oldNote, true,
+						char, songNotes[4], null, chars, gottaHitNote);
 					sustainNote.scrollFactor.set();
 					unspawnNotes.push(sustainNote);
 
@@ -1718,7 +1718,7 @@ class PlayState extends MusicBeatState {
 	}
 
 	/**
-	 * The note underlay colored black. 
+	 * The note underlay colored black.
 	 * Turned off by default.
 	 */
 	public var noteBG:FlxSprite;
@@ -2031,12 +2031,10 @@ class PlayState extends MusicBeatState {
 		if (healthBar.percent <= 20) {
 			iconP1.animation.play("lose");
 			iconP2.animation.play("win");
-
-		} else if(healthBar.percent >= 80) {
+		} else if (healthBar.percent >= 80) {
 			iconP1.animation.play("win");
 			iconP2.animation.play("lose");
-		}
-		else{
+		} else {
 			iconP1.animation.play("neutral");
 			iconP2.animation.play("neutral");
 		}
@@ -2161,7 +2159,7 @@ class PlayState extends MusicBeatState {
 					// TODO: make this not... this
 					if (Options.getData("downscroll")) {
 						swagRect.height = (coolStrum.y + (coolStrum.width / 2) - note.y) / note.scale.y;
-						swagRect.y = note.frameHeight - swagRect.height - (note.animation.curAnim.name.endsWith("end") ? note.offset.y: 0);
+						swagRect.y = note.frameHeight - swagRect.height - (note.animation.curAnim.name.endsWith("end") ? note.offset.y : 0);
 					} else {
 						swagRect.width = note.width / note.scale.x;
 						swagRect.height = note.height / note.scale.y;
@@ -3360,13 +3358,13 @@ class PlayState extends MusicBeatState {
 				} else {
 					if (dad.otherCharacters != null && !(dad.otherCharacters.length - 1 < note.character))
 						if (note.characters.length <= 1)
-							dad.otherCharacters[note.character].playAnim(NoteVariables.characterAnimations[getCorrectKeyCount(true) - 1][direction]
-								+ "miss", true);
+							dad.otherCharacters[note.character].playAnim(NoteVariables.characterAnimations[getCorrectKeyCount(true) - 1][direction] + "miss",
+								true);
 						else {
 							for (character in note.characters) {
 								if (dad.otherCharacters.length - 1 >= character)
-									dad.otherCharacters[character].playAnim(NoteVariables.characterAnimations[getCorrectKeyCount(true) - 1][direction]
-										+ "miss", true);
+									dad.otherCharacters[character].playAnim(NoteVariables.characterAnimations[getCorrectKeyCount(true) - 1][direction] +
+										"miss", true);
 							}
 						}
 					else
@@ -4001,11 +3999,11 @@ class PlayState extends MusicBeatState {
 						#end
 					}
 
-						iconP1.scale.set(iconP1.startSize, iconP1.startSize);
-						iconP1.setupIcon(boyfriend.icon);
+					iconP1.scale.set(iconP1.startSize, iconP1.startSize);
+					iconP1.setupIcon(boyfriend.icon);
 
-						healthBar.createFilledBar(dad.barColor, boyfriend.barColor);
-						healthBar.updateFilledBar();
+					healthBar.createFilledBar(dad.barColor, boyfriend.barColor);
+					healthBar.updateFilledBar();
 			}
 		} else
 			CoolUtil.coolError("The character " + event[3] + " isn't in any character cache!\nHow did this happen? ¯|_(ツ)_|¯",
@@ -4404,12 +4402,12 @@ class PlayState extends MusicBeatState {
 		insert(members.indexOf(boyfriend), behind);
 	}
 
-	@:noCompletion function set_speed(speed:Float):Float{
-		if(notes?.members != null && unspawnNotes != null){
-			for(note in notes.members){
+	@:noCompletion function set_speed(speed:Float):Float {
+		if (notes?.members != null && unspawnNotes != null) {
+			for (note in notes.members) {
 				note.speed = speed;
 			}
-			for(note in unspawnNotes){
+			for (note in unspawnNotes) {
 				note.speed = speed;
 			}
 		}

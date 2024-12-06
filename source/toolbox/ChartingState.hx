@@ -1024,7 +1024,7 @@ class ChartingState extends MusicBeatState {
 			for (character in ['player', 'opponent', _song.player1, _song.player2]) {
 				var soundPath:String = Paths.voices(daSong, _song.specialAudioName ?? difficulty_name, character, _song.player1);
 				if (!addedVocals.contains(soundPath)) {
-					vocals.add(new FlxSound().loadEmbedded(soundPath));
+					vocals.add(FlxG.sound.list.add(new FlxSound().loadEmbedded(soundPath)));
 					addedVocals.push(soundPath);
 				}
 			}

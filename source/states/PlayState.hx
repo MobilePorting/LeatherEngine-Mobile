@@ -2028,30 +2028,17 @@ class PlayState extends MusicBeatState {
 		else
 			healthShown = health;
 
-		if (healthBar.percent < 20) {
-			if (!iconP1.animatedIcon)
-				iconP1.animation.curAnim.curFrame = 1;
-			if (!iconP2.animatedIcon)
-				iconP2.animation.curAnim.curFrame = 2;
+		if (healthBar.percent <= 20) {
+			iconP1.animation.play("lose");
+			iconP2.animation.play("win");
 
-			if (iconP2.animation.curAnim.curFrame != 2 && !iconP2.animatedIcon)
-				iconP2.animation.curAnim.curFrame = 0;
-		} else {
-			if (!iconP1.animatedIcon)
-				iconP1.animation.curAnim.curFrame = 0;
-
-			if (!iconP2.animatedIcon)
-				iconP2.animation.curAnim.curFrame = 0;
+		} else if(healthBar.percent >= 80) {
+			iconP1.animation.play("win");
+			iconP2.animation.play("lose");
 		}
-
-		if (healthBar.percent > 80) {
-			if (!iconP2.animatedIcon)
-				iconP2.animation.curAnim.curFrame = 1;
-			if (!iconP1.animatedIcon)
-				iconP1.animation.curAnim.curFrame = 2;
-
-			if (iconP1.animation.curAnim.curFrame != 2 && !iconP1.animatedIcon)
-				iconP1.animation.curAnim.curFrame = 0;
+		else{
+			iconP1.animation.play("neutral");
+			iconP2.animation.play("neutral");
 		}
 
 		if (!switchedStates) {
@@ -3594,8 +3581,8 @@ class PlayState extends MusicBeatState {
 			camHUD.zoom += 0.03 * cameraZoomStrength;
 		}
 
-		iconP1.scale.set(iconP1.scale.x + 0.2, iconP1.scale.y + 0.2);
-		iconP2.scale.set(iconP2.scale.x + 0.2, iconP2.scale.y + 0.2);
+		iconP1.scale.add(0.2, 0.2);
+		iconP2.scale.add(0.2, 0.2);
 
 		iconP1.updateHitbox();
 		iconP2.updateHitbox();
@@ -3968,8 +3955,8 @@ class PlayState extends MusicBeatState {
 					}
 					#end
 
-					iconP2.scale.set(1, 1);
-					iconP2.changeIconSet(dad.icon);
+					iconP2.scale.set(iconP2.startSize, iconP2.startSize);
+					iconP2.setupIcon(dad.icon);
 
 					healthBar.createFilledBar(dad.barColor, boyfriend.barColor);
 					healthBar.updateFilledBar();
@@ -4014,14 +4001,11 @@ class PlayState extends MusicBeatState {
 						#end
 					}
 
-					@:privateAccess
-					{
-						iconP1.scale.set(1, 1);
-						iconP1.changeIconSet(boyfriend.icon);
+						iconP1.scale.set(iconP1.startSize, iconP1.startSize);
+						iconP1.setupIcon(boyfriend.icon);
 
 						healthBar.createFilledBar(dad.barColor, boyfriend.barColor);
 						healthBar.updateFilledBar();
-					}
 			}
 		} else
 			CoolUtil.coolError("The character " + event[3] + " isn't in any character cache!\nHow did this happen? ¯|_(ツ)_|¯",

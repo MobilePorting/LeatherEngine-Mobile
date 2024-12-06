@@ -330,11 +330,11 @@ class FreeplayState extends MusicBeatState {
 			if (i == lastSelectedSong)
 				continue;
 
-			iconArray[i].scale.set(1, 1);
+			iconArray[i].scale.set(iconArray[i].startSize, iconArray[i].startSize);
 		}
 
 		if (lastSelectedSong != -1 && iconArray[lastSelectedSong] != null)
-			iconArray[lastSelectedSong].scale.set(FlxMath.lerp(iconArray[lastSelectedSong].scale.x, 1, elapsed * 9),
+			iconArray[lastSelectedSong].scale.set(FlxMath.lerp(iconArray[lastSelectedSong].scale.x, iconArray[lastSelectedSong].startSize, elapsed * 9),
 				FlxMath.lerp(iconArray[lastSelectedSong].scale.y, 1, elapsed * 9));
 
 		lerpScore = Math.floor(FlxMath.lerp(lerpScore, intendedScore, 0.4));
@@ -581,19 +581,13 @@ class FreeplayState extends MusicBeatState {
 			for (i in 0...iconArray.length) {
 				iconArray[i].alpha = 0.6;
 
-				if (iconArray[i].animation.curAnim != null && !iconArray[i].animatedIcon)
-					iconArray[i].animation.curAnim.curFrame = 0;
+				if (iconArray[i].animation.curAnim != null)
+					iconArray[i].animation.play("neutral");
 			}
 
 			if (iconArray != null && curSelected >= 0 && (curSelected <= iconArray.length) && iconArray.length != 0) {
 				iconArray[curSelected].alpha = 1;
-			}
-
-			if (iconArray[curSelected].animation.curAnim != null && !iconArray[curSelected].animatedIcon) {
-				iconArray[curSelected].animation.curAnim.curFrame = 2;
-
-				if (iconArray[curSelected].animation.curAnim.curFrame != 2)
-					iconArray[curSelected].animation.curAnim.curFrame = 0;
+				iconArray[curSelected].animation.play("win");
 			}
 		}
 

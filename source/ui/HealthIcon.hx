@@ -1,5 +1,6 @@
 package ui;
 
+import haxe.Json;
 import lime.utils.Assets;
 
 class HealthIcon extends TrackerSprite {
@@ -20,77 +21,62 @@ class HealthIcon extends TrackerSprite {
 		this.isPlayer = isPlayer;
 
 		// plays anim lol
-		playSwagAnim(char);
+		setupIcon(this.char = char);
 		scrollFactor.set();
 	}
 
-	public function playSwagAnim(?char:String = 'bf') {
-		changeIconSet(char);
-		this.char = char;
-	}
-
-	var selected:String;
-
-	public function changeIconSet(char:String = 'bf') {
+	public function setupIcon(char:String = 'placeholder') {
 		antialiasing = Options.getData("antialiasing");
-
-		if (Assets.exists(Paths.image('icons/' + char + '-icons').split(".png")[0] + ".xml")
-			|| Assets.exists(Paths.image('icons/icon-' + char).split(".png")[0] + ".xml")
-			|| Assets.exists(Paths.image('icons/' + char).split(".png")[0] + ".xml")) {
-
-			if (Assets.exists(Paths.image('icons/' + char + '-icons').split(".png")[0] + ".xml")) {
-				frames = Paths.getSparrowAtlas('icons/' + char + '-icons');
-				selected = Paths.image('icons/' + char + '-icons');
-			} else if (Assets.exists(Paths.image('icons/icon-' + char).split(".png")[0] + ".xml")) {
-				frames = Paths.getSparrowAtlas('icons/icon-' + char);
-				selected = Paths.image('icons/icon-' + char);
-			} else if (Assets.exists(Paths.image('icons/' + char).split(".png")[0] + ".xml")) {
-				frames = Paths.getSparrowAtlas('icons/' + char);
-				selected = Paths.image('icons/' + char);
+		var iconPath:String = 'placeholder-icons';
+		var iconConfig:HealthIconConfig = {
+			offset: [0, 0],
+			scale: 1,
+			fps: 24,
+			antialiasing: true
+		};
+		for (path in ['$char-icons', 'icon-$char', char]) {
+			if (Assets.exists(Paths.image('icons/$path'))) {
+				iconPath = path;
+				break;
 			}
+		}
 
-			animation.addByPrefix(char, char, 24, true, isPlayer);
+		if (Assets.exists('assets/images/icons/$iconPath.json')) {
+			iconConfig = cast Json.parse(Assets.getText('assets/images/icons/$iconPath.json'));
+		} else if (Assets.exists('assets/images/icons/$iconPath.txt')) {
+			var textArray:Array<String> = Assets.getText('assets/images/icons/$iconPath.txt').split(" ");
+			iconConfig.offset = [Std.parseFloat(textArray[0]), Std.parseFloat(textArray[1])];
+			iconConfig.scale = Std.parseFloat(textArray[2]);
+		}
 
-			if (Assets.exists(selected.split(".png")[0] + ".txt")) {
-				var theFunny = Assets.getText(selected.split(".png")[0] + ".txt").split(" ");
-
-				setGraphicSize(Std.int(width * Std.parseFloat(theFunny[2])));
-				updateHitbox();
-
-				offsetX = Std.parseFloat(theFunny[0]);
-				offsetY = Std.parseFloat(theFunny[1]);
-			}
-
-			animatedIcon = true;
+		animatedIcon = Assets.exists('assets/images/icons/$iconPath.xml');
+		if (animatedIcon) {
+			frames = Paths.getSparrowAtlas('icons/$iconPath');
+			animation.addByPrefix('neutral', '${char}0', iconConfig.fps, true, isPlayer);
+			animation.addByPrefix('lose', '${char}-lose0', iconConfig.fps, true, isPlayer);
+			animation.addByPrefix('win', '${char}-win0', iconConfig.fps, true, isPlayer);
 		} else {
-			if (Assets.exists(Paths.image('icons/' + char + '-icons'))) // LE ICONS
-				loadGraphic(Paths.gpuBitmap('icons/' + char + '-icons'));
-			else if (Assets.exists(Paths.image('icons/' + 'icon-' + char))) // BASE GAME ICONS
-				loadGraphic(Paths.gpuBitmap('icons/' + 'icon-' + char));
-			else if (Assets.exists(Paths.image('icons/' + char))) // just the name as file name
-				loadGraphic(Paths.gpuBitmap('icons/' + char));
-			else // UNKNOWN ICON
-				loadGraphic(Paths.gpuBitmap('icons/placeholder-icon'));
-
-			if (height != 150) // damn weird edge cases >:(
-				loadGraphic(graphic, true, Std.int(width / 2), Std.int(height));
-			else
-				loadGraphic(graphic, true, 150, 150);
-
-			animation.add(char, [0, 1, 2], 0, false, isPlayer);
+			loadGraphic(Paths.gpuBitmap('icons/$iconPath'), true, 150, 150);
+			animation.add('neutral', [0], 0, false, isPlayer);
+			animation.add('lose', [1], 0, false, isPlayer);
+			animation.add('win', [2], 0, false, isPlayer);
 		}
+		animation.play('neutral');
 
-		animation.play(char);
+		scale.set(iconConfig.scale, iconConfig.scale);
+		offsetX = iconConfig.offset[0];
+		offsetY = iconConfig.offset[1];
+		antialiasing = (iconConfig.antialiasing || !char.endsWith('-pixel'));
 		startSize = scale.x;
-
-		// antialiasing override
-		switch (char) {
-			case 'senpai' | 'senpai-angry' | 'spirit':
-				antialiasing = false;
-		}
-
-		if (char.endsWith('-pixel')) {
-			antialiasing = false;
-		}
+		updateHitbox();
+		centerOffsets();
+		centerOrigin();
 	}
+}
+
+typedef HealthIconConfig = {
+	var offset:Array<Float>;
+	var scale:Float;
+	var fps:Int;
+	var antialiasing:Bool;
 }

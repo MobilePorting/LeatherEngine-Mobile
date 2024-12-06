@@ -1716,11 +1716,11 @@ class ChartingState extends MusicBeatState {
 		var healthIconP2:String = loadHealthIconFromCharacter(_song.player2);
 
 		if (_song.notes[curSection].mustHitSection) {
-			leftIcon.playSwagAnim(healthIconP1);
-			rightIcon.playSwagAnim(healthIconP2);
+			leftIcon.setupIcon(healthIconP1);
+			rightIcon.setupIcon(healthIconP2);
 		} else {
-			leftIcon.playSwagAnim(healthIconP2);
-			rightIcon.playSwagAnim(healthIconP1);
+			leftIcon.setupIcon(healthIconP2);
+			rightIcon.setupIcon(healthIconP1);
 		}
 
 		leftIcon.setGraphicSize(0, 45);

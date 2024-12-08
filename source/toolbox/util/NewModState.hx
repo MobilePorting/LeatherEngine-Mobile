@@ -63,7 +63,7 @@ class NewModState extends MusicBeatState{
     public var createButton:FlxButton;
 
     public var camHUD:FlxCamera;
-    public var UI_boxPopup:FlxUITabMenu;
+    public var popup:FlxUITabMenu;
     public var popupBg:FlxSprite;
     public var close:FlxButton;
 
@@ -219,7 +219,7 @@ class NewModState extends MusicBeatState{
                 rpcText: rpc_id.text.length > 0 ? modName.text : "Leather Engine",
                 description: description.text,
                 author: author.text,
-                api_version: CoolUtil.getCurrentVersion().replace('v', ''),
+                api_version: CoolUtil.getCurrentVersion().replace('v', '').replace('pre', ''),
                 mod_version: modVersion.text,
                 metadata: {
                     auto_enable: Std.string(checkAutoEnable.checked),
@@ -237,12 +237,12 @@ class NewModState extends MusicBeatState{
         popupBg.cameras = [camHUD];
         add(popupBg);
 
-        UI_boxPopup = new FlxUITabMenu(null, [{name: "Mod Created", label: 'Mod Created'},], true);
+        popup = new FlxUITabMenu(null, [{name: "Mod Created", label: 'Mod Created'},], true);
 
-		UI_boxPopup.resize(640 * 0.667, 480 * 0.667);
-        UI_boxPopup.screenCenter();
-        UI_boxPopup.cameras = [camHUD];
-		add(UI_boxPopup);
+		popup.resize(640 * 0.667, 480 * 0.667);
+        popup.screenCenter();
+        popup.cameras = [camHUD];
+		add(popup);
 
         close = new FlxButton(0,0,"Close",function(){
             FlxG.switchState(() -> new ModsMenu());

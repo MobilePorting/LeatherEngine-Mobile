@@ -46,7 +46,7 @@ class GameOverSubstate extends MusicBeatSubstate {
 		bf.y += bf.positioningOffset[1];
 		add(bf);
 
-		camFollow = new FlxObject(bf.getGraphicMidpoint().x, bf.getGraphicMidpoint().y, 1, 1);
+		camFollow = new FlxObject(bf.getGraphicMidpoint().x + bf.cameraOffset[0], bf.getGraphicMidpoint().y + bf.cameraOffset[1], 1, 1);
 		add(camFollow);
 
 		if (FlxG.sound.music.active)

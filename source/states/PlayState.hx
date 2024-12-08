@@ -695,7 +695,7 @@ class PlayState extends MusicBeatState {
 		if (SONG.speed < 0)
 			SONG.speed = 0;
 
-		speed = Options.getData("useCustomScrollSpeed") ? Options.getData("customScrollSpeed") / songMultiplier : SONG.speed;
+		speed = SONG.speed;
 
 		Conductor.recalculateStuff(songMultiplier);
 		Conductor.safeZoneOffset *= songMultiplier; // makes the game more fair
@@ -1683,14 +1683,14 @@ class PlayState extends MusicBeatState {
 				for (susNote in 0...Math.floor(swagNote.sustainLength / Std.int(Conductor.stepCrochet))) {
 					oldNote = unspawnNotes[unspawnNotes.length - 1];
 
-					var sustainNote:Note = new Note(daStrumTime + (Conductor.stepCrochet * susNote) + (Conductor.stepCrochet / FlxMath.roundDecimal(speed,
-						2)), noteData, oldNote, true,
-						char, songNotes[4], null, chars, gottaHitNote);
+					var sustainNote:Note = new Note(daStrumTime + (Conductor.stepCrochet * susNote) + (Conductor.stepCrochet / (Options.getData("downscroll") ? 1 :FlxMath.roundDecimal(speed,
+					2))), noteData, oldNote, true,
+					char, songNotes[4], null, chars, gottaHitNote);
 					sustainNote.scrollFactor.set();
 					unspawnNotes.push(sustainNote);
-
+					
 					sustainNote.mustPress = gottaHitNote;
-
+					
 					sustainGroup.push(sustainNote);
 					sustainNote.sustains = sustainGroup;
 				}
@@ -2159,17 +2159,17 @@ class PlayState extends MusicBeatState {
 					// TODO: make this not... this
 					if (Options.getData("downscroll")) {
 						swagRect.height = (coolStrum.y + (coolStrum.width / 2) - note.y) / note.scale.y;
-						swagRect.y = note.frameHeight - swagRect.height - (note.animation.curAnim.name.endsWith("end") ? note.offset.y : 0);
+						swagRect.y = note.frameHeight - swagRect.height - (note.animation.curAnim.name.endsWith("end") ? note.offset.y * 2 : 0);
 					} else {
-						swagRect.width = note.width / note.scale.x;
-						swagRect.height = note.height / note.scale.y;
+						// swagRect.width = note.width / note.scale.x;
+						// swagRect.height = note.height / note.scale.y;
 						swagRect.y = (coolStrum.y + Note.swagWidth / 2 - note.y) / note.scale.y;
 						swagRect.height -= swagRect.y;
 					}
 					note.clipRect = swagRect;
 				}
 				note.calculateCanBeHit();
-				if (!note.mustPress && note.strumTime <= Conductor.songPosition && note.shouldHit) {
+				if (!note.mustPress && note.canBeHit && note.shouldHit) {
 					camZooming = true;
 
 					var singAnim:String = NoteVariables.characterAnimations[getCorrectKeyCount(false) - 1][Std.int(Math.abs(note.noteData))]
@@ -4403,6 +4403,9 @@ class PlayState extends MusicBeatState {
 	}
 
 	@:noCompletion function set_speed(speed:Float):Float {
+		if(Options.getData("useCustomScrollSpeed")){
+			speed = Options.getData("customScrollSpeed") / songMultiplier;
+		}
 		if (notes?.members != null && unspawnNotes != null) {
 			for (note in notes.members) {
 				note.speed = speed;

@@ -10,7 +10,7 @@
   "graphicSize": 6,
   "antialiasing": false,
   "deathCharacterName": "bf-pixel-dead",
-  "cameraOffset": [-100, -200],
+  "cameraOffset": [-100, -75],
   "positionOffset": [183, 202],
   "animations": [
     {

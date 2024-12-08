@@ -5,6 +5,7 @@
   "graphicSize": 6,
   "antialiasing": false,
   "healthIcon": "bf-pixel",
+  "cameraOffset": [-100, -100],
   "animations": [
     {
       "name": "singUP",

@@ -734,8 +734,7 @@ class StageMakingState extends MusicBeatState {
 
 		stage = new StageGroup(stage_Name);
 		add(stage);
-
-		@:privateAccess
+		
 		stageData = stage.stage_Data;
 
 		stage.setCharOffsets(bf, gf, dad);

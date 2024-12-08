@@ -65,7 +65,9 @@ class SoundGroup extends FlxTypedContainer<FlxSound> {
 	function set_volume(volume:Float):Float {
 		this.volume = volume;
 		for (sound in members) {
-			sound.volume = volume;
+			if(sound != null){
+				sound.volume = volume;
+			}
 		}
 		return volume;
 	}
@@ -73,7 +75,9 @@ class SoundGroup extends FlxTypedContainer<FlxSound> {
 	function set_time(time:Float):Float {
 		this.time = time;
 		for (sound in members) {
-			sound.time = time;
+			if(sound != null){
+				sound.time = time;
+			}
 		}
 		return time;
 	}
@@ -82,7 +86,10 @@ class SoundGroup extends FlxTypedContainer<FlxSound> {
 	function set_pitch(pitch:Float):Float {
 		this.pitch = pitch;
 		for (sound in members) {
+			if(sound != null){
+
 			sound.pitch = pitch;
+			}
 		}
 		return pitch;
 	}
@@ -91,7 +98,7 @@ class SoundGroup extends FlxTypedContainer<FlxSound> {
 	function get_maxLength():Float {
 		var m:Float = 0.0;
 		for (sound in members) {
-			if (sound.length > m) {
+			if (sound != null && sound.length > m) {
 				m = sound.length;
 			}
 		}

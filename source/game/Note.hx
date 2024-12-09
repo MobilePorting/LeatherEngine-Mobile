@@ -234,7 +234,6 @@ class Note extends FlxSkewedSprite {
 				if (prevNote.animation != null)
 					prevNote.animation.play("hold");
 
-
 				prevNote.scale.y *= Conductor.stepCrochet / 100 * 1.5 * speed;
 				prevNote.updateHitbox();
 				prevNote.sustainScaleY = prevNote.scale.y;
@@ -290,39 +289,31 @@ class Note extends FlxSkewedSprite {
 	}
 
 	public function calculateCanBeHit() {
-		if (this != null) {
-			if (mustPress) {
-				/**
-					// TODO: make this shit use something from the arrow config .txt file
-				**/
-				if (shouldHit) {
-					if (strumTime > Conductor.songPosition - Conductor.safeZoneOffset
-						&& strumTime < Conductor.songPosition + Conductor.safeZoneOffset)
-						canBeHit = true;
-					else
-						canBeHit = false;
-				} else {
-					if (strumTime > Conductor.songPosition - Conductor.safeZoneOffset * 0.3
-						&& strumTime < Conductor.songPosition + Conductor.safeZoneOffset * 0.2)
-						canBeHit = true;
-					else
-						canBeHit = false;
-				}
-
-				if (strumTime < Conductor.songPosition - Conductor.safeZoneOffset && !wasGoodHit)
-					tooLate = true;
+		if (this == null) {
+			return;
+		}
+		if (mustPress) {
+			/**
+				// TODO: make this shit use something from the arrow config .txt file
+			**/
+			if (shouldHit) {
+				canBeHit = (strumTime > Conductor.songPosition - Conductor.safeZoneOffset
+					&& strumTime < Conductor.songPosition + Conductor.safeZoneOffset);
 			} else {
-				canBeHit = false;
+				canBeHit = (strumTime > Conductor.songPosition - Conductor.safeZoneOffset / 3
+					&& strumTime < Conductor.songPosition + Conductor.safeZoneOffset * 0.2);
+			}
 
-				if (!isSustainNote) {
-					if (strumTime <= Conductor.songPosition)
-						canBeHit = true;
-				} else {
-					if (strumTime < Conductor.songPosition - Conductor.safeZoneOffset * 0.3)
-						canBeHit = true;
-					else
-						canBeHit = false;
-				}
+			if (strumTime < Conductor.songPosition - Conductor.safeZoneOffset && !wasGoodHit)
+				tooLate = true;
+		} else {
+			canBeHit = false;
+
+			if (!isSustainNote) {
+				if (strumTime <= Conductor.songPosition)
+					canBeHit = true;
+			} else {
+				canBeHit = (strumTime < Conductor.songPosition - Conductor.safeZoneOffset / 3);
 			}
 		}
 	}
@@ -339,10 +330,10 @@ class Note extends FlxSkewedSprite {
 	}
 
 	@:noCompletion function set_speed(speed:Float):Float {
-		if(Options.getData("useCustomScrollSpeed")){
+		if (Options.getData("useCustomScrollSpeed")) {
 			speed = Options.getData("customScrollSpeed") / PlayState.songMultiplier;
 		}
-		if(isSustainNote && !inEditor && animation != null && !animation?.curAnim?.name?.endsWith('end')){
+		if (isSustainNote && !inEditor && animation != null && !animation?.curAnim?.name?.endsWith('end')) {
 			scale.y = Std.parseFloat(PlayState.instance.ui_settings[0]) * (Std.parseFloat(PlayState.instance.ui_settings[2])
 				- (Std.parseFloat(PlayState.instance.mania_size[3])));
 			scale.y *= Conductor.stepCrochet / 100 * 1.5 * speed;

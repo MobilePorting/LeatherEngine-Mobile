@@ -17,8 +17,6 @@ import openfl.text.TextFormat;
 import states.TitleState;
 import ui.SimpleInfoDisplay;
 import ui.logs.Logs;
-import flixel.FlxState;
-//import ui.logs.LogFrontEnd;
 #if mobile
 import mobile.states.CopyState;
 #end
@@ -44,7 +42,7 @@ class Main extends Sprite {
 
 		CoolUtil.haxe_trace = Log.trace;
 		Log.trace = CoolUtil.haxe_print;
-		OpenFLLog.throwErrors = false;
+		//OpenFLLog.throwErrors = false;
 
 		game = new FlxGame(1280, 720, #if (mobile && MODDING_ALLOWED) !CopyState.checkExistingFiles() ? CopyState : #end TitleState, 60, 60, true);
 

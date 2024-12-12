@@ -1,5 +1,6 @@
 package ui;
 
+import flixel.FlxSprite;
 import haxe.Json;
 import lime.utils.Assets;
 
@@ -34,7 +35,7 @@ class HealthIcon extends TrackerSprite {
 			fps: 24,
 			antialiasing: true
 		};
-		for (path in ['$char-icons', 'icon-$char', char]) {
+		for (path in [char, '$char-icons', 'icon-$char']) {
 			if (Assets.exists(Paths.image('icons/$path'))) {
 				iconPath = path;
 				break;
@@ -56,10 +57,20 @@ class HealthIcon extends TrackerSprite {
 			animation.addByPrefix('lose', '${char}-lose0', iconConfig.fps, true, isPlayer);
 			animation.addByPrefix('win', '${char}-win0', iconConfig.fps, true, isPlayer);
 		} else {
-			loadGraphic(Paths.gpuBitmap('icons/$iconPath'), true, 150, 150);
+			var dummy:FlxSprite = new FlxSprite().loadGraphic(Paths.gpuBitmap('icons/$iconPath'));
+			
+			if (dummy.height != 150) // damn psych engine edge cases >:(
+				loadGraphic(Paths.gpuBitmap('icons/$iconPath'), true, Std.int(dummy.width / 2), Std.int(dummy.height));
+			else
+				loadGraphic(Paths.gpuBitmap('icons/$iconPath'), true, 150, 150);
+			dummy.destroy();
+			dummy = null;
+			var winFrame:Int = (width >= 450 ? 2 : 0);
+			var loseFrame:Int = (width >= 300 ? 1 : 0);
+
+			animation.add('win', [winFrame], 0, false, isPlayer);
+			animation.add('lose', [loseFrame], 0, false, isPlayer);
 			animation.add('neutral', [0], 0, false, isPlayer);
-			animation.add('lose', [1], 0, false, isPlayer);
-			animation.add('win', [2], 0, false, isPlayer);
 		}
 		animation.play('neutral');
 

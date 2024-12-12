@@ -12,9 +12,11 @@ import lime.app.Application;
 import lime.graphics.Image;
 import lime.utils.Assets;
 import ui.logs.Logs;
+import haxe.EntryPoint;
 import haxe.Log;
 import haxe.Json;
 import haxe.PosInfos;
+
 
 /**
  * Helper class with lots of utilitiy functions.
@@ -361,21 +363,23 @@ class CoolUtil {
 	**/
 	public static function print(message:String, ?type:PrintType = LOG, ?pos_infos:PosInfos):Void {
 		untyped __cpp__("std::cout << {0}", '${Log.formatOutput('${messageFromPrintType(type)} $message', pos_infos)}\n');
-		switch (type) {
-			case DEBUG:
-				Logs.debug(Log.formatOutput(message, pos_infos));
-			case WARNING:
-				Logs.warn(Log.formatOutput(message, pos_infos));
-			case ERROR:
-				Logs.error(Log.formatOutput(message, pos_infos));
-			default:
-				Logs.log(Log.formatOutput(message, pos_infos));
-		}
+		EntryPoint.runInMainThread(() -> {
+			switch (type) {
+				case DEBUG:
+					Logs.debug(Log.formatOutput(message, pos_infos));
+				case WARNING:
+					Logs.warn(Log.formatOutput(message, pos_infos));
+				case ERROR:
+					Logs.error(Log.formatOutput(message, pos_infos));
+				default:
+					Logs.log(Log.formatOutput(message, pos_infos));
+			}
+		});
 	}
 
-	public static function messageFromPrintType(?type:PrintType = LOG):String{
+	public static function messageFromPrintType(?type:PrintType = LOG):String {
 		var messagePrefix:String;
-		switch (type){
+		switch (type) {
 			case DEBUG:
 				messagePrefix = '${ansi_colors["green"]} DEBUG';
 			case WARNING:
@@ -393,7 +397,7 @@ class CoolUtil {
 
 		@author Leather128
 	**/
-	public dynamic static function haxe_trace(v:Dynamic,  ?infos:Null<PosInfos>){}
+	public dynamic static function haxe_trace(v:Dynamic, ?infos:Null<PosInfos>) {}
 
 	public static inline function getCurrentVersion():String {
 		return 'v' + Application.current.meta.get('version');
@@ -407,7 +411,7 @@ class CoolUtil {
 		var difficultyExtension:String = difficulty == 'normal' ? '' : '-$difficulty';
 		var difficultyExtensionMeta:String = (difficulty == 'nightmare' || difficulty == 'erect') ? '-erect' : '';
 
-		if(mix != null && Assets.exists('$difficultyExtensionMeta-$mix')){
+		if (mix != null && Assets.exists('$difficultyExtensionMeta-$mix')) {
 			difficultyExtensionMeta += '-$mix';
 		}
 

@@ -105,7 +105,7 @@
       "name": "linc_luajit",
       "type": "git",
       "ref": null,
-      "url": "https://github.com/mcagabe19-stuff/linc_luajit-rewriten"
+      "url": "https://github.com/Vortex2Oblivion/linc_luajit"
     },
     {
       "name": "openfl",

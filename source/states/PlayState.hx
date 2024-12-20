@@ -1485,7 +1485,7 @@ class PlayState extends MusicBeatState {
 				note.active = false;
 				note.visible = false;
 
-				//note.kill();
+				if (!Options.getData("botplay")) note.kill();
 				unspawnNotes.remove(note);
 				note.destroy();
 			}
@@ -1505,7 +1505,7 @@ class PlayState extends MusicBeatState {
 	}
 
 	public inline function invalidateNote(note:Note):Void {
-		//note.kill();
+		if (!Options.getData("botplay")) note.kill();
 		notes.remove(note, true);
 		note.destroy();
 	}

@@ -1787,9 +1787,8 @@ class PlayState extends MusicBeatState {
 
 		if (isPlayer)
 		{
-			addHitbox(false);
+			addHitbox();
 			addHitboxCamera();
-			hitbox.visible = true;
 		}
 	}
 

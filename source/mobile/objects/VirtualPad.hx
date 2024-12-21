@@ -53,6 +53,8 @@ enum FlxActionMode {
 	A_B_C_X_Y;
 	A_B_C_X_Y_Z;
 	A_B_C_D_V_X_Y_Z;
+	CHARACTER_CREATOR;
+	CHART_EDITOR;
 	NONE;
 }
 
@@ -65,6 +67,8 @@ enum FlxActionMode {
 class VirtualPad extends FlxSpriteGroup {
 	@:dox(hide) public var buttonLeft2:MobileButton = new MobileButton(0, 0);
 	@:dox(hide) public var buttonRight2:MobileButton = new MobileButton(0, 0);
+	@:dox(hide) public var buttonUp2:MobileButton = new MobileButton(0, 0);
+	@:dox(hide) public var buttonDown2:MobileButton = new MobileButton(0, 0);
 	@:dox(hide) public var buttonLeft:MobileButton = new MobileButton(0, 0);
 	@:dox(hide) public var buttonUp:MobileButton = new MobileButton(0, 0);
 	@:dox(hide) public var buttonRight:MobileButton = new MobileButton(0, 0);
@@ -74,6 +78,7 @@ class VirtualPad extends FlxSpriteGroup {
 	@:dox(hide) public var buttonC:MobileButton = new MobileButton(0, 0);
 	@:dox(hide) public var buttonD:MobileButton = new MobileButton(0, 0);
 	@:dox(hide) public var buttonE:MobileButton = new MobileButton(0, 0);
+	@:dox(hide) public var buttonG:MobileButton = new MobileButton(0, 0);
 	@:dox(hide) public var buttonP:MobileButton = new MobileButton(0, 0);
 	@:dox(hide) public var buttonV:MobileButton = new MobileButton(0, 0);
 	@:dox(hide) public var buttonX:MobileButton = new MobileButton(0, 0);
@@ -152,6 +157,27 @@ class VirtualPad extends FlxSpriteGroup {
 				add(buttonZ = createButton(FlxG.width - 132, FlxG.height - 255, 'z', 0xCCB98E));
 				add(buttonA = createButton(FlxG.width - 132, FlxG.height - 135, 'a', 0xFF0000));
 			case A_B_C_D_V_X_Y_Z:
+				add(buttonV = createButton(FlxG.width - 510, FlxG.height - 255, 'v', 0x49A9B2));
+				add(buttonD = createButton(FlxG.width - 510, FlxG.height - 135, 'd', 0x0078FF));
+				add(buttonX = createButton(FlxG.width - 384, FlxG.height - 255, 'x', 0x99062D));
+				add(buttonC = createButton(FlxG.width - 384, FlxG.height - 135, 'c', 0x44FF00));
+				add(buttonY = createButton(FlxG.width - 258, FlxG.height - 255, 'y', 0x4A35B9));
+				add(buttonB = createButton(FlxG.width - 258, FlxG.height - 135, 'b', 0xFFCB00));
+				add(buttonZ = createButton(FlxG.width - 132, FlxG.height - 255, 'z', 0xCCB98E));
+				add(buttonA = createButton(FlxG.width - 132, FlxG.height - 135, 'a', 0xFF0000));
+			case CHARACTER_CREATOR:
+				add(buttonV = createButton(FlxG.width - 510, FlxG.height - 255, 'v', 0x49A9B2));
+				add(buttonD = createButton(FlxG.width - 510, FlxG.height - 135, 'd', 0x0078FF));
+				add(buttonX = createButton(FlxG.width - 384, FlxG.height - 255, 'x', 0x99062D));
+				add(buttonC = createButton(FlxG.width - 384, FlxG.height - 135, 'c', 0x44FF00));
+				add(buttonY = createButton(FlxG.width - 258, FlxG.height - 255, 'y', 0x4A35B9));
+				add(buttonB = createButton(FlxG.width - 258, FlxG.height - 135, 'b', 0xFFCB00));
+				add(buttonG = createButton(FlxG.width - 132, FlxG.height - 255, 'g', 0xFF009D));
+				add(buttonZ = createButton(FlxG.width - 132, FlxG.height - 375, 'z', 0xCCB98E));
+				add(buttonA = createButton(FlxG.width - 132, FlxG.height - 135, 'a', 0xFF0000));
+			case CHART_EDITOR:
+				add(buttonUp2 = createButton(FlxG.width - 636, FlxG.height - 255, 'up', 0x00FF00));
+				add(buttonDown2 = createButton(FlxG.width - 636, FlxG.height - 135, 'down', 0x00FFFF));
 				add(buttonV = createButton(FlxG.width - 510, FlxG.height - 255, 'v', 0x49A9B2));
 				add(buttonD = createButton(FlxG.width - 510, FlxG.height - 135, 'd', 0x0078FF));
 				add(buttonX = createButton(FlxG.width - 384, FlxG.height - 255, 'x', 0x99062D));

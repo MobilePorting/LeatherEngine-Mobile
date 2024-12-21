@@ -26,7 +26,7 @@ import flixel.util.FlxColor;
 using StringTools;
 
 /**
-	*DEBUG MODE
+ * DEBUG MODE
  */
 @:publicFields
 class CharacterCreator extends MusicBeatState {
@@ -354,6 +354,9 @@ class CharacterCreator extends MusicBeatState {
 		offset_Button.cameras = [camHUD];
 		add(offset_Button);
 
+		addVirtualPad(LEFT_FULL, CHARACTER_CREATOR);
+		addVirtualPadCamera();
+
 		super.create();
 	}
 
@@ -372,20 +375,20 @@ class CharacterCreator extends MusicBeatState {
 	}
 
 	override function update(elapsed:Float) {
-		if (FlxG.keys.pressed.E && charCam.zoom < 2)
-			charCam.zoom += elapsed * charCam.zoom * (FlxG.keys.pressed.SHIFT ? 0.1 : 1);
-		if (FlxG.keys.pressed.Q && charCam.zoom >= 0.1)
-			charCam.zoom -= elapsed * charCam.zoom * (FlxG.keys.pressed.SHIFT ? 0.1 : 1);
+		if (FlxG.keys.pressed.E || virtualPad.buttonX.pressed && charCam.zoom < 2)
+			charCam.zoom += elapsed * charCam.zoom * (FlxG.keys.pressed.SHIFT || virtualPad.buttonC.pressed ? 0.1 : 1);
+		if (FlxG.keys.pressed.Q || virtualPad.buttonY.pressed && charCam.zoom >= 0.1)
+			charCam.zoom -= elapsed * charCam.zoom * (FlxG.keys.pressed.SHIFT || virtualPad.buttonC.pressed ? 0.1 : 1);
 		if (FlxG.mouse.wheel != 0 && charCam.zoom >= 0.1 && charCam.zoom < 2)
-			charCam.zoom += FlxG.keys.pressed.SHIFT ? FlxG.mouse.wheel / 100.0 : FlxG.mouse.wheel / 10.0;
+			charCam.zoom += (FlxG.keys.pressed.SHIFT || virtualPad.buttonC.pressed) ? FlxG.mouse.wheel / 100.0 : FlxG.mouse.wheel / 10.0;
 
 		if (charCam.zoom > 2)
 			charCam.zoom = 2;
 		if (charCam.zoom < 0.1)
 			charCam.zoom = 0.1;
-		if (FlxG.keys.justPressed.Z)
+		if (virtualPad.buttonG.justPressed || FlxG.keys.justPressed.Z)
 			stage.foregroundSprites.visible = stage.infrontOfGFSprites.visible = stage.visible = !stage.visible;
-		if (FlxG.keys.justPressed.X) {
+		if (virtualPad.buttonA.justPressed || FlxG.keys.justPressed.X) {
 			char.isPlayer = !char.isPlayer;
 			char.flipX = !char.flipX;
 
@@ -407,19 +410,19 @@ class CharacterCreator extends MusicBeatState {
 			genBoyOffsets(true);
 		}
 
-		var shiftThing:Int = FlxG.keys.pressed.SHIFT ? 5 : 1;
+		var shiftThing:Int = (FlxG.keys.pressed.SHIFT || virtualPad.buttonC.pressed) ? 5 : 1;
 
-		if (FlxG.keys.pressed.I || FlxG.keys.pressed.J || FlxG.keys.pressed.K || FlxG.keys.pressed.L) {
-			if (FlxG.keys.pressed.I)
+		if ((FlxG.keys.pressed.I || (virtualPad.buttonZ.pressed && virtualPad.buttonUp.pressed)) || (FlxG.keys.pressed.J || (virtualPad.buttonZ.pressed && virtualPad.buttonLeft.pressed)) || (FlxG.keys.pressed.K || (virtualPad.buttonZ.pressed && virtualPad.buttonDown.pressed)) || (FlxG.keys.pressed.L || (virtualPad.buttonZ.pressed && virtualPad.buttonRight.pressed))) {
+			if (FlxG.keys.pressed.I || (virtualPad.buttonZ.pressed && virtualPad.buttonUp.pressed))
 				camFollow.velocity.y = -90 * shiftThing;
-			else if (FlxG.keys.pressed.K)
+			else if (FlxG.keys.pressed.K || (virtualPad.buttonZ.pressed && virtualPad.buttonDown.pressed))
 				camFollow.velocity.y = 90 * shiftThing;
 			else
 				camFollow.velocity.y = 0;
 
-			if (FlxG.keys.pressed.J)
+			if (FlxG.keys.pressed.J || (virtualPad.buttonZ.pressed && virtualPad.buttonLeft.pressed))
 				camFollow.velocity.x = -90 * shiftThing;
-			else if (FlxG.keys.pressed.L)
+			else if (FlxG.keys.pressed.L || (virtualPad.buttonZ.pressed && virtualPad.buttonRight.pressed))
 				camFollow.velocity.x = 90 * shiftThing;
 			else
 				camFollow.velocity.x = 0;
@@ -427,11 +430,11 @@ class CharacterCreator extends MusicBeatState {
 			camFollow.velocity.set();
 		}
 
-		if (FlxG.keys.justPressed.W) {
+		if (virtualPad.buttonV.justPressed || FlxG.keys.justPressed.W) {
 			curAnim--;
 		}
 
-		if (FlxG.keys.justPressed.ESCAPE) {
+		if (virtualPad.buttonB.justPressed || FlxG.keys.justPressed.ESCAPE) {
 			if (lastState == "OptionsMenu") {
 				FlxG.switchState(new MainMenuState());
 			} else {
@@ -439,7 +442,7 @@ class CharacterCreator extends MusicBeatState {
 			}
 		}
 
-		if (FlxG.keys.justPressed.S) {
+		if (virtualPad.buttonD.justPressed || FlxG.keys.justPressed.S) {
 			curAnim++;
 		}
 
@@ -449,7 +452,7 @@ class CharacterCreator extends MusicBeatState {
 		if (curAnim >= animList.length)
 			curAnim = 0;
 
-		if (FlxG.keys.justPressed.S || FlxG.keys.justPressed.W || FlxG.keys.justPressed.SPACE) {
+		if ((virtualPad.buttonD.justPressed || FlxG.keys.justPressed.S) || (virtualPad.buttonV.justPressed || FlxG.keys.justPressed.W) || FlxG.keys.justPressed.SPACE) {
 			char.playAnim(animList[curAnim], true);
 
 			var position = stage.getCharacterPos(char.isPlayer ? 0 : 1, char);
@@ -463,12 +466,12 @@ class CharacterCreator extends MusicBeatState {
 			genBoyOffsets(false);
 		}
 
-		var upP = FlxG.keys.justPressed.UP;
-		var rightP = FlxG.keys.justPressed.RIGHT;
-		var downP = FlxG.keys.justPressed.DOWN;
-		var leftP = FlxG.keys.justPressed.LEFT;
+		var upP = ((virtualPad.buttonUp.justPressed && !virtualPad.buttonZ.pressed) || FlxG.keys.justPressed.UP);
+		var rightP = ((virtualPad.buttonRight.justPressed && !virtualPad.buttonZ.pressed) || FlxG.keys.justPressed.RIGHT);
+		var downP = ((virtualPad.buttonDown.justPressed && !virtualPad.buttonZ.pressed) || FlxG.keys.justPressed.DOWN);
+		var leftP = ((virtualPad.buttonLeft.justPressed && !virtualPad.buttonZ.pressed) || FlxG.keys.justPressed.LEFT);
 
-		var holdShift = FlxG.keys.pressed.SHIFT;
+		var holdShift = (FlxG.keys.pressed.SHIFT || virtualPad.buttonC.pressed);
 		var multiplier = 1;
 		if (holdShift)
 			multiplier = 10;
@@ -496,7 +499,7 @@ class CharacterCreator extends MusicBeatState {
 		}
 
 		charCam.zoom = flixel.math.FlxMath.roundDecimal(charCam.zoom, 2) <= 0 ? 1 : charCam.zoom;
-		moveText.text = 'Use IJKL to move the camera\nE and Q to zoom the camera\nSHIFT for faster moving offset or camera\nZ to toggle the stage\nX to toggle playing side\nCamera Zoom: ${flixel.math.FlxMath.roundDecimal(charCam.zoom, 2)}\n';
+		moveText.text = (controls.mobileC) ? 'Hold Z and Use Arrow keys to move the camera\nX and Y to zoom the camera\nC for faster moving offset or camera\nG to toggle the stage\nA to toggle playing side\n' : 'Use IJKL to move the camera\nE and Q to zoom the camera\nSHIFT for faster moving offset or camera\nZ to toggle the stage\nX to toggle playing side\n' + 'Camera Zoom: ${flixel.math.FlxMath.roundDecimal(charCam.zoom, 2)}\n';
 		moveText.x = FlxG.width - moveText.width - 4;
 
 		super.update(elapsed);

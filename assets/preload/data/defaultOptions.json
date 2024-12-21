@@ -46,7 +46,7 @@
     },
     {
       "option": "maxFPS",
-      "value": 120
+      "value": 60
     },
     {
       "option": "cutscenePlaysOn",

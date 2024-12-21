@@ -197,6 +197,7 @@ class Hitbox extends FlxSpriteGroup {
 		return bitmap;
 	}
 
+	@:dox(hide)
 	private function getHintColor(ammo:Int, currentAmmo:Int):FlxColor
 	{
 		var blah:Array<Int> = shaders.NoteColors.getNoteColor(utilities.NoteVariables.animationDirections[ammo][currentAmmo]);

@@ -56,101 +56,13 @@ class Hitbox extends FlxSpriteGroup {
 	 * @param perHintHeight The height that the hints will use.
 	 * @param colors The color per hint.
 	 */
-	public function new(ammo:UInt, perHintWidth:Int, perHintHeight:Int, ?colors:Array<FlxColor>):Void {
+	public function new(ammo:UInt, perHintWidth:Int, perHintHeight:Int):Void {
 		super();
 
 		hints = new Array<MobileButton>();
 
-		if (colors == null)
-			switch (ammo) {
-				case 1:
-					colors = [0xCCCCCC];
-				case 2:
-					colors = [0xC24B99, 0xF9393F];
-				case 3:
-					colors = [0xC24B99, 0xCCCCCC, 0xF9393F];
-				case 5:
-					colors = [0xC24B99, 0x00FFFF, 0xCCCCCC, 0x12FA05, 0xF9393F];
-				case 6:
-					colors = [0xC24B99, 0x12FA05, 0xF9393F, 0xFFFF00, 0x00FFFF, 0x0033FF];
-				case 7:
-					colors = [0xC24B99, 0x12FA05, 0xF9393F, 0xCCCCCC, 0xFFFF00, 0x00FFFF, 0x0033FF];
-				case 8:
-					colors = [0xC24B99, 0x00FFFF, 0x12FA05, 0xF9393F, 0xFFFF00, 0x8B4AFF, 0xFF0000, 0x0033FF];
-				case 9:
-					colors = [
-						0xC24B99,
-						0x00FFFF,
-						0x12FA05,
-						0xF9393F,
-						0xCCCCCC,
-						0xFFFF00,
-						0x8B4AFF,
-						0xFF0000,
-						0x0033FF
-					];
-				case 10:
-					colors = [
-						0xC24B99, 0x00FFFF, 0x12FA05, 0xF9393F, 0x12FA05, 0x00FFFF, 0xFFFF00, 0x8B4AFF, 0xFF0000, 0x0033FF
-					];
-				case 11:
-					colors = [
-						0xC24B99, 0x00FFFF, 0x12FA05, 0xF9393F, 0x12FA05, 0xC24B99, 0x00FFFF, 0xFFFF00, 0x8B4AFF, 0xFF0000, 0x0033FF
-					];
-				case 12:
-					colors = [
-						0xC24B99, 0x00FFFF, 0x12FA05, 0xF9393F, 0xFF0000, 0x00FFFF, 0x12FA05, 0x0033FF, 0xFFFF00, 0x8B4AFF, 0xFF0000, 0x0033FF
-					];
-				case 13:
-					colors = [
-						0xC24B99, 0x00FFFF, 0x12FA05, 0xF9393F, 0xFF0000, 0x1E29FF, 0xCCCCCC, 0x6200FF, 0x1EFF69, 0xFFFF00, 0x8B4AFF, 0xFF0000, 0x0033FF
-					];
-				case 14:
-					colors = [
-						0xC24B99, 0x00FFFF, 0x12FA05, 0xF9393F, 0xFF0000, 0x1E29FF, 0xCCCCCC, 0xC24B99, 0x6200FF, 0x1EFF69, 0xFFFF00, 0x8B4AFF, 0xFF0000,
-						0x0033FF
-					];
-				case 15:
-					colors = [
-						0xC24B99, 0x00FFFF, 0x12FA05, 0xF9393F, 0xFF0000, 0x1E29FF, 0x12FA05, 0xC24B99, 0xFF8300, 0x6200FF, 0x1EFF69, 0xFFFF00, 0x8B4AFF,
-						0xFF0000, 0x0033FF
-					];
-				case 16:
-					colors = [
-						0xC24B99, 0x00FFFF, 0x12FA05, 0xF9393F, 0xFF0000, 0x00FFFF, 0x12FA05, 0x1E29FF, 0x6200FF, 0xA9FF1E, 0xFF8300, 0x1EFF69, 0xFFFF00,
-						0x8B4AFF, 0xFF0000, 0x0033FF
-					];
-				case 17:
-					colors = [
-						0xC24B99, 0x00FFFF, 0x12FA05, 0xF9393F, 0xC24B99, 0xFF0000, 0xCCCCCC, 0x00FFFF, 0xC24B99, 0x12FA05, 0xCCCCCC, 0x0033FF, 0xC24B99,
-						0xFFFF00, 0x8B4AFF, 0xFF0000, 0x0033FF
-					];
-				case 18:
-					colors = [
-						0xC24B99, 0x00FFFF, 0x12FA05, 0xF9393F, 0xFFFF00, 0x8B4AFF, 0xFF0000, 0x0033FF, 0xCCCCCC, 0xC24B99, 0xFF0000, 0x00FFFF, 0x12FA05,
-						0x0033FF, 0x8B4AFF, 0xA9FF1E, 0xFF8300, 0x1EFF69
-					];
-				case 19:
-					colors = [
-						0xC24B99, 0x00FFFF, 0x12FA05, 0xF9393F, 0xFFFF00, 0x8B4AFF, 0xFF0000, 0x0033FF, 0xFF8300, 0xC24B99, 0xA9FF1E, 0xFF0000, 0x00FFFF,
-						0x12FA05, 0x0033FF, 0x8B4AFF, 0xA9FF1E, 0xFF8300, 0x1EFF69
-					];
-				case 20:
-					colors = [
-						0xC24B99, 0x00FFFF, 0x12FA05, 0xF9393F, 0xFFFF00, 0x8B4AFF, 0xFF0000, 0x0033FF, 0x8B4AFF, 0xA9FF1E, 0xFF8300, 0x12FA05, 0xFF0000,
-						0x00FFFF, 0x12FA05, 0x0033FF, 0x8B4AFF, 0xA9FF1E, 0xFF8300, 0x1EFF69
-					];
-				case 21:
-					colors = [
-						0xC24B99, 0x00FFFF, 0x12FA05, 0xF9393F, 0xFFFF00, 0x8B4AFF, 0xFF0000, 0x0033FF, 0x8B4AFF, 0xA9FF1E, 0xC24B99, 0xFF8300, 0x12FA05,
-						0xFF0000, 0x00FFFF, 0x12FA05, 0x0033FF, 0x8B4AFF, 0xA9FF1E, 0xFF8300, 0x1EFF69
-					];
-				default:
-					colors = [0xC24B99, 0x00FFFF, 0x12FA05, 0xF9393F];
-			}
-
 		for (i in 0...ammo)
-			add(hints[i] = createHint(i * perHintWidth, 0, perHintWidth, perHintHeight, colors[i]));
+			add(hints[i] = createHint(i * perHintWidth, 0, perHintWidth, perHintHeight, getHintColor(ammo - 1, i)));
 
 		scrollFactor.set();
 	}
@@ -266,8 +178,7 @@ class Hitbox extends FlxSpriteGroup {
 			shape.graphics.lineStyle(10, Color, 1);
 			shape.graphics.drawRect(0, 0, Width, Height);
 			shape.graphics.endFill();
-		} else // if (Options.getData("hitboxType") == 'Gradient')
-		{
+		} else { // if (Options.getData("hitboxType") == 'Gradient')
 			shape.graphics.lineStyle(3, Color, 1);
 			shape.graphics.drawRect(0, 0, Width, Height);
 			shape.graphics.lineStyle(0, 0, 0);
@@ -284,5 +195,11 @@ class Hitbox extends FlxSpriteGroup {
 		var bitmap:BitmapData = new BitmapData(Width, Height, true, 0);
 		bitmap.draw(shape, true);
 		return bitmap;
+	}
+
+	private function getHintColor(ammo:Int, currentAmmo:Int):FlxColor
+	{
+		var blah:Array<Int> = shaders.NoteColors.getNoteColor(utilities.NoteVariables.animationDirections[ammo][currentAmmo]);
+		return FlxColor.fromRGB(blah[0], blah[1], blah[2]);
 	}
 }

@@ -232,7 +232,6 @@ class EventHandeler {
 				if (newKeyCount < 1 || Math.isNaN(newKeyCount))
 					newKeyCount = 1;
 
-				final reloadHitbox:Bool = (PlayState.SONG.playerKeyCount != newPlayerKeyCount);
 				PlayState.SONG.keyCount = newKeyCount;
 				PlayState.SONG.playerKeyCount = newPlayerKeyCount;
 				PlayState.playerStrums.clear();
@@ -293,11 +292,6 @@ class EventHandeler {
 					}
 				}
 				#end
-				if (reloadHitbox)
-				{
-					game.addHitbox();
-					game.addHitboxCamera();
-				}
 			case "change ui skin":
 				var noteskin:String = Std.string(event[2]);
 				PlayState.SONG.ui_Skin = noteskin;

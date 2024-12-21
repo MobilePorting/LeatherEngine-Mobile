@@ -13,7 +13,7 @@ import openfl.errors.Error;
 import openfl.events.ErrorEvent;
 import openfl.events.UncaughtErrorEvent;
 import openfl.text.TextFormat;
-//import openfl.utils._internal.Log as OpenFLLog;
+import openfl.utils._internal.Log as OpenFLLog;
 import states.TitleState;
 import ui.SimpleInfoDisplay;
 import ui.logs.Logs;
@@ -40,9 +40,11 @@ class Main extends Sprite {
 
 		utilities.CrashHandler.init();
 
+		#if !mobile
 		CoolUtil.haxe_trace = Log.trace;
 		Log.trace = CoolUtil.haxe_print;
-		//OpenFLLog.throwErrors = false;
+		OpenFLLog.throwErrors = false;
+		#end
 
 		game = new FlxGame(1280, 720, #if (mobile && MODDING_ALLOWED) !CopyState.checkExistingFiles() ? CopyState : #end TitleState, 60, 60, true);
 
@@ -64,9 +66,11 @@ class Main extends Sprite {
 		logsOverlay.visible = false;
 		addChild(logsOverlay);
 
+		#if !mobile
 		LogStyle.WARNING.onLog.add(data -> trace(data, WARNING));
 		LogStyle.ERROR.onLog.add(data -> trace(data, ERROR));
 		LogStyle.NOTICE.onLog.add(data -> trace(data));
+		#end
 
 		display = new SimpleInfoDisplay(8, 3, 0xFFFFFF, "_sans");
 		addChild(display);

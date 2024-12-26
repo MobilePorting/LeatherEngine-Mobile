@@ -1,63 +1,85 @@
 package modding.scripts;
 
+import haxe.io.Path;
+import haxe.exceptions.NotImplementedException;
+import states.PlayState;
+import game.Conductor;
+import flixel.FlxG;
+import utilities.CoolUtil;
+import lime.app.Application;
+
 /**
-    Base class for any scripting languages to inherit from.
+	Base class for any scripting languages to inherit from.
 
-    Usage:
-        This class should be mainly used for creating different types
-        of scripts of different languages. Like how Leather Engine supports
-        both Lua and HScript, if you were to add another language
-        you would just extend this (aka Python or something, idk what your plans are).
+	Usage:
+		This class should be mainly used for creating different types
+		of scripts of different languages. Like how Leather Engine supports
+		both Lua and HScript, if you were to add another language
+		you would just extend this (aka Python or something, idk what your plans are).
 
-    @author Leather128
+	@author Leather128
 **/
-class Script
-{
-    public function new(script_path:String)
-    {
-        // Simple trace as actual loading logic is held in the extension of this class
-        trace('Loading script at path \'${script_path}\'', DEBUG);
-    }
+class Script {
+	public var executeOn:ExecuteOn;
 
-    /**
-        Calls the desired `func` (function) with the specified `arguments`.
+    public var path:String;
 
-        @param func The function name to call in the script.
-        @param arguments (Optional) Array of arguments to run the `func` (function) with.
+    public var name:String;
 
-        @return `true` if the function was successfully ran,
-            `false` if the function was unsuccessful, and
-            `null` if the function was not specified.
-        
-        @author Leather128
-    **/
-    public function call(func:String, ?arguments:Array<Dynamic>):Null<Bool>
-        return null;
+	public var extension:String;
 
-    /**
-        Sets the desired `variable` to the specified `value`.
+    public var otherScripts:Array<Script> = [];
 
-        @param variable `String` name for the variable to set.
-        @param value `Dynamic` value to set the `variable` to.
+    public var createPost:Bool = false;
 
-        @return `true` if the variable didn't already exist and was succesfully set,
-            `false` if the variable already existed and thus wasn't set (should trace an error), and
-            `null` if the function was not specified.
+	public function new(path:String) {
+		trace('Loading script at path \'${path}\'');
+        this.path = path;
+		var _path:Path = new Path(path);
+        this.name = _path.file;
+		this.extension = _path.ext;
+		this.executeOn = BOTH;
+		_path = null; // We dont need this anymore
+	}
 
-        @author Leather128
-    **/
-    public function set(variable:String, value:Dynamic):Null<Bool>
-        return null;
+	/**
+		Calls the desired `func` (function) with the specified `arguments`.
 
-    /**
-        Setup the enviroment for a script.
+		@param func The function name to call in the script.
+		@param arguments (Optional) Array of arguments to run the `func` (function) with.
 
-        @return `true` if the enviroment was setup correctly,
-            `false` if there was an exception, and
-            `null` if the function wasn't specified.
-        
-        @author Leather128
-    **/
-    public function setup_enviroment():Null<Bool>
-        return null;
+		@return `true` if the function was successfully ran,
+			`false` if the function was unsuccessful, and
+			`null` if the function was not specified.
+
+		@author Leather128
+	**/
+	public function call(func:String, ?arguments:Array<Any>):Bool
+		throw new NotImplementedException();
+
+	/**
+		Sets the desired `variable` to the specified `value`.
+
+		@param variable `String` name for the variable to set.
+		@param value `Any` value to set the `variable` to.
+
+		@author Leather128
+	**/
+	public function set(variable:String, value:Any)
+		throw new NotImplementedException();
+
+	/**
+		Setup the enviroment for a script.
+
+		@return `true` if the enviroment was setup correctly,
+			`false` if there was an exception, and
+			`null` if the function wasn't specified.
+
+		@author Leather128
+	**/
+	public function setup()
+		throw new NotImplementedException();
+
+	public function destroy()
+		throw new NotImplementedException();
 }

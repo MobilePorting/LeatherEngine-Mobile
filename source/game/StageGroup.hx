@@ -1,10 +1,11 @@
 package game;
 
+import modding.scripts.Script;
 #if MODDING_ALLOWED
 import polymod.backends.PolymodAssets;
 #end
 #if LUA_ALLOWED
-import modding.ModchartUtilities;
+import modding.scripts.languages.LuaScript;
 #end
 import shaders.ColorSwapHSV;
 import modding.scripts.languages.HScript;
@@ -36,9 +37,9 @@ class StageGroup extends FlxGroup {
 	public var p1_Cam_Offset:FlxPoint = new FlxPoint(0, 0);
 	public var p2_Cam_Offset:FlxPoint = new FlxPoint(0, 0);
 
-	public var stage_Data:StageData;
+	public var stageData:StageData;
 
-	public var stage_Objects:Array<Array<Dynamic>> = [];
+	public var stageObjects:Array<Array<Dynamic>> = [];
 
 	// other
 	public var onBeatHit_Group:FlxTypedGroup<FlxSprite> = new FlxTypedGroup<FlxSprite>();
@@ -46,9 +47,7 @@ class StageGroup extends FlxGroup {
 	public var foregroundSprites:FlxGroup = new FlxGroup();
 	public var infrontOfGFSprites:FlxGroup = new FlxGroup();
 
-	#if LUA_ALLOWED
-	public var stageScript:ModchartUtilities = null;
-	#end
+	public var stageScript:Script = null;
 
 	public var colorSwap:ColorSwapHSV;
 
@@ -57,38 +56,38 @@ class StageGroup extends FlxGroup {
 			stage = newStage;
 
 		if (stage != "" && Assets.exists(Paths.json("stage data/" + stage))) {
-			stage_Data = cast Json.parse(Assets.getText(Paths.json("stage data/" + stage)).trim());
+			stageData = cast Json.parse(Assets.getText(Paths.json("stage data/" + stage)).trim());
 		} else {
-			stage_Data = cast Json.parse(Assets.getText(Paths.json("stage data/stage")).trim());
+			stageData = cast Json.parse(Assets.getText(Paths.json("stage data/stage")).trim());
 		}
 
 		clear();
 
 		switch (stage) {
-			//incase you want to harcode your stage
+			// incase you want to harcode your stage
 			default:
 				{
-					if (stage_Data != null) {
-						camZoom = stage_Data.camera_Zoom;
+					if (stageData != null) {
+						camZoom = stageData.camera_Zoom;
 
-						if (stage_Data.camera_Offsets != null) {
-							p1_Cam_Offset.set(stage_Data.camera_Offsets[0][0], stage_Data.camera_Offsets[0][1]);
-							p2_Cam_Offset.set(stage_Data.camera_Offsets[1][0], stage_Data.camera_Offsets[1][1]);
+						if (stageData.camera_Offsets != null) {
+							p1_Cam_Offset.set(stageData.camera_Offsets[0][0], stageData.camera_Offsets[0][1]);
+							p2_Cam_Offset.set(stageData.camera_Offsets[1][0], stageData.camera_Offsets[1][1]);
 						}
 
-						player_1_Point.set(stage_Data.character_Positions[0][0], stage_Data.character_Positions[0][1]);
-						player_2_Point.set(stage_Data.character_Positions[1][0], stage_Data.character_Positions[1][1]);
-						gf_Point.set(stage_Data.character_Positions[2][0], stage_Data.character_Positions[2][1]);
+						player_1_Point.set(stageData.character_Positions[0][0], stageData.character_Positions[0][1]);
+						player_2_Point.set(stageData.character_Positions[1][0], stageData.character_Positions[1][1]);
+						gf_Point.set(stageData.character_Positions[2][0], stageData.character_Positions[2][1]);
 
-						if (stage_Data.character_Scrolls != null) {
-							p1_Scroll = stage_Data.character_Scrolls[0];
-							p2_Scroll = stage_Data.character_Scrolls[1];
-							gf_Scroll = stage_Data.character_Scrolls[2];
+						if (stageData.character_Scrolls != null) {
+							p1_Scroll = stageData.character_Scrolls[0];
+							p2_Scroll = stageData.character_Scrolls[1];
+							gf_Scroll = stageData.character_Scrolls[2];
 						}
 
 						var null_Object_Name_Loop:Int = 0;
 
-						for (Object in stage_Data.objects) {
+						for (Object in stageData.objects) {
 							var Sprite:FlxSprite = Object.dances ? new DancingSprite(Object.position[0],
 								Object.position[1]) : new FlxSprite(Object.position[0], Object.position[1]);
 
@@ -102,14 +101,14 @@ class StageGroup extends FlxGroup {
 							Sprite.scrollFactor.set(Object.scroll_Factor[0], Object.scroll_Factor[1]);
 
 							if (Object.object_Name != null && Object.object_Name != "")
-								stage_Objects.push([Object.object_Name, Sprite, Object]);
+								stageObjects.push([Object.object_Name, Sprite, Object]);
 							else {
-								stage_Objects.push(["undefinedSprite" + null_Object_Name_Loop, Sprite, Object]);
+								stageObjects.push(["undefinedSprite" + null_Object_Name_Loop, Sprite, Object]);
 								null_Object_Name_Loop++;
 							}
 
 							if (Object.is_Animated) {
-								Sprite.frames = Paths.getSparrowAtlas((stage_Data.imageDirectory ?? stage) + "/" + Object.file_Name, "stages");
+								Sprite.frames = Paths.getSparrowAtlas((stageData.imageDirectory ?? stage) + "/" + Object.file_Name, "stages");
 
 								for (Animation in Object.animations) {
 									var Anim_Name = Animation.name;
@@ -132,7 +131,7 @@ class StageGroup extends FlxGroup {
 							} else if (Object.file_Name.startsWith('#')) {
 								Sprite.makeGraphic(Std.int(Object.scale), Std.int(Object.scale), FlxColor.fromString(Object.file_Name));
 							} else
-								Sprite.loadGraphic(Paths.gpuBitmap((stage_Data.imageDirectory ?? stage) + "/" + Object.file_Name, "stages"));
+								Sprite.loadGraphic(Paths.gpuBitmap((stageData.imageDirectory ?? stage) + "/" + Object.file_Name, "stages"));
 
 							if (Object.uses_Frame_Width)
 								Sprite.setGraphicSize(Std.int(Sprite.frameWidth * Object.scale));
@@ -158,24 +157,20 @@ class StageGroup extends FlxGroup {
 								add(Sprite);
 						}
 					}
-					if (Assets.exists(Paths.hx('data/stage data/${stage}'))) {
-						if (FlxG.state is PlayState) {
-							var script:HScript = new HScript(Paths.hx('data/stage data/${stage}'));
-							for (object in stage_Objects) {
-								script.interp.variables.set(object[0], object[1]);
-							}
-							PlayState.instance.scripts.push(script);
+					if (stageData.scriptName == null) {
+						stageData.scriptName = stage;
+					}
+					if (Assets.exists(Paths.hx('data/stage data/${stageData.scriptName}'))) {
+						stageScript = new HScript(Paths.hx('data/stage data/${stage}'));
+						for (object in stageObjects) {
+							stageScript.set(object[0], object[1]);
 						}
+					} else if (Assets.exists(Paths.lua("stage data/" + stageData.scriptName))) {
+						stageScript = new LuaScript(#if MODDING_ALLOWED PolymodAssets #else Assets #end
+							.getPath(Paths.lua("stage data/" + stageData.scriptName)));
 					}
 				}
 		}
-	}
-
-	public function createLuaStuff() {
-		#if (linc_luajit && polymod)
-		if (stage_Data != null && stage_Data.scriptName != null && Assets.exists(Paths.lua("stage data/" + stage_Data.scriptName)))
-			stageScript = new ModchartUtilities(PolymodAssets.getPath(Paths.lua("stage data/" + stage_Data.scriptName)));
-		#end
 	}
 
 	public function setCharOffsets(?p1:Character, ?gf:Character, ?p2:Character):Void {
@@ -286,7 +281,7 @@ class StageGroup extends FlxGroup {
 	override public function destroy() {
 		#if linc_luajit
 		if (stageScript != null) {
-			stageScript.die();
+			stageScript.destroy();
 			stageScript = null;
 		}
 		#end
@@ -301,7 +296,7 @@ class StageGroup extends FlxGroup {
 	 * @return FlxSprite
 	 */
 	public function getNamedProp(prop:String):FlxSprite {
-		for (object in stage_Objects) {
+		for (object in stageObjects) {
 			if (object[0] == prop) {
 				return object[1];
 			}

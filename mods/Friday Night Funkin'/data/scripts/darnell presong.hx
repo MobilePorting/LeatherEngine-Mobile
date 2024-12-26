@@ -130,7 +130,7 @@ function darkenStageProps()
 	{
 		// Darken the background, then fade it back.
     var dumb:Array<FlxSprite> = [];
-    for (penis in PlayState.instance.stage.stage_Objects){
+    for (penis in PlayState.instance.stage.stageObjects){
       dumb.push(penis[1]);
     }
 		for (stageProp in dumb)

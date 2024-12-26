@@ -15,5 +15,5 @@
 	<SubTexture name="watchtower gradient color 0010" x="1113" y="0" width="365" height="682" frameX="-2" frameY="0" frameWidth="369" frameHeight="682"/>
 	<SubTexture name="watchtower gradient color 0011" x="1113" y="0" width="365" height="682" frameX="-2" frameY="0" frameWidth="369" frameHeight="682"/>
 	<SubTexture name="watchtower gradient color 0012" x="1113" y="0" width="365" height="682" frameX="-2" frameY="0" frameWidth="369" frameHeight="682"/>
-	<SubTexture name="watchtower gradient color instance 10013" x="1113" y="0" width="365" height="682" frameX="-2" frameY="0" frameWidth="369" frameHeight="682"/>
+	<SubTexture name="watchtower gradient color0013" x="1113" y="0" width="365" height="682" frameX="-2" frameY="0" frameWidth="369" frameHeight="682"/>
 </TextureAtlas>

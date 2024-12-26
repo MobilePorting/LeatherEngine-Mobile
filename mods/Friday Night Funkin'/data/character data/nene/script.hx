@@ -41,7 +41,7 @@ function createPost() {
 	FlxG.sound.music.play();
 	FlxG.sound.music.volume = 0;
 	abotViz = new ABotVis();
-	abotViz.x = character.x + 100;
+	abotViz.x = character.x + 105;
 	abotViz.y = character.y + 400;
 	abotViz.antialiasing = Options.getData("antialiasing");
 	abotViz.scrollFactor.set(0.95, 0.95);

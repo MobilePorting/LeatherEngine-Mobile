@@ -66,12 +66,6 @@
       "animation_name": "BF RIGHT MISS",
       "fps": 24,
       "looped": false
-    },
-    {
-      "name": "hey",
-      "animation_name": "BF Peace Sign",
-      "fps": 24,
-      "looped": false
     }
   ]
 }

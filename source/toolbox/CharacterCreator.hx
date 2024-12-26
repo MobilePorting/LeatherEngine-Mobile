@@ -567,7 +567,7 @@ class CharacterCreator extends MusicBeatState {
 		stage = new StageGroup(stage_Name);
 		add(stage);
 
-		stageData = stage.stage_Data;
+		stageData = stage.stageData;
 
 		var position = stage.getCharacterPos(char.isPlayer ? 0 : 1, char);
 		char.setPosition(position[0], position[1]);

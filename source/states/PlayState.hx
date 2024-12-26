@@ -41,8 +41,8 @@ import game.StageGroup;
 import game.StrumNote;
 import game.TimeBar;
 import lime.utils.Assets;
-import modding.ModchartUtilities;
-import modding.scripts.languages.HScript;
+import modding.scripts.*;
+import modding.scripts.languages.*;
 import substates.GameOverSubstate;
 import substates.PauseSubState;
 import toolbox.ChartingState;
@@ -534,17 +534,10 @@ class PlayState extends MusicBeatState {
 	**/
 	public var ogKeyCount:Int = 4;
 
-	#if LUA_ALLOWED
 	/**
-		`Map` of `String` to `ModchartUtilities` used for custom events.
+		`Map` of `String` to `LuaScript` used for custom events.
 	**/
-	public var event_luas:Map<String, ModchartUtilities> = [];
-
-	/**
-		Array of Lua scripts.
-	**/
-	public var luaScriptArray:Array<ModchartUtilities> = [];
-	#end
+	public var scripts:Map<String, Script> = [];
 
 	/**
 		`FlxTypedGroup` of `NoteSplash`s used to contain all note splashes
@@ -575,25 +568,6 @@ class PlayState extends MusicBeatState {
 	 */
 	public var tweenManager:FlxTweenManager;
 
-	public function clearLuaObjects() {
-		#if LUA_ALLOWED
-		// clear dumb lua stuffs
-		for (sound in ModchartUtilities.lua_Sounds) {
-			sound.stop();
-			sound.kill();
-			sound.destroy();
-		}
-		ModchartUtilities.killShaders();
-		ModchartUtilities.lua_Characters.clear();
-		ModchartUtilities.lua_Sounds.clear();
-		ModchartUtilities.lua_Sprites.clear();
-		ModchartUtilities.lua_Shaders.clear();
-		ModchartUtilities.lua_Custom_Shaders.clear();
-		ModchartUtilities.lua_Cameras.clear();
-		ModchartUtilities.lua_Jsons.clear();
-		#end
-	}
-
 	override public function create() {
 		tweenManager = new FlxTweenManager();
 		// set instance because duh
@@ -609,8 +583,6 @@ class PlayState extends MusicBeatState {
 
 		// gaming time
 		curSong = SONG.song;
-
-		clearLuaObjects();
 
 		// if we have a hitsound, preload it nerd
 		if (hitSoundString != "none")
@@ -791,11 +763,15 @@ class PlayState extends MusicBeatState {
 		// stage maker
 		stage = new StageGroup(Options.getData("charsAndBGs") ? curStage : "");
 		stageMap.set(stage.stage, stage);
+		if (stage.stageScript != null) {
+			stage.stageScript.executeOn = STAGE;
+			scripts.set(stage.stage, stage.stageScript);
+		}
 		add(stage);
 		call("createStage", [stage.stage]);
 
 		defaultCamZoom = stage.camZoom;
-		camGame.bgColor = FlxColor.fromString(stage.stage_Data.backgroundColor ?? "#000000");
+		camGame.bgColor = FlxColor.fromString(stage.stageData.backgroundColor ?? "#000000");
 
 		var camPos:FlxPoint = new FlxPoint(dad.getGraphicMidpoint().x, dad.getGraphicMidpoint().y);
 
@@ -940,11 +916,11 @@ class PlayState extends MusicBeatState {
 			if (FileSystem.exists(folder)) {
 				for (file in FileSystem.readDirectory(folder)) {
 					if (file.endsWith('.hx')) {
-						scripts.push(new HScript(folder + file));
+						scripts.set(file, new HScript(folder + file));
 					}
 					#if LUA_ALLOWED
 					else if (file.endsWith('.lua')) {
-						luaScriptArray.push(new ModchartUtilities(folder + file));
+						scripts.set(file, new LuaScript(folder + file));
 					}
 					#end
 				}
@@ -955,13 +931,12 @@ class PlayState extends MusicBeatState {
 		#if LUA_ALLOWED
 		if (Assets.exists(Paths.lua("modcharts/" + PlayState.SONG.modchartPath))) {
 			trace("The 'modcharts' folder is deprecated! Use the 'scripts' folder instead!", WARNING);
-			luaScriptArray.push(new ModchartUtilities(PolymodAssets.getPath(Paths.lua("modcharts/" + PlayState.SONG.modchartPath))));
+			scripts.set(PlayState.SONG.modchartPath, new LuaScript(PolymodAssets.getPath(Paths.lua("modcharts/" + PlayState.SONG.modchartPath))));
 		} else if (Assets.exists(Paths.lua("scripts/" + PlayState.SONG.modchartPath))) {
-			luaScriptArray.push(new ModchartUtilities(PolymodAssets.getPath(Paths.lua("scripts/" + PlayState.SONG.modchartPath))));
+			scripts.set(PlayState.SONG.modchartPath, new LuaScript(PolymodAssets.getPath(Paths.lua("scripts/" + PlayState.SONG.modchartPath))));
 		}
 
 		call("create", [PlayState.SONG.song.toLowerCase()], MODCHART);
-		stage.createLuaStuff();
 		call("create", [stage.stage], STAGE);
 		#end
 
@@ -1083,13 +1058,13 @@ class PlayState extends MusicBeatState {
 
 			switch (cutscene.type.toLowerCase()) {
 				case "script":
-					var cutscene:HScript = new HScript(Paths.hx('data/${cutscene.scriptPath}'));
+					var cutsceneScript:HScript = new HScript(Paths.hx('data/${cutscene.scriptPath}'));
 
-					for (object in stage.stage_Objects) {
-						cutscene.interp.variables.set(object[0], object[1]);
+					for (object in stage.stageObjects) {
+						cutsceneScript.interp.variables.set(object[0], object[1]);
 					}
-					scripts.push(cutscene);
-					cutscene.call("startCutscene");
+					scripts.set(cutscene.scriptPath, cutsceneScript);
+					cutsceneScript.call("startCutscene");
 				case "video":
 					startVideo(cutscene.videoPath, cutscene.videoExt, false);
 
@@ -1145,18 +1120,15 @@ class PlayState extends MusicBeatState {
 
 		super.create();
 
-		for (script_funny in scripts) {
-			script_funny.create_post = true;
-		}
-
 		call("createPost", []);
+
+		for (script in scripts) {
+			script.createPost = true;
+		}
 
 		calculateAccuracy();
 		updateSongInfoText();
 	}
-
-	public var scripts:Array<HScript> = [];
-	public var hscriptEvents:Map<String, HScript> = [];
 
 	public function reorderCameras(?newCam:FlxCamera = null) {
 		var cameras = FlxG.cameras.list.copy();
@@ -1199,12 +1171,12 @@ class PlayState extends MusicBeatState {
 
 					switch (cutscene.type.toLowerCase()) {
 						case "script":
-							var cutscene:HScript = new HScript(Paths.hx('data/${cutscene.scriptPath}'));
-							for (object in stage.stage_Objects) {
-								cutscene.interp.variables.set(object[0], object[1]);
+							var cutsceneScript:HScript = new HScript(Paths.hx('data/${cutscene.scriptPath}'));
+							for (object in stage.stageObjects) {
+								cutsceneScript.interp.variables.set(object[0], object[1]);
 							}
-							scripts.push(cutscene);
-							cutscene.call("startCutscene");
+							scripts.set(cutscene.scriptPath, cutsceneScript);
+							cutsceneScript.call("startCutscene");
 						case "video":
 							startVideo(cutscene.videoPath, cutscene.videoExt, endSongVar);
 
@@ -1227,6 +1199,10 @@ class PlayState extends MusicBeatState {
 		});
 	}
 
+	#if VIDEOS_ALLOWED
+	public var videoHandler:FlxVideo = new FlxVideo();
+	#end
+
 	public function startVideo(name:String, ?ext:String, ?endSongVar:Bool = false):Void {
 		inCutscene = true;
 
@@ -1238,18 +1214,16 @@ class PlayState extends MusicBeatState {
 		}
 
 		#if VIDEOS_ALLOWED
-		var video_handler:FlxVideo = new FlxVideo();
-
-		video_handler.onEndReached.add(function() {
-			video_handler.dispose();
-			FlxG.removeChild(video_handler);
+		videoHandler.autoPause = true;
+		if (videoHandler.load(PolymodAssets.getPath(Paths.video(name, ext))))
+			FlxTimer.wait(0.001, () -> videoHandler.play());
+		videoHandler.mute = false;
+		videoHandler.onEndReached.add(function() {
+			videoHandler.dispose();
+			FlxG.removeChild(videoHandler);
 			bruhDialogue(endSongVar);
 		}, true);
-		if (video_handler.load(PolymodAssets.getPath(Paths.video(name, ext))))
-			FlxTimer.wait(0.001, () -> video_handler.play());
-		video_handler.play();
-		video_handler.mute = false;
-		FlxG.addChildBelowMouse(video_handler);
+		FlxG.addChildBelowMouse(videoHandler);
 		#else
 		bruhDialogue(endSongVar);
 		trace("Videos aren't supported on this platform!", ERROR);
@@ -1269,12 +1243,12 @@ class PlayState extends MusicBeatState {
 
 			switch (cutscene.type.toLowerCase()) {
 				case "script":
-					var cutscene:HScript = new HScript(Paths.hx('data/${cutscene.scriptPath}'));
-					for (object in stage.stage_Objects) {
-						cutscene.interp.variables.set(object[0], object[1]);
+					var cutsceneScript:HScript = new HScript(Paths.hx('data/${cutscene.scriptPath}'));
+					for (object in stage.stageObjects) {
+						cutsceneScript.interp.variables.set(object[0], object[1]);
 					}
-					scripts.push(cutscene);
-					cutscene.call("startCutscene");
+					scripts.set(cutscene.scriptPath, cutsceneScript);
+					cutsceneScript.call("startCutscene");
 				case "video":
 					startVideo(cutscene.videoPath, cutscene.videoExt, endSongVar);
 
@@ -1335,43 +1309,33 @@ class PlayState extends MusicBeatState {
 		}
 
 		#if LUA_ALLOWED
-		if (stage.stageScript != null)
-			stage.stageScript.setupTheShitCuzPullRequestsSuck();
-
-		if (generatedSomeDumbEventLuas) {
-			for (key in event_luas.keys()) {
-				var event_lua:ModchartUtilities = event_luas.get(key);
-				event_lua.setupTheShitCuzPullRequestsSuck();
-			}
-		}
-
-		if (luaScriptArray.length != 0) {
-			for (i in luaScriptArray) {
-				i.setupTheShitCuzPullRequestsSuck();
+		for (script in scripts) {
+			if (script is LuaScript) {
+				script.setup();
 			}
 		}
 
 		for (i in 0...strumLineNotes.length) {
 			var member = strumLineNotes.members[i];
 
-			setLuaVar("defaultStrum" + i + "X", member.x);
-			setLuaVar("defaultStrum" + i + "Y", member.y);
-			setLuaVar("defaultStrum" + i + "Angle", member.angle);
+			set("defaultStrum" + i + "X", member.x);
+			set("defaultStrum" + i + "Y", member.y);
+			set("defaultStrum" + i + "Angle", member.angle);
 
-			setLuaVar("defaultStrum" + i, {
+			set("defaultStrum" + i, {
 				x: member.x,
 				y: member.y,
 				angle: member.angle,
 			});
 
 			if (enemyStrums.members.contains(member)) {
-				setLuaVar("enemyStrum" + i % SONG.keyCount, {
+				set("enemyStrum" + i % SONG.keyCount, {
 					x: member.x,
 					y: member.y,
 					angle: member.angle,
 				});
 			} else {
-				setLuaVar("playerStrum" + i % SONG.playerKeyCount, {
+				set("playerStrum" + i % SONG.playerKeyCount, {
 					x: member.x,
 					y: member.y,
 					angle: member.angle,
@@ -1379,7 +1343,7 @@ class PlayState extends MusicBeatState {
 			}
 		}
 
-		call("start", [SONG.song.toLowerCase()], BOTH, [stage.stage]);
+		call("start", [SONG.song.toLowerCase()], BOTH);
 		#end
 
 		startTimer.start(Conductor.crochet / 1000, function(tmr:FlxTimer) {
@@ -1510,7 +1474,7 @@ class PlayState extends MusicBeatState {
 
 	public function setSongTime(time:Float) {
 		invincible = true;
-		setLuaVar("bot", true);
+		set("bot", true);
 		if (time < 0)
 			time = 0;
 
@@ -1530,7 +1494,7 @@ class PlayState extends MusicBeatState {
 		vocals.play();
 		Conductor.songPosition = time;
 		invincible = false;
-		setLuaVar("bot", Options.getData("botplay"));
+		set("bot", Options.getData("botplay"));
 	}
 
 	function startSong():Void {
@@ -1681,14 +1645,15 @@ class PlayState extends MusicBeatState {
 				for (susNote in 0...Math.floor(swagNote.sustainLength / Std.int(Conductor.stepCrochet))) {
 					oldNote = unspawnNotes[unspawnNotes.length - 1];
 
-					var sustainNote:Note = new Note(daStrumTime + (Conductor.stepCrochet * susNote) + (Conductor.stepCrochet / ((Options.getData("downscroll") || SONG.modchartingTools) ? 1 : FlxMath.roundDecimal(speed,
-					2))), noteData, oldNote, true,
-					char, songNotes[4], null, chars, gottaHitNote);
+					var sustainNote:Note = new Note(daStrumTime
+						+ (Conductor.stepCrochet * susNote)
+						+ (Conductor.stepCrochet / ((Options.getData("downscroll") || SONG.modchartingTools) ? 1 : FlxMath.roundDecimal(speed, 2))),
+						noteData, oldNote, true, char, songNotes[4], null, chars, gottaHitNote);
 					sustainNote.scrollFactor.set();
 					unspawnNotes.push(sustainNote);
-					
+
 					sustainNote.mustPress = gottaHitNote;
-					
+
 					sustainGroup.push(sustainNote);
 					sustainNote.sustains = sustainGroup;
 				}
@@ -1934,10 +1899,6 @@ class PlayState extends MusicBeatState {
 
 	public var speed(default, set):Float = 1.0;
 
-	#if LUA_ALLOWED
-	public var generatedSomeDumbEventLuas:Bool = false;
-	#end
-
 	public var ratingStr:String = "";
 
 	public var song_info_timer:Float = 0.0;
@@ -2061,7 +2022,7 @@ class PlayState extends MusicBeatState {
 			&& PlayState.SONG.notes[Std.int(curStep / Conductor.stepsPerSection)] != null
 			&& !switchedStates
 			&& startedCountdown) {
-			setLuaVar("mustHit", PlayState.SONG.notes[Std.int(curStep / Conductor.stepsPerSection)].mustHitSection);
+			set("mustHit", PlayState.SONG.notes[Std.int(curStep / Conductor.stepsPerSection)].mustHitSection);
 
 			if (PlayState.SONG.moveCamera) {
 				if (!PlayState.SONG.notes[Std.int(curStep / Conductor.stepsPerSection)].mustHitSection) {
@@ -2132,6 +2093,8 @@ class PlayState extends MusicBeatState {
 
 			vocals.stop();
 			FlxG.sound.music.stop();
+
+			camGame.bgColor = FlxColor.BLACK;
 
 			openSubState(new GameOverSubstate(boyfriend.getScreenPosition().x, boyfriend.getScreenPosition().y));
 
@@ -2499,23 +2462,20 @@ class PlayState extends MusicBeatState {
 		});
 
 		#if LUA_ALLOWED
-		if (((stage.stageScript != null) || generatedSomeDumbEventLuas || luaScriptArray.length != 0)
-			&& generatedMusic
-			&& !switchedStates
-			&& startedCountdown) {
-			for (shader in ModchartUtilities.lua_Shaders) {
+		if (generatedMusic && !switchedStates && startedCountdown) {
+			for (shader in LuaScript.lua_Shaders) {
 				shader.update(elapsed);
 			}
 
-			setLuaVar("songPos", Conductor.songPosition);
-			setLuaVar("hudZoom", camHUD.zoom);
-			setLuaVar("curBeat", curBeat);
-			setLuaVar("cameraZoom", FlxG.camera.zoom);
-			setLuaVar("bpm", Conductor.bpm);
-			setLuaVar("songBpm", Conductor.bpm);
-			setLuaVar("crochet", Conductor.crochet);
-			setLuaVar("stepCrochet", Conductor.stepCrochet);
-			setLuaVar("Conductor", {
+			set("songPos", Conductor.songPosition);
+			set("hudZoom", camHUD.zoom);
+			set("curBeat", curBeat);
+			set("cameraZoom", FlxG.camera.zoom);
+			set("bpm", Conductor.bpm);
+			set("songBpm", Conductor.bpm);
+			set("crochet", Conductor.crochet);
+			set("stepCrochet", Conductor.stepCrochet);
+			set("conductor", {
 				bpm: Conductor.bpm,
 				crochet: Conductor.crochet,
 				stepCrochet: Conductor.stepCrochet,
@@ -2530,7 +2490,7 @@ class PlayState extends MusicBeatState {
 				curBeat: curBeat,
 				curStep: curStep,
 			});
-			setLuaVar("FlxG", {
+			set("flxG", {
 				width: FlxG.width,
 				height: FlxG.height,
 				elapsed: FlxG.elapsed,
@@ -2538,19 +2498,19 @@ class PlayState extends MusicBeatState {
 
 			call("update", [elapsed]);
 
-			var showOnlyStrums:Bool = getLuaVar("showOnlyStrums", "bool");
+			var showOnlyStrums:Bool = getLuaVar("showOnlyStrums", "bool") ?? false;
 
 			healthBarBG.visible = healthBar.visible = iconP1.visible = iconP2.visible = scoreTxt.visible = timeBar.visible = !showOnlyStrums;
 			if (Options.getData("sideRatings"))
 				ratingText.visible = !showOnlyStrums;
 
 			for (i in 0...SONG.keyCount) {
-				strumLineNotes.members[i].visible = getLuaVar("strumLine1Visible", "bool");
+				strumLineNotes.members[i].visible = getLuaVar("strumLine1Visible", "bool") ?? true;
 			}
 
 			for (i in 0...SONG.playerKeyCount) {
 				if (i <= playerStrums.length)
-					playerStrums.members[i].visible = getLuaVar("strumLine2Visible", "bool");
+					playerStrums.members[i].visible = getLuaVar("strumLine2Visible", "bool") ?? true;
 			}
 
 			if (!canFullscreen && FlxG.fullscreen)
@@ -2568,7 +2528,7 @@ class PlayState extends MusicBeatState {
 
 	override function destroy() {
 		call("onDestroy", []);
-		closeLua();
+		closeScripts();
 		super.destroy();
 	}
 
@@ -2665,12 +2625,12 @@ class PlayState extends MusicBeatState {
 
 				switch (cutscene.type.toLowerCase()) {
 					case "script":
-						var cutscene:HScript = new HScript(Paths.hx('data/${cutscene.scriptPath}'));
-						for (object in stage.stage_Objects) {
-							cutscene.interp.variables.set(object[0], object[1]);
+						var cutsceneScript:HScript = new HScript(Paths.hx('data/${cutscene.scriptPath}'));
+						for (object in stage.stageObjects) {
+							cutsceneScript.interp.variables.set(object[0], object[1]);
 						}
-						scripts.push(cutscene);
-						cutscene.call("startCutscene");
+						scripts.set(cutscene.scriptPath, cutsceneScript);
+						cutsceneScript.call("startCutscene");
 					case "video":
 						startVideo(cutscene.videoPath, cutscene.videoExt, true);
 
@@ -3390,7 +3350,7 @@ class PlayState extends MusicBeatState {
 			]);
 
 			#if LUA_ALLOWED
-			setLuaVar("misses", misses);
+			set("misses", misses);
 			#end
 		}
 	}
@@ -3527,7 +3487,7 @@ class PlayState extends MusicBeatState {
 			&& (FlxG.sound.music.time > Conductor.songPosition + 5 || FlxG.sound.music.time < Conductor.songPosition - 5))
 			resyncVocals();
 
-		setLuaVar("curStep", curStep);
+		set("curStep", curStep);
 		call("stepHit", [curStep]);
 	}
 
@@ -3901,20 +3861,9 @@ class PlayState extends MusicBeatState {
 					}
 
 					#if LUA_ALLOWED
-					if (stage.stageScript != null)
-						stage.stageScript.setupTheShitCuzPullRequestsSuck();
-
-					if (generatedSomeDumbEventLuas) {
-						for (event in event_luas.keys()) {
-							if (event_luas.exists(event))
-								event_luas.get(event).setupTheShitCuzPullRequestsSuck();
-						}
-					}
-
-					if (luaScriptArray.length != 0) {
-						for (i in luaScriptArray) {
-							i.setupTheShitCuzPullRequestsSuck();
-						}
+					for (script in scripts) {
+						if (script is LuaScript)
+							script.setup();
 					}
 					#end
 				case "dad" | "opponent" | "1":
@@ -3939,20 +3888,9 @@ class PlayState extends MusicBeatState {
 					}
 
 					#if LUA_ALLOWED
-					if (stage.stageScript != null)
-						stage.stageScript.setupTheShitCuzPullRequestsSuck();
-
-					if (generatedSomeDumbEventLuas) {
-						for (event in event_luas.keys()) {
-							if (event_luas.exists(event))
-								event_luas.get(event).setupTheShitCuzPullRequestsSuck();
-						}
-					}
-
-					if (luaScriptArray.length != 0) {
-						for (i in luaScriptArray) {
-							i.setupTheShitCuzPullRequestsSuck();
-						}
+					for (script in scripts) {
+						if (script is LuaScript)
+							script.setup();
 					}
 					#end
 
@@ -3984,20 +3922,9 @@ class PlayState extends MusicBeatState {
 						}
 
 						#if LUA_ALLOWED
-						if (stage.stageScript != null)
-							stage.stageScript.setupTheShitCuzPullRequestsSuck();
-
-						if (generatedSomeDumbEventLuas) {
-							for (event in event_luas.keys()) {
-								if (event_luas.exists(event))
-									event_luas.get(event).setupTheShitCuzPullRequestsSuck();
-							}
-						}
-
-						if (luaScriptArray.length != 0) {
-							for (i in luaScriptArray) {
-								i.setupTheShitCuzPullRequestsSuck();
-							}
+						for (script in scripts) {
+							if (script is LuaScript)
+								script.setup();
 						}
 						#end
 					}
@@ -4038,113 +3965,35 @@ class PlayState extends MusicBeatState {
 		}
 	}
 
-	public inline function set(name:String, data:Dynamic, ?execute_on:Execute_On = BOTH, ?stage_data:Dynamic) {
-		setLuaVar(name, data, execute_on, stage_data);
+	public inline function set(name:String, data:Any, ?executeOn:ExecuteOn = BOTH) {
 		for (script in scripts) {
-			if (execute_on != STAGE) {
-				script.interp.variables.set(name, data);
+			if (script.executeOn == executeOn || executeOn == BOTH) {
+				script.set(name, data);
 			}
 		}
 	}
 
-	public inline function call(func:String, ?args:Array<Dynamic>, ?execute_on:Execute_On = BOTH, ?stage_arguments:Array<Dynamic>) {
-		hscriptCall(func, args, execute_on);
+	public function call(name:String, ?args:Array<Any>, ?executeOn:ExecuteOn = BOTH) {
+		for (script in scripts) {
+			if((script.executeOn == executeOn || executeOn == BOTH)){
+				script.call(name, args);
+			}
+		}
+	}
+
+	function getLuaVar(name:String, type:String):Any {
 		#if LUA_ALLOWED
-		executeALuaState(func, args, execute_on, stage_arguments);
-		#end
-	}
+		var luaVar:Any = null;
 
-	public function hscriptCall(func:String, ?args:Array<Dynamic>, ?execute_on:Execute_On = BOTH) {
-		if (scripts.length != 0 && execute_on != STAGE) {
-			for (cool_script in scripts) {
-				cool_script.call(func, args);
-			}
-		}
-
-		if (execute_on != STAGE) {
-			for (cool_script in hscriptEvents.keys()) {
-				if (hscriptEvents.exists(cool_script))
-					hscriptEvents.get(cool_script).call(func, args);
-			}
-		}
-	}
-
-	public function executeALuaState(name:String, arguments:Array<Dynamic>, ?execute_on:Execute_On = BOTH, ?stage_arguments:Array<Dynamic>) {
-		if (stage_arguments == null)
-			stage_arguments = arguments;
-
-		#if LUA_ALLOWED
-		if (stage.stageScript != null && execute_on != MODCHART)
-			stage.stageScript.executeState(name, stage_arguments);
-
-		if (execute_on != STAGE) {
-			for (script in event_luas.keys()) {
-				if (event_luas.exists(script))
-					event_luas.get(script).executeState(name, arguments);
-			}
-		}
-
-		if (luaScriptArray.length != 0 && execute_on != STAGE) {
-			for (script in luaScriptArray) {
-				script.executeState(name, arguments);
-			}
-		}
-		#end
-	}
-
-	public function setLuaVar(name:String, data:Dynamic, ?execute_on:Execute_On = BOTH, ?stage_data:Dynamic) {
-		if (stage_data == null)
-			stage_data = data;
-
-		#if LUA_ALLOWED
-		if (luaScriptArray.length != 0 && execute_on != STAGE) {
-			for (i in luaScriptArray) {
-				i.setVar(name, data);
-			}
-		}
-
-		if (stage.stageScript != null && execute_on != MODCHART)
-			stage.stageScript.setVar(name, stage_data);
-
-		if (execute_on != STAGE) {
-			for (script in event_luas.keys()) {
-				if (event_luas.exists(script))
-					event_luas.get(script).setVar(name, data);
-			}
-		}
-		#end
-	}
-
-	function getLuaVar(name:String, type:String):Dynamic {
-		#if LUA_ALLOWED
-		var luaVar:Dynamic = null;
-
-		// we prioritize modchart cuz frick you
-
-		if (stage.stageScript != null) {
-			var newLuaVar = stage.stageScript.getVar(name, type);
-
-			if (newLuaVar != null)
-				luaVar = newLuaVar;
-		}
-
-		for (script in event_luas.keys()) {
-			if (event_luas.exists(script)) {
-				var newLuaVar = event_luas.get(script).getVar(name, type);
+		for (script in scripts) {
+			if (script is LuaScript) {
+				var newLuaVar = cast(script, LuaScript).getVar(name, type);
 
 				if (newLuaVar != null)
 					luaVar = newLuaVar;
 			}
 		}
 
-		if (luaScriptArray.length != 0) {
-			for (i in luaScriptArray) {
-				var newLuaVar = i.getVar(name, type);
-
-				if (newLuaVar != null)
-					luaVar = newLuaVar;
-			}
-		}
 		if (luaVar != null)
 			return luaVar;
 		#end
@@ -4152,51 +4001,23 @@ class PlayState extends MusicBeatState {
 		return null;
 	}
 
-	public function closeLua() {
-		clearLuaObjects();
-
-		#if LUA_ALLOWED
-		if (stage.stageScript != null) {
-			stage.stageScript.die();
-			stage.stageScript = null;
+	public inline function closeScripts() {
+		for (script in scripts) {
+			script?.destroy();
 		}
-
-		if (generatedSomeDumbEventLuas) {
-			for (key in event_luas.keys()) {
-				var event_lua:ModchartUtilities = event_luas.get(key);
-				if (event_lua != null) {
-					event_lua.die();
-					event_lua = null;
-				}
-			}
-		}
-
-		if (luaScriptArray.length != 0) {
-			for (i in luaScriptArray) {
-				if (i != null) {
-					i.die();
-					i = null;
-				}
-			}
-		}
-		luaScriptArray = [];
-		#end
 	}
 
 	public function processEvent(event:Array<Dynamic>) {
 		#if LUA_ALLOWED
-		if (!event_luas.exists(event[0].toLowerCase()) && Assets.exists(Paths.lua("event data/" + event[0].toLowerCase()))) {
-			event_luas.set(event[0].toLowerCase(), new ModchartUtilities(PolymodAssets.getPath(Paths.lua("event data/" + event[0].toLowerCase()))));
-			generatedSomeDumbEventLuas = true;
-
+		if (scripts.exists(event[0].toLowerCase())) {
 			for (i in 0...strumLineNotes.length) {
 				var member = strumLineNotes.members[i];
 
-				event_luas.get(event[0].toLowerCase()).setVar("defaultStrum" + i + "X", member.x);
-				event_luas.get(event[0].toLowerCase()).setVar("defaultStrum" + i + "Y", member.y);
-				event_luas.get(event[0].toLowerCase()).setVar("defaultStrum" + i + "Angle", member.angle);
+				scripts.get(event[0].toLowerCase()).set("defaultStrum" + i + "X", member.x);
+				scripts.get(event[0].toLowerCase()).set("defaultStrum" + i + "Y", member.y);
+				scripts.get(event[0].toLowerCase()).set("defaultStrum" + i + "Angle", member.angle);
 
-				event_luas.get(event[0].toLowerCase()).setVar("defaultStrum" + i, {
+				scripts.get(event[0].toLowerCase()).set("defaultStrum" + i, {
 					x: member.x,
 					y: member.y,
 					angle: member.angle,
@@ -4204,9 +4025,6 @@ class PlayState extends MusicBeatState {
 			}
 		}
 		#end
-		if (!hscriptEvents.exists(event[0].toLowerCase()) && Assets.exists(Paths.hx("data/event data/" + event[0].toLowerCase()))) {
-			hscriptEvents.set(event[0].toLowerCase(), new HScript(Paths.hx("data/event data/" + event[0].toLowerCase())));
-		}
 
 		EventHandeler.processEvent(this, event);
 
@@ -4219,7 +4037,7 @@ class PlayState extends MusicBeatState {
 			accuracy = FlxMath.roundDecimal(100.0 / (totalNotes / hitNotes), 2);
 
 		#if LUA_ALLOWED
-		setLuaVar("accuracy", accuracy);
+		set("accuracy", accuracy);
 		#end
 
 		updateRating();
@@ -4241,7 +4059,6 @@ class PlayState extends MusicBeatState {
 		}
 
 		if (Assets.exists(Paths.songEvents(SONG.song.toLowerCase(), storyDifficultyStr.toLowerCase())) && loadChartEvents) {
-			@:privateAccess
 			var eventFunnies:Array<Array<Dynamic>> = SongLoader.parseLegacy(Json.parse(Assets.getText(Paths.songEvents(SONG.song.toLowerCase(),
 				storyDifficultyStr.toLowerCase()))), SONG.song)
 				.events;
@@ -4332,21 +4149,17 @@ class PlayState extends MusicBeatState {
 						funnyStage.visible = false;
 
 						stageMap.set(event[2], funnyStage);
-
-						trace(funnyStage.stage);
 					}
 				}
 
 				#if LUA_ALLOWED
-				if (!event_luas.exists(event[0].toLowerCase()) && Assets.exists(Paths.lua("event data/" + event[0].toLowerCase()))) {
-					event_luas.set(event[0].toLowerCase(), new ModchartUtilities(PolymodAssets.getPath(Paths.lua("event data/" + event[0].toLowerCase()))));
-					generatedSomeDumbEventLuas = true;
+				if (!scripts.exists(event[0].toLowerCase()) && Assets.exists(Paths.lua("event data/" + event[0].toLowerCase()))) {
+					scripts.set(event[0].toLowerCase(), new LuaScript(PolymodAssets.getPath(Paths.lua("event data/" + event[0].toLowerCase()))));
 				}
 				#end
 
-				if (!hscriptEvents.exists(event[0].toLowerCase())
-					&& Assets.exists(Paths.hx("data/event data/" + event[0].toLowerCase()))) {
-					hscriptEvents.set(event[0].toLowerCase(), new HScript(Paths.hx("data/event data/" + event[0].toLowerCase())));
+				if (!scripts.exists(event[0].toLowerCase()) && Assets.exists(Paths.hx("data/event data/" + event[0].toLowerCase()))) {
+					scripts.set(event[0].toLowerCase(), new HScript(Paths.hx("data/event data/" + event[0].toLowerCase())));
 				}
 			}
 
@@ -4358,13 +4171,12 @@ class PlayState extends MusicBeatState {
 
 	public function setupNoteTypeScript(noteType:String) {
 		#if LUA_ALLOWED
-		if (!event_luas.exists(noteType.toLowerCase()) && Assets.exists(Paths.lua("arrow types/" + noteType))) {
-			event_luas.set(noteType.toLowerCase(), new ModchartUtilities(PolymodAssets.getPath(Paths.lua("arrow types/" + noteType))));
-			generatedSomeDumbEventLuas = true;
+		if (!scripts.exists(noteType.toLowerCase()) && Assets.exists(Paths.lua("arrow types/" + noteType))) {
+			scripts.set(noteType.toLowerCase(), new LuaScript(PolymodAssets.getPath(Paths.lua("arrow types/" + noteType))));
 		}
 		#end
 		if (Assets.exists(Paths.hx("data/arrow types/" + noteType))) {
-			scripts.push(new HScript(Paths.hx("data/arrow types/" + noteType)));
+			scripts.set(noteType.toLowerCase(), new HScript(Paths.hx("data/arrow types/" + noteType)));
 		}
 	}
 
@@ -4406,7 +4218,7 @@ class PlayState extends MusicBeatState {
 	}
 
 	@:noCompletion function set_speed(speed:Float):Float {
-		if(Options.getData("useCustomScrollSpeed")){
+		if (Options.getData("useCustomScrollSpeed")) {
 			speed = Options.getData("customScrollSpeed") / songMultiplier;
 		}
 		if (notes?.members != null && unspawnNotes != null) {
@@ -4479,10 +4291,4 @@ class PlayState extends MusicBeatState {
 		#end
 	}
 	#end
-}
-
-enum Execute_On {
-	BOTH;
-	MODCHART;
-	STAGE;
 }

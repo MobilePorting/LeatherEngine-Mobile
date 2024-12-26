@@ -442,7 +442,7 @@ class StageMakingState extends MusicBeatState {
 				case 'alpha_stepper':
 					if (selectedObject != 0 || selected == bf_Pos || selected == dad_Pos || selected == gf_Pos) {
 						if (!(selected == bf_Pos || selected == dad_Pos || selected == gf_Pos))
-							Reflect.setProperty(stage.stage_Objects[selectedObject - 1][1], "alpha", nums.value);
+							Reflect.setProperty(stage.stageObjects[selectedObject - 1][1], "alpha", nums.value);
 						else {
 							if (selected == bf_Pos)
 								bf.alpha = nums.value;
@@ -457,7 +457,7 @@ class StageMakingState extends MusicBeatState {
 					}
 				case 'scroll_stepper':
 					if (selectedObject != 0 && !(selected == bf_Pos || selected == dad_Pos || selected == gf_Pos)) {
-						var cool:Dynamic = stage.stage_Objects[selectedObject - 1][1];
+						var cool:Dynamic = stage.stageObjects[selectedObject - 1][1];
 
 						cool.scrollFactor.set(nums.value, nums.value);
 
@@ -735,7 +735,7 @@ class StageMakingState extends MusicBeatState {
 		stage = new StageGroup(stage_Name);
 		add(stage);
 		
-		stageData = stage.stage_Data;
+		stageData = stage.stageData;
 
 		stage.setCharOffsets(bf, gf, dad);
 
@@ -810,7 +810,7 @@ class StageMakingState extends MusicBeatState {
 		add(gf_Pos);
 		add(dad_Pos);
 
-		for (objectArray in stage.stage_Objects) {
+		for (objectArray in stage.stageObjects) {
 			objects.push([objectArray[0], objectArray[1]]);
 
 			var sprite = objectArray[1];

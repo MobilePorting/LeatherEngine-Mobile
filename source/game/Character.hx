@@ -162,7 +162,7 @@ class Character extends FlxSprite {
 			script = new HScript(Paths.hx("data/character data/" + characterName + "/script"));
 
 			script.interp.variables.set("character", this);
-			PlayState.instance.scripts.push(script);
+			PlayState.instance.scripts.set(characterName, script);
 			script.call("createCharacter", [curCharacter]);
 		}
 

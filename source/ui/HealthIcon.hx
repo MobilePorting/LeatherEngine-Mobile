@@ -63,16 +63,18 @@ class HealthIcon extends TrackerSprite {
 				loadGraphic(Paths.gpuBitmap('icons/$iconPath'), true, Std.int(dummy.width / 2), Std.int(dummy.height));
 			else
 				loadGraphic(Paths.gpuBitmap('icons/$iconPath'), true, 150, 150);
+			
+			var winFrame:Int = (dummy.width >= 450 ? 2 : 0);
+			var loseFrame:Int = (dummy.width >= 300 ? 1 : 0);
+			
 			dummy.destroy();
 			dummy = null;
-			var winFrame:Int = (width >= 450 ? 2 : 0);
-			var loseFrame:Int = (width >= 300 ? 1 : 0);
 
 			animation.add('win', [winFrame], 0, false, isPlayer);
 			animation.add('lose', [loseFrame], 0, false, isPlayer);
 			animation.add('neutral', [0], 0, false, isPlayer);
 		}
-		animation.play('neutral');
+		animation.play('win');
 
 		scale.set(iconConfig.scale, iconConfig.scale);
 		offsetX = iconConfig.offset[0];

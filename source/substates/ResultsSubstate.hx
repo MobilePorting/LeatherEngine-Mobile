@@ -344,7 +344,7 @@ class ResultsSubstate extends MusicBeatSubstate {
 		add(soundSystem);
 		insert(members.indexOf(soundSystem), clearPercentSmall);
 
-		resultsAnim.animation.addByPrefix("result", "results instance 1", 24, false);
+		resultsAnim.animation.addByPrefix("result", "results", 24, false);
 		resultsAnim.visible = false;
 		// resultsAnim.zIndex = 1200;
 		resultsAnim.antialiasing = Options.getData("antialiasing");

@@ -10,65 +10,45 @@ import hscript.*;
 
 /**
 	Handles HScript for you.
-
-	@author Leather128
 **/
-class HScript {
+class HScript extends Script {
 	/**
 		Parses the HScript.
-
-		@author Leather128
 	**/
 	public var parser:Parser = new Parser();
 
 	/**
 		Current Expression.
-
-		@author Leather128
 	**/
 	public var program:Expr;
 
 	/**
 		Interprets the HScript.
-
-		@author Leather128
 	**/
 	public var interp:Interp = new Interp();
 
-	/**
-		Array of other scripts to call functions from (that were loaded from the script).
 
-		@author Leather128
-	**/
-	public var other_scripts:Array<HScript> = [];
-
-	/**
-		`Bool` representation for if the `createPost` function has been called yet (used in the `load` function).
-
-		@author Leather128
-	**/
-	public var create_post:Bool = false;
-
-	public function new(hscript_path:String) {
-		trace('Loading script at path \'${hscript_path}\'');
+	public function new(path:String) {
+		super(path);
 		// parser settings
 		parser.allowJSON = true;
 		parser.allowTypes = true;
 		parser.allowMetadata = true;
+		// parser.resumeErrors = true;
 
 		// load text
-		program = parser.parseString(FileSystem.exists(hscript_path) ? File.getContent(hscript_path) : Assets.getText(hscript_path));
+		program = parser.parseString(FileSystem.exists(path) ? File.getContent(path) : Assets.getText(path));
 
-		set_default_vars();
+		setup();
 
 		interp.execute(program);
-		call("create");
+		call("create", [path]);
 	}
 
 	public inline function update(elapsed:Float)
 		call("update", [elapsed]);
 
-	public function call(func:String, ?args:Array<Dynamic>) {
+	public override function call(func:String, ?args:Array<Any>):Bool {
 		if (interp.variables.exists(func)) {
 			var real_func = interp.variables.get(func);
 
@@ -78,90 +58,108 @@ class HScript {
 				else
 					Reflect.callMethod(null, real_func, args);
 			} catch (e) {
-				trace(e.details(), ERROR);
+				trace(name + extension + ": " + e.details(), ERROR);
 				trace("ERROR Caused in " + func + " with " + Std.string(args) + " args", ERROR);
+				return false;
 			}
 		}
 
-		for (other_script in other_scripts) {
-			other_script.call(func, args);
+		for (script in otherScripts) {
+			script.call(func, args);
+		}
+		return true;
+	}
+
+	override public function set(variable:String, value:Any){
+		interp.variables.set(variable, value);
+	}
+
+	override public function destroy(){
+		interp?.variables?.clear();
+		parser = null;
+		program = null;
+		interp = null;
+
+		for (script in otherScripts) {
+			script?.destroy();
 		}
 	}
 
-	public function set_default_vars() {
+	override public function setup() {
 		// global class shit
+		//setDefaults();
 
 		// haxeflixel classes
-		interp.variables.set("FlxG", flixel.FlxG);
-		interp.variables.set("FlxSprite", flixel.FlxSprite);
-		interp.variables.set("FlxSound", flixel.sound.FlxSound);
-		interp.variables.set('FlxCamera', flixel.FlxCamera);
-		interp.variables.set("FlxMath", flixel.math.FlxMath);
-		interp.variables.set('FlxTimer', flixel.util.FlxTimer);
-		interp.variables.set('FlxTween', flixel.tweens.FlxTween);
-		interp.variables.set("FlxTweenUtil", modding.helpers.FlxTweenUtil);
-		interp.variables.set("FlxText", modding.helpers.FlxTextFix);
-		interp.variables.set('FlxColor', modding.helpers.FlxColorHelper);
-		interp.variables.set('FlxEase', flixel.tweens.FlxEase);
-		interp.variables.set("Assets", openfl.utils.Assets);
-		interp.variables.set("LimeAssets", lime.utils.Assets);
-		interp.variables.set("Math", Math);
-		interp.variables.set("Std", Std);
-		interp.variables.set("StringTools", StringTools);
-		interp.variables.set("FlxRuntimeShader", flixel.addons.display.FlxRuntimeShader);
-		interp.variables.set("CustomShader", shaders.custom.CustomShader);
-		interp.variables.set('ShaderFilter', openfl.filters.ShaderFilter);
-		interp.variables.set('Json', haxe.Json);
-		interp.variables.set("FlxSpriteGroup", flixel.group.FlxSpriteGroup);
-		interp.variables.set("FlxAnimate", flxanimate.FlxAnimate);
-		interp.variables.set("FlxAtlasSprite", game.FlxAtlasSprite);
-		interp.variables.set("Map", haxe.ds.StringMap);
-		interp.variables.set("StringMap", haxe.ds.StringMap);
-		interp.variables.set("IntMap", haxe.ds.IntMap);
-		interp.variables.set("EnumValueMap", haxe.ds.EnumValueMap);
-		interp.variables.set("ObjectMap", haxe.ds.ObjectMap);
+		set("FlxG", flixel.FlxG);
+		set("FlxSprite", flixel.FlxSprite);
+		set("FlxSound", flixel.sound.FlxSound);
+		set('FlxCamera', flixel.FlxCamera);
+		set("FlxMath", flixel.math.FlxMath);
+		set('FlxTimer', flixel.util.FlxTimer);
+		set('FlxTween', flixel.tweens.FlxTween);
+		set("FlxTweenUtil", modding.helpers.FlxTweenUtil);
+		set("FlxText", modding.helpers.FlxTextFix);
+		set('FlxColor', modding.helpers.FlxColorHelper);
+		set('FlxEase', flixel.tweens.FlxEase);
+		set("Assets", openfl.utils.Assets);
+		set("LimeAssets", lime.utils.Assets);
+		set("Math", Math);
+		set("Std", Std);
+		set("StringTools", StringTools);
+		set("FlxRuntimeShader", flixel.addons.display.FlxRuntimeShader);
+		set("CustomShader", shaders.custom.CustomShader);
+		set('ShaderFilter', openfl.filters.ShaderFilter);
+		set('Json', haxe.Json);
+		set("FlxSpriteGroup", flixel.group.FlxSpriteGroup);
+		set("FlxAnimate", flxanimate.FlxAnimate);
+		set("FlxAtlasSprite", game.FlxAtlasSprite);
+		set("Map", haxe.ds.StringMap);
+		set("StringMap", haxe.ds.StringMap);
+		set("IntMap", haxe.ds.IntMap);
+		set("EnumValueMap", haxe.ds.EnumValueMap);
+		set("ObjectMap", haxe.ds.ObjectMap);
 
 
 
 		// game classes
-		interp.variables.set("PlayState", states.PlayState);
-		interp.variables.set("Conductor", game.Conductor);
-		interp.variables.set("Paths", Paths);
-		interp.variables.set("CoolUtil", utilities.CoolUtil);
-		interp.variables.set('Options', utilities.Options);
-		interp.variables.set('Character', game.Character);
-		interp.variables.set('Alphabet', ui.Alphabet);
-		interp.variables.set('CustomState', modding.custom.CustomState);
-		interp.variables.set('CustomSubstate', modding.custom.CustomSubstate);
+		set("PlayState", states.PlayState);
+		set("Conductor", game.Conductor);
+		set("Paths", Paths);
+		set("CoolUtil", utilities.CoolUtil);
+		set('Options', utilities.Options);
+		set('Character', game.Character);
+		set('Alphabet', ui.Alphabet);
+		set('CustomState', modding.custom.CustomState);
+		set('CustomSubstate', modding.custom.CustomSubstate);
 
 		#if DISCORD_ALLOWED
-		interp.variables.set('DiscordClient', utilities.Discord.DiscordClient);
+		set('DiscordClient', utilities.Discord.DiscordClient);
 		#end
 
 		#if MODDING_ALLOWED
-		interp.variables.set("Polymod", polymod.Polymod);
-		interp.variables.set("PolymodAssets", polymod.backends.PolymodAssets);
-		interp.variables.set('ModList', modding.ModList);
+		set("Polymod", polymod.Polymod);
+		set("PolymodAssets", polymod.backends.PolymodAssets);
+		set('ModList', modding.ModList);
 		#end
 
 		// modchart tools stuff
 		#if MODCHARTING_TOOLS
 		if (FlxG.state == PlayState.instance) {
-			interp.variables.set('PlayfieldRenderer', modcharting.PlayfieldRenderer);
-			interp.variables.set('ModchartUtil', modcharting.ModchartUtil);
-			interp.variables.set('Modifier', modcharting.Modifier);
-			interp.variables.set('NoteMovement', modcharting.NoteMovement);
-			interp.variables.set('NotePositionData', modcharting.NotePositionData);
-			interp.variables.set('ModchartFile', modcharting.ModchartFile);
+			set('PlayfieldRenderer', modcharting.PlayfieldRenderer);
+			set('ModchartUtil', modcharting.ModchartUtil);
+			set('Modifier', modcharting.Modifier);
+			set('NoteMovement', modcharting.NoteMovement);
+			set('NotePositionData', modcharting.NotePositionData);
+			set('ModchartFile', modcharting.ModchartFile);
 		}
 		#end
 		// function shits
 
-		interp.variables.set("import", function(class_name:String) {
+		set("import", function(class_name:String) {
 			var classes = class_name.split(".");
 
 			if (Type.resolveClass(class_name) != null)
-				interp.variables.set(classes[classes.length - 1], Type.resolveClass(class_name));
+				set(classes[classes.length - 1], Type.resolveClass(class_name));
 			else if (Type.resolveEnum(class_name) != null) {
 				var enum_new = {};
 				var good_enum = Type.resolveEnum(class_name);
@@ -170,50 +168,50 @@ class HScript {
 					Reflect.setField(enum_new, constructor, good_enum.createByName(constructor));
 				}
 
-				interp.variables.set(classes[classes.length - 1], enum_new);
+				set(classes[classes.length - 1], enum_new);
 			} else
 				trace(class_name + " isn't a valid class or enum!", WARNING);
 		});
 
-		interp.variables.set("trace", function(value:Dynamic) {
+		set("trace", function(value:Dynamic) {
 			trace(value);
 		});
 
-		interp.variables.set("load", function(script_path:String) {
-			var new_script:HScript = new HScript(script_path);
-			if (create_post)
-				new_script.call("createPost");
+		set("load", function(path:String) {
+			var newScript:HScript = new HScript(path);
+			if (createPost)
+				newScript.call("createPost", [path]);
 
-			other_scripts.push(new_script);
+			otherScripts.push(newScript);
 
-			return other_scripts.length - 1;
+			return otherScripts.length - 1;
 		});
 
-		interp.variables.set("unload", function(script_index:Int) {
-			if (other_scripts.length - 1 >= script_index)
-				other_scripts.remove(other_scripts[script_index]);
+		set("unload", function(script_index:Int) {
+			if (otherScripts.length - 1 >= script_index)
+				otherScripts.remove(otherScripts[script_index]);
 		});
 
-		interp.variables.set("otherScripts", other_scripts);
+		set("otherScripts", otherScripts);
 
 		// playstate local shit
-		interp.variables.set("bf", states.PlayState.boyfriend);
-		interp.variables.set("gf", states.PlayState.gf);
-		interp.variables.set("dad", states.PlayState.dad);
+		set("bf", states.PlayState.boyfriend);
+		set("gf", states.PlayState.gf);
+		set("dad", states.PlayState.dad);
 
-		interp.variables.set("removeStage", function() {
-			states.PlayState.instance.stage.stage_Objects = [];
+		set("removeStage", function() {
+			states.PlayState.instance.stage.stageObjects = [];
 
 			states.PlayState.instance.stage.infrontOfGFSprites.clear();
 			states.PlayState.instance.stage.foregroundSprites.clear();
 			states.PlayState.instance.stage.clear();
 		});
 
-		interp.variables.set("add", function(object:FlxBasic) {
+		set("add", function(object:FlxBasic) {
 			FlxG.state.add(object);
 		});
 
-		interp.variables.set("remove", function(object:FlxBasic) {
+		set("remove", function(object:FlxBasic) {
 			FlxG.state.remove(object);
 		});
 	}

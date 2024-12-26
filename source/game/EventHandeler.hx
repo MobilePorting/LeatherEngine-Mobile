@@ -205,18 +205,14 @@ class EventHandeler {
 
 					game.defaultCamZoom = game.stage.camZoom;
 
-					game.camGame.bgColor = FlxColor.fromString(game.stage.stage_Data.backgroundColor ?? "#000000");
-
-					#if LUA_ALLOWED
-					game.stage.createLuaStuff();
-					#end
+					game.camGame.bgColor = FlxColor.fromString(game.stage.stageData.backgroundColor ?? "#000000");
 
 					game.call("create", [game.stage.stage], STAGE);
 					game.call("createStage", [game.stage.stage]);
 
 					#if LUA_ALLOWED
 					if (game.stage.stageScript != null)
-						game.stage.stageScript.setupTheShitCuzPullRequestsSuck();
+						game.stage.stageScript.setup();
 					#end
 
 					game.call("start", [game.stage.stage], STAGE);
@@ -262,29 +258,29 @@ class EventHandeler {
 				modcharting.NoteMovement.getDefaultStrumPos(game);
 				#end
 				#if LUA_ALLOWED
-				game.setLuaVar("playerKeyCount", newPlayerKeyCount);
-				game.setLuaVar("keyCount", newKeyCount);
+				game.set("playerKeyCount", newPlayerKeyCount);
+				game.set("keyCount", newKeyCount);
 				for (i in 0...PlayState.strumLineNotes.length) {
 					var member = PlayState.strumLineNotes.members[i];
 
-					game.setLuaVar("defaultStrum" + i + "X", member.x);
-					game.setLuaVar("defaultStrum" + i + "Y", member.y);
-					game.setLuaVar("defaultStrum" + i + "Angle", member.angle);
+					game.set("defaultStrum" + i + "X", member.x);
+					game.set("defaultStrum" + i + "Y", member.y);
+					game.set("defaultStrum" + i + "Angle", member.angle);
 
-					game.setLuaVar("defaultStrum" + i, {
+					game.set("defaultStrum" + i, {
 						x: member.x,
 						y: member.y,
 						angle: member.angle,
 					});
 
 					if (PlayState.enemyStrums.members.contains(member)) {
-						game.setLuaVar("enemyStrum" + i % PlayState.SONG.keyCount, {
+						game.set("enemyStrum" + i % PlayState.SONG.keyCount, {
 							x: member.x,
 							y: member.y,
 							angle: member.angle,
 						});
 					} else {
-						game.setLuaVar("playerStrum" + i % PlayState.SONG.playerKeyCount, {
+						game.set("playerStrum" + i % PlayState.SONG.playerKeyCount, {
 							x: member.x,
 							y: member.y,
 							angle: member.angle,

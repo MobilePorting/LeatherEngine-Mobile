@@ -466,7 +466,7 @@ class ChartingStateRevamp extends MusicBeatState {
 
 		Current_Notes.forEach(function(Note:Note) {
 			remove(Note);
-			Note.kill();
+			//if (!Options.getData("botplay")) Note.kill();
 			Note.destroy();
 		});
 

@@ -4234,7 +4234,7 @@ class PlayState extends MusicBeatState {
 
 	public function openChartEditor():Void
 	{
-		closeLua();
+		closeScripts();
 
 		PlayState.chartingMode = true;
 
@@ -4254,7 +4254,7 @@ class PlayState extends MusicBeatState {
 
 	public function openCharacterEditor():Void
 	{
-		closeLua();
+		closeScripts();
 
 		switchedStates = true;
 
@@ -4275,7 +4275,7 @@ class PlayState extends MusicBeatState {
 	#if MODCHARTING_TOOLS
 	public function openModchartEditor():Void
 	{
-		closeLua();
+		closeScripts();
 
 		switchedStates = true;
 

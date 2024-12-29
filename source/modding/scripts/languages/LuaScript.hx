@@ -3380,7 +3380,7 @@ class LuaScript extends Script {
 		}
 		#end
 
-		setLuaFunction("vibrate", (duration:Null<Int>, ?period:Null<Int>) ->
+		setFunction("vibrate", (duration:Null<Int>, ?period:Null<Int>) ->
 		{
 			if (duration == null)
 				return trace('vibrate: No duration specified.');
@@ -3396,16 +3396,16 @@ class LuaScript extends Script {
 		setVar("isChromebook", AndroidTools.isChromebook());
 		setVar("isDeXMode", AndroidTools.isDeXMode());
 
-		setLuaFunction("backJustPressed", FlxG.android.justPressed.BACK);
-		setLuaFunction("backPressed", FlxG.android.pressed.BACK);
-		setLuaFunction("backJustReleased", FlxG.android.justReleased.BACK);
+		setFunction("backJustPressed", FlxG.android.justPressed.BACK);
+		setFunction("backPressed", FlxG.android.pressed.BACK);
+		setFunction("backJustReleased", FlxG.android.justReleased.BACK);
 
-		setLuaFunction("menuJustPressed", FlxG.android.justPressed.MENU);
-		setLuaFunction("menuPressed", FlxG.android.pressed.MENU);
-		setLuaFunction("menuJustReleased", FlxG.android.justReleased.MENU);
+		setFunction("menuJustPressed", FlxG.android.justPressed.MENU);
+		setFunction("menuPressed", FlxG.android.pressed.MENU);
+		setFunction("menuJustReleased", FlxG.android.justReleased.MENU);
 
-		setLuaFunction("getCurrentOrientation", () -> LeatherJNI.getCurrentOrientationAsString());
-		setLuaFunction("setOrientation", function(hint:Null<String>):Void
+		setFunction("getCurrentOrientation", () -> LeatherJNI.getCurrentOrientationAsString());
+		setFunction("setOrientation", function(hint:Null<String>):Void
 			{
 				switch (hint.toLowerCase())
 				{
@@ -3425,9 +3425,9 @@ class LuaScript extends Script {
 				LeatherJNI.setOrientation(FlxG.stage.stageWidth, FlxG.stage.stageHeight, false, hint);
 			});
 
-		setLuaFunction("minimizeWindow", () -> AndroidTools.minimizeWindow());
+		setFunction("minimizeWindow", () -> AndroidTools.minimizeWindow());
 
-		setLuaFunction("showToast", function(text:String, duration:Null<Int>, ?xOffset:Null<Int>, ?yOffset:Null<Int>) //, ?gravity:Null<Int>
+		setFunction("showToast", function(text:String, duration:Null<Int>, ?xOffset:Null<Int>, ?yOffset:Null<Int>) //, ?gravity:Null<Int>
 		{
 			if (text == null)
 				return trace('showToast: No text specified.');
@@ -3442,19 +3442,19 @@ class LuaScript extends Script {
 			AndroidToast.makeText(text, duration, -1, xOffset, yOffset);
 		});
 
-		setLuaFunction("isScreenKeyboardShown", () -> LeatherJNI.isScreenKeyboardShown());
+		setFunction("isScreenKeyboardShown", () -> LeatherJNI.isScreenKeyboardShown());
 
-		setLuaFunction("clipboardHasText", () -> LeatherJNI.clipboardHasText());
-		setLuaFunction("clipboardGetText", () -> LeatherJNI.clipboardGetText());
-		setLuaFunction("clipboardSetText", function(text:Null<String>):Void
+		setFunction("clipboardHasText", () -> LeatherJNI.clipboardHasText());
+		setFunction("clipboardGetText", () -> LeatherJNI.clipboardGetText());
+		setFunction("clipboardSetText", function(text:Null<String>):Void
 		{
 			if (text != null) return trace('clipboardSetText: No text specified.');
 			LeatherJNI.clipboardSetText(text);
 		});
 
-		setLuaFunction("manualBackButton", () -> LeatherJNI.manualBackButton());
+		setFunction("manualBackButton", () -> LeatherJNI.manualBackButton());
 
-		setLuaFunction("setActivityTitle", function(text:Null<String>):Void
+		setFunction("setActivityTitle", function(text:Null<String>):Void
 		{
 			if (text != null) return trace('setActivityTitle: No text specified.');
 			LeatherJNI.setActivityTitle(text);

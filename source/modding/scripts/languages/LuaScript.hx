@@ -3390,11 +3390,11 @@ class LuaScript extends Script {
 		});
 
 		#if android
-		setVar("isDolbyAtmos", AndroidTools.isDolbyAtmos());
-		setVar("isAndroidTV", AndroidTools.isAndroidTV());
-		setVar("isTablet", AndroidTools.isTablet());
-		setVar("isChromebook", AndroidTools.isChromebook());
-		setVar("isDeXMode", AndroidTools.isDeXMode());
+		set("isDolbyAtmos", AndroidTools.isDolbyAtmos());
+		set("isAndroidTV", AndroidTools.isAndroidTV());
+		set("isTablet", AndroidTools.isTablet());
+		set("isChromebook", AndroidTools.isChromebook());
+		set("isDeXMode", AndroidTools.isDeXMode());
 
 		setFunction("backJustPressed", FlxG.android.justPressed.BACK);
 		setFunction("backPressed", FlxG.android.pressed.BACK);

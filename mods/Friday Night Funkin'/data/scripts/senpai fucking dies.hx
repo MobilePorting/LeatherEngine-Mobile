@@ -7,7 +7,7 @@ function startCutscene() {
 	var senpaiEvil:FlxSprite = new FlxSprite();
 	senpaiEvil.frames = Paths.getSparrowAtlas('cutscenes/week6/senpaiButHeFuckingDies', 'shared');
 	senpaiEvil.animation.addByPrefix('idle', 'Senpai Pre Explosion', 24, false);
-	senpaiEvil.setGraphicSize(Std.int(senpaiEvil.width * 6));
+	senpaiEvil.setGraphicSize(senpaiEvil.width * 6);
 	senpaiEvil.scrollFactor.set();
 	senpaiEvil.updateHitbox();
 	senpaiEvil.screenCenter();

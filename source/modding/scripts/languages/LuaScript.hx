@@ -465,7 +465,7 @@ class LuaScript extends Script {
 			return Reflect.getProperty(FlxG.keys.justReleased, key);
 		});
 
-		setFunction("setGraphicSize", function(id:String, width:Int = 0, height:Int = 0) {
+		setFunction("setGraphicSize", function(id:String, width:Float = 0, height:Float = 0) {
 			var actor:FlxSprite = getActorByName(id);
 
 			if (actor != null)
@@ -1302,7 +1302,7 @@ class LuaScript extends Script {
 		});
 
 		setFunction("setRenderedNoteScale", function(scale:Float, id:Int) {
-			PlayState.instance.notes.members[id].setGraphicSize(Std.int(PlayState.instance.notes.members[id].width * scale));
+			PlayState.instance.notes.members[id].setGraphicSize(PlayState.instance.notes.members[id].width * scale);
 		});
 
 		setFunction("setRenderedNoteScale", function(scaleX:Int, scaleY:Int, id:Int) {
@@ -1736,12 +1736,12 @@ class LuaScript extends Script {
 
 		setFunction("setActorScale", function(scale:Float, id:String) {
 			if (getActorByName(id) != null)
-				getActorByName(id).setGraphicSize(Std.int(getActorByName(id).width * scale));
+				getActorByName(id).setGraphicSize(getActorByName(id).width * scale);
 		});
 
 		setFunction("setActorScaleXY", function(scaleX:Float, scaleY:Float, id:String) {
 			if (getActorByName(id) != null)
-				getActorByName(id).setGraphicSize(Std.int(getActorByName(id).width * scaleX), Std.int(getActorByName(id).height * scaleY));
+				getActorByName(id).setGraphicSize(getActorByName(id).width * scaleX, getActorByName(id).height * scaleY);
 		});
 
 		setFunction("setActorFlipX", function(flip:Bool, id:String) {

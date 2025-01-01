@@ -181,7 +181,7 @@ class HUDAdjustment extends MusicBeatState {
 		initRatingX = rating.x -= (Options.getData("middlescroll") ? 350 : (Options.getData("playAs") == 0 ? 0 : -150));
 		initRatingY = rating.y -= 60;
 		rating.camera = hud;
-		rating.setGraphicSize(Std.int(rating.width * Std.parseFloat(uiSettings[0]) * Std.parseFloat(uiSettings[4])));
+		rating.setGraphicSize(rating.width * Std.parseFloat(uiSettings[0]) * Std.parseFloat(uiSettings[4]));
 		rating.antialiasing = uiSettings[3] == "true";
 		rating.updateHitbox();
 		rating.draggable = true;
@@ -217,7 +217,7 @@ class HUDAdjustment extends MusicBeatState {
 		initComboX = combo.x -= (Options.getData("middlescroll") ? 350 : (Options.getData("playAs") == 0 ? 0 : -150)) + 90;
 		initComboY = combo.y += 80;
 		combo.camera = hud;
-		combo.setGraphicSize(Std.int(combo.width * Std.parseFloat(uiSettings[1])));
+		combo.setGraphicSize(combo.width * Std.parseFloat(uiSettings[1]));
 		combo.antialiasing = uiSettings[3] == "true";
 		combo.updateHitbox();
 		combo.draggable = true;

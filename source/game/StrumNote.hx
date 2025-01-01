@@ -79,7 +79,7 @@ class StrumNote extends FlxSkewedSprite {
 
 		antialiasing = ui_settings[3] == "true";
 
-		setGraphicSize(Std.int((width * Std.parseFloat(ui_settings[0])) * (Std.parseFloat(ui_settings[2]) - (Std.parseFloat(mania_size[keyCount - 1])))));
+		setGraphicSize((width * Std.parseFloat(ui_settings[0])) * (Std.parseFloat(ui_settings[2]) - (Std.parseFloat(mania_size[keyCount - 1]))));
 		updateHitbox();
 		noteColor = NoteColors.getNoteColor(NoteVariables.animationDirections[keyCount - 1][noteData]);
 		shader = affectedbycolor ? colorSwap.shader : null;

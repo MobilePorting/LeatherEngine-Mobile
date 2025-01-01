@@ -51,7 +51,7 @@ class NoteSplash extends FlxSprite {
 			false);
 		animation.play("default", true);
 
-		setGraphicSize(Std.int(target.width * 2.5));
+		setGraphicSize(target.width * 2.5);
 
 		antialiasing = target.antialiasing;
 

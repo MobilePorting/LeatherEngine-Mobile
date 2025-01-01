@@ -54,7 +54,7 @@ class ModsMenu extends MusicBeatState {
 		menuBG = new FlxSprite().makeBackground(0xFFea71fd);
 
 		menuBG.color = 0xFFea71fd;
-		menuBG.setGraphicSize(Std.int(menuBG.width * 1.1));
+		menuBG.setGraphicSize(menuBG.width * 1.1);
 		menuBG.updateHitbox();
 		menuBG.screenCenter();
 		menuBG.antialiasing = true;

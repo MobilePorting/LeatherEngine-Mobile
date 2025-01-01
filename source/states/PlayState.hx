@@ -1382,7 +1382,7 @@ class PlayState extends MusicBeatState {
 					ready.updateHitbox();
 					ready.antialiasing = ui_settings[3] == "true";
 
-					ready.setGraphicSize(Std.int(ready.width * Std.parseFloat(ui_settings[0]) * Std.parseFloat(ui_settings[7])));
+					ready.setGraphicSize(ready.width * Std.parseFloat(ui_settings[0]) * Std.parseFloat(ui_settings[7]));
 					ready.updateHitbox();
 
 					ready.screenCenter();
@@ -1400,7 +1400,7 @@ class PlayState extends MusicBeatState {
 					set.updateHitbox();
 					set.antialiasing = ui_settings[3] == "true";
 
-					set.setGraphicSize(Std.int(set.width * Std.parseFloat(ui_settings[0]) * Std.parseFloat(ui_settings[7])));
+					set.setGraphicSize(set.width * Std.parseFloat(ui_settings[0]) * Std.parseFloat(ui_settings[7]));
 					set.updateHitbox();
 
 					set.screenCenter();
@@ -1418,7 +1418,7 @@ class PlayState extends MusicBeatState {
 					go.updateHitbox();
 					go.antialiasing = ui_settings[3] == "true";
 
-					go.setGraphicSize(Std.int(go.width * Std.parseFloat(ui_settings[0]) * Std.parseFloat(ui_settings[7])));
+					go.setGraphicSize(go.width * Std.parseFloat(ui_settings[0]) * Std.parseFloat(ui_settings[7]));
 					go.updateHitbox();
 
 					go.screenCenter();
@@ -1765,7 +1765,7 @@ class PlayState extends MusicBeatState {
 				bruhVal += note.swagWidth + (2 + Std.parseFloat(mania_gap[SONG.playerKeyCount - 1]));
 			}
 
-			noteBG.setGraphicSize(Std.int(bruhVal), FlxG.height * 2);
+			noteBG.setGraphicSize(bruhVal, FlxG.height * 2);
 			noteBG.updateHitbox();
 
 			noteBG.x = playerStrums.members[0].x;
@@ -2847,7 +2847,7 @@ class PlayState extends MusicBeatState {
 
 		ratingsGroup.add(rating);
 
-		rating.setGraphicSize(Std.int(rating.width * Std.parseFloat(ui_settings[0]) * Std.parseFloat(ui_settings[4])));
+		rating.setGraphicSize(rating.width * Std.parseFloat(ui_settings[0]) * Std.parseFloat(ui_settings[4]));
 		rating.antialiasing = ui_settings[3] == "true";
 		rating.updateHitbox();
 
@@ -2876,7 +2876,7 @@ class PlayState extends MusicBeatState {
 			numScore.x += Options.getData("comboOffset")[0];
 			numScore.y += Options.getData("comboOffset")[1];
 
-			numScore.setGraphicSize(Std.int(numScore.width * Std.parseFloat(ui_settings[1])));
+			numScore.setGraphicSize(numScore.width * Std.parseFloat(ui_settings[1]));
 			numScore.updateHitbox();
 
 			numScore.antialiasing = ui_settings[3] == "true";

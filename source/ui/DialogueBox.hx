@@ -158,7 +158,7 @@ class DialogueBox extends FlxSpriteGroup
 			box.scrollFactor.set(0,0);
 			box.updateHitbox();
 
-			box.setGraphicSize(Std.int(box.width * cutscene_Data.dialogueBoxSize));
+			box.setGraphicSize(box.width * cutscene_Data.dialogueBoxSize);
 			box.updateHitbox();
 		}
 
@@ -193,7 +193,7 @@ class DialogueBox extends FlxSpriteGroup
 			current_Section.rightPortrait.scale = 1;
 
 		portraitRight.loadPortrait(current_Section.rightPortrait.sprite);
-		portraitRight.setGraphicSize(Std.int(portraitRight.width * current_Section.rightPortrait.scale));
+		portraitRight.setGraphicSize(portraitRight.width * current_Section.rightPortrait.scale);
 		portraitRight.updateHitbox();
 
 		portraitRight.setPosition(
@@ -211,7 +211,7 @@ class DialogueBox extends FlxSpriteGroup
 			current_Section.leftPortrait.scale = 1;
 
 		portraitLeft.loadPortrait(current_Section.leftPortrait.sprite);
-		portraitLeft.setGraphicSize(Std.int(portraitLeft.width * current_Section.leftPortrait.scale));
+		portraitLeft.setGraphicSize(portraitLeft.width * current_Section.leftPortrait.scale);
 		portraitLeft.updateHitbox();
 
 		portraitLeft.setPosition(
@@ -262,7 +262,7 @@ class DialogueBox extends FlxSpriteGroup
 			if(current_Section.hand_Sprite.scale == null)
 				current_Section.hand_Sprite.scale = 1;
 			
-			hand.setGraphicSize(Std.int(hand.width * current_Section.hand_Sprite.scale));
+			hand.setGraphicSize(hand.width * current_Section.hand_Sprite.scale);
 			hand.updateHitbox();
 
 			hand.x = (box.x + box.width) - hand.width;

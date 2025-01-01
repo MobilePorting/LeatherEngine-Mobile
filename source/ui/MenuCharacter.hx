@@ -29,7 +29,7 @@ class MenuCharacter extends FlxSprite {
 			animation.addByPrefix("idle", characterData.Animation_Name, characterData.FPS, characterData.Animation_Looped);
 			animation.play("idle");
 
-			setGraphicSize(Std.int(width * characterData.Size));
+			setGraphicSize(width * characterData.Size);
 			updateHitbox();
 
 			offset.set(characterData.Offsets[0], characterData.Offsets[1]);

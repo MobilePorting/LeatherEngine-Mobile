@@ -134,9 +134,9 @@ class StageGroup extends FlxGroup {
 								Sprite.loadGraphic(Paths.gpuBitmap((stageData.imageDirectory ?? stage) + "/" + Object.file_Name, "stages"));
 
 							if (Object.uses_Frame_Width)
-								Sprite.setGraphicSize(Std.int(Sprite.frameWidth * Object.scale));
+								Sprite.setGraphicSize(Sprite.frameWidth * Object.scale);
 							else
-								Sprite.setGraphicSize(Std.int(Sprite.width * Object.scale));
+								Sprite.setGraphicSize(Sprite.width * Object.scale);
 
 							if (Object.updateHitbox || Object.updateHitbox == null)
 								Sprite.updateHitbox();

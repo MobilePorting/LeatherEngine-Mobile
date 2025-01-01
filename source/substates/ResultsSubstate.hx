@@ -411,9 +411,7 @@ class ResultsSubstate extends MusicBeatSubstate {
 		highscoreNew.animation.addByPrefix("new", "highscoreAnim0", 24, false);
 		highscoreNew.visible = false;
 		highscoreNew.antialiasing = Options.getData("antialiasing");
-		// highscoreNew.setGraphicSize(Std.int(highscoreNew.width * 0.8));
 		highscoreNew.updateHitbox();
-		// highscoreNew.zIndex = 1200;
 		add(highscoreNew);
 
 		new FlxTimer().start(rank.getHighscoreDelay(), _ -> {

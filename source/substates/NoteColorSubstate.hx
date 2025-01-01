@@ -249,7 +249,7 @@ class NoteColorSubstate extends MusicBeatSubstate
 
 			babyArrow.antialiasing = ui_settings[3] == "true";
 
-			babyArrow.setGraphicSize(Std.int((babyArrow.width * Std.parseFloat(ui_settings[0])) * (Std.parseFloat(ui_settings[2]) - (Std.parseFloat(mania_size[key_Count-1])))));
+			babyArrow.setGraphicSize((babyArrow.width * Std.parseFloat(ui_settings[0])) * (Std.parseFloat(ui_settings[2]) - (Std.parseFloat(mania_size[key_Count-1]))));
 			babyArrow.updateHitbox();
 
 			babyArrow.animation.addByPrefix('default', NoteVariables.animationDirections[key_Count - 1][i] + "0");

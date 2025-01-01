@@ -182,7 +182,7 @@ class UISkinSelect extends MusicBeatSubstate
             rating.alpha = 0;
             FlxTween.tween(rating, {y: rating.y + 10, alpha: 1}, 1, {ease: FlxEase.circOut, startDelay: 0.2});
 
-            rating.setGraphicSize(Std.int(rating.width * Std.parseFloat(ui_settings[0]) * Std.parseFloat(ui_settings[4])));
+            rating.setGraphicSize(rating.width * Std.parseFloat(ui_settings[0]) * Std.parseFloat(ui_settings[4]));
             rating.antialiasing = ui_settings[3] == "true";
             rating.updateHitbox();
 
@@ -197,7 +197,7 @@ class UISkinSelect extends MusicBeatSubstate
         combo.alpha = 0;
         FlxTween.tween(combo, {y: combo.y + 10, alpha: 1}, 1, {ease: FlxEase.circOut, startDelay: 0.2});
 
-        combo.setGraphicSize(Std.int(combo.width * Std.parseFloat(ui_settings[0]) * Std.parseFloat(ui_settings[4])));
+        combo.setGraphicSize(combo.width * Std.parseFloat(ui_settings[0]) * Std.parseFloat(ui_settings[4]));
         combo.antialiasing = ui_settings[3] == "true";
         combo.updateHitbox();
 
@@ -209,7 +209,7 @@ class UISkinSelect extends MusicBeatSubstate
 
             number.loadGraphic(Paths.gpuBitmap("ui skins/" + ui_Skin + "/numbers/num" + i, 'shared'));
 
-            number.setGraphicSize(Std.int(number.width * Std.parseFloat(ui_settings[1])));
+            number.setGraphicSize(number.width * Std.parseFloat(ui_settings[1]));
 			number.antialiasing = ui_settings[3] == "true";
 			number.updateHitbox();
 

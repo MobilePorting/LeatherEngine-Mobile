@@ -136,8 +136,9 @@ class LuaScript extends Script {
 	}
 
 	override public function destroy() {
+		trails.clear();
 		/*Lua.close(lua);
-		lua = null;*/
+			lua = null; */
 	}
 
 	function getLuaErrorMessage(l) {
@@ -146,7 +147,6 @@ class LuaScript extends Script {
 
 		return v;
 	}
-
 
 	override public function set(name:String, value:Any):Void {
 		Convert.toLua(lua, value);
@@ -169,7 +169,7 @@ class LuaScript extends Script {
 	}
 
 	public function new(path:String) {
-        super(path);
+		super(path);
 		lua = LuaL.newstate();
 		LuaL.openlibs(lua);
 
@@ -208,7 +208,7 @@ class LuaScript extends Script {
 
 		if (result != 0) {
 			CoolUtil.coolError("Lua ERROR:\n" + Lua.tostring(lua, result), "Leather Engine Modcharts");
-			//return;
+			// return;
 			// FlxG.switchState(new MainMenuState());
 		}
 
@@ -1367,6 +1367,54 @@ class LuaScript extends Script {
 
 		setFunction("isParentSustain", function(id:Int) {
 			return PlayState.instance.notes.members[id].prevNote.isSustainNote;
+		});
+
+		setFunction("setRenderedNoteColor", function(r:Float, g:Float, b:Float, id:Int) {
+			var note:Note = PlayState.instance.notes.members[id];
+			note.colorSwap.r = r;
+			note.colorSwap.g = g;
+			note.colorSwap.b = b;
+		});
+
+		setFunction("setUnspawnedNoteColor", function(r:Float, g:Float, b:Float, id:Int) {
+			var note:Note = PlayState.instance.unspawnNotes[id];
+			note.colorSwap.r = r;
+			note.colorSwap.g = g;
+			note.colorSwap.b = b;
+		});
+
+		setFunction("setRenderedNoteColorForce", function(r:Float, g:Float, b:Float, id:Int) {
+			var note:Note = PlayState.instance.notes.members[id];
+			note.shader = note.colorSwap.shader;
+			note.colorSwap.r = r;
+			note.colorSwap.g = g;
+			note.colorSwap.b = b;
+		});
+
+		setFunction("setUnspawnedNoteColorForce", function(r:Float, g:Float, b:Float, id:Int) {
+			var note:Note = PlayState.instance.unspawnNotes[id];
+			note.shader = note.colorSwap.shader;
+			note.colorSwap.r = r;
+			note.colorSwap.g = g;
+			note.colorSwap.b = b;
+		});
+
+		setFunction("getRenderedNoteColor", function(id:Int):Dynamic {
+			var note:Note = PlayState.instance.notes.members[id];
+			return {r: note.colorSwap.r, g: note.colorSwap.g, b: note.colorSwap.b};
+		});
+
+		setFunction("getUnspawnedNoteColor", function(id:Int):Dynamic {
+			var note:Note = PlayState.instance.unspawnNotes[id];
+			return {r: note.colorSwap.r, g: note.colorSwap.g, b: note.colorSwap.b};
+		});
+
+		setFunction("getRenderedNoteAffectedByColor", function(id:Int):Bool {
+			return PlayState.instance.notes.members[id].affectedbycolor;
+		});
+
+		setFunction("getUnspawnedNoteAffectedByColor", function(id:Int):Bool {
+			return PlayState.instance.notes.members[id].affectedbycolor;
 		});
 
 		setFunction("anyNotes", function() {
@@ -3350,7 +3398,7 @@ class LuaScript extends Script {
 			set('setModifier', function(beat:Float, argsAsString:String) {
 				ModchartFuncs.set(beat, argsAsString);
 			});
-            set('easeModifier', function(beat:Float, time:Float, easeStr:String, argsAsString:String) {
+			set('easeModifier', function(beat:Float, time:Float, easeStr:String, argsAsString:String) {
 				ModchartFuncs.ease(beat, time, easeStr, argsAsString);
 			});
 			set('ease', function(beat:Float, time:Float, easeStr:String, argsAsString:String) {
@@ -3577,7 +3625,7 @@ class LuaScript extends Script {
 	}
 
 	public override function call(func:String, ?arguments:Array<Any>):Bool {
-		if(arguments == null)
+		if (arguments == null)
 			arguments = [];
 
 		for (script in otherScripts) {
@@ -3593,8 +3641,7 @@ class LuaScript extends Script {
 		if (Lua.pcall(lua, arguments.length, 1, 0) != Lua.LUA_OK) {
 			Lua.pop(lua, 1);
 			return false;
-		}
-		else{
+		} else {
 			Lua.pop(lua, 1);
 			return true;
 		}

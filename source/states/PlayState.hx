@@ -2440,6 +2440,12 @@ class PlayState extends MusicBeatState {
 			#end
 		}
 
+		if(FlxG.keys.justPressed.F6){
+			Options.setData(!Options.getData("botplay"), "botplay");
+			set("bot", Options.getData("botplay"));
+			SONG.validScore = false;
+		}
+
 		if (!switchedStates) {
 			for (event in events) {
 				// activate funni lol

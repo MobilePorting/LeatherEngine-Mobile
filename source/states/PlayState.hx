@@ -760,6 +760,12 @@ class PlayState extends MusicBeatState {
 		DiscordClient.changePresence(detailsText, SONG.song + " (" + storyDifficultyStr + ")", iconRPC);
 		#end
 
+		
+		strumLine = new FlxSprite(0, 100).makeGraphic(FlxG.width, 10);
+
+		if (Options.getData("downscroll"))
+			strumLine.y = FlxG.height - 100;
+
 		// stage maker
 		stage = new StageGroup(Options.getData("charsAndBGs") ? curStage : "");
 		stageMap.set(stage.stage, stage);
@@ -856,11 +862,6 @@ class PlayState extends MusicBeatState {
 		add(stage.foregroundSprites);
 
 		Conductor.songPosition = -5000;
-
-		strumLine = new FlxSprite(0, 100).makeGraphic(FlxG.width, 10);
-
-		if (Options.getData("downscroll"))
-			strumLine.y = FlxG.height - 100;
 
 		strumLine.scrollFactor.set();
 
@@ -4005,6 +4006,22 @@ class PlayState extends MusicBeatState {
 		for (script in scripts) {
 			script?.destroy();
 		}
+
+		for (sound in LuaScript.lua_Sounds) {
+			sound?.stop();
+			sound?.kill();
+			sound?.destroy();
+		}
+		LuaScript.killShaders();
+		LuaScript.lua_Characters.clear();
+		LuaScript.lua_Sounds.clear();
+		LuaScript.lua_Sprites.clear();
+		LuaScript.lua_Shaders.clear();
+		LuaScript.lua_Custom_Shaders.clear();
+		LuaScript.lua_Cameras.clear();
+		LuaScript.lua_Jsons.clear();
+
+		scripts.clear();
 	}
 
 	public function processEvent(event:Array<Dynamic>) {

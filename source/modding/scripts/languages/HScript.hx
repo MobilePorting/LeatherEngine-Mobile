@@ -79,7 +79,7 @@ class HScript extends Script {
 		parser = null;
 		program = null;
 		interp = null;
-
+		
 		for (script in otherScripts) {
 			script?.destroy();
 		}

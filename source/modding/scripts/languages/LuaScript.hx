@@ -136,29 +136,8 @@ class LuaScript extends Script {
 	}
 
 	override public function destroy() {
-		PlayState.songMultiplier = oldMultiplier;
-
-		for (sound in LuaScript.lua_Sounds) {
-			sound?.stop();
-			sound?.kill();
-			sound?.destroy();
-		}
-		LuaScript.killShaders();
-		LuaScript.lua_Characters.clear();
-		LuaScript.lua_Sounds.clear();
-		LuaScript.lua_Sprites.clear();
-		LuaScript.lua_Shaders.clear();
-		LuaScript.lua_Custom_Shaders.clear();
-		LuaScript.lua_Cameras.clear();
-		LuaScript.lua_Jsons.clear();
-		trails.clear();
-
-		for(script in otherScripts){
-			script?.destroy();
-		}
-
-		Lua.close(lua);
-		lua = null;
+		/*Lua.close(lua);
+		lua = null;*/
 	}
 
 	function getLuaErrorMessage(l) {

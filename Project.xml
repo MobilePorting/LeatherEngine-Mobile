@@ -137,6 +137,10 @@
 	<!-- Do whatever you want I'm tired uninstall and install everytime -->
 	<certificate path="key.keystore" password="leatherengine" alias="leatherport" alias-password="leatherengine" if="android" unless="debug" />
 
+	<!-- Category Type for Apple Systems -->
+	<config:ios category_type="public.app-category.music-games" />
+	<config:mac category_type="public.app-category.music-games" />
+
 	<!--<haxedef name="HXCPP_GC_BIG_BLOCKS" />-->
 	<haxedef name="HXCPP_GC_GENERATIONAL" />
 

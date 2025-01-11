@@ -1417,6 +1417,22 @@ class LuaScript extends Script {
 			return PlayState.instance.notes.members[id].affectedbycolor;
 		});
 
+		setFunction("setRenderedNoteSpeed", function(speed:Float, id:Int) {
+			PlayState.instance.notes.members[id].speed = speed;
+		});
+
+		setFunction("getRenderedNoteSpeed", function(id:Int) {
+			return PlayState.instance.notes.members[id].speed;
+		});
+
+		setFunction("setUnspawnNoteSpeed", function(speed:Float, id:Int) {
+			PlayState.instance.unspawnNotes[id].speed = speed;
+		});
+
+		setFunction("getUnspawnNoteSpeed", function(id:Int) {
+			return PlayState.instance.unspawnNotes[id].speed;
+		});
+
 		setFunction("anyNotes", function() {
 			return PlayState.instance.notes.members.length != 0;
 		});

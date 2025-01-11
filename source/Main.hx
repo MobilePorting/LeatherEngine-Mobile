@@ -123,6 +123,10 @@ class Main extends Sprite {
 		display.infoDisplayed[3] = logsEnabled;
 	}
 
+	public static inline function toggleCommitHash(commitHashEnabled:Bool):Void {
+		display.infoDisplayed[4] = commitHashEnabled;
+	}
+
 	public static inline function changeFont(font:String):Void {
 		display.defaultTextFormat = new TextFormat(font, (font == "_sans" ? 12 : 14), display.textColor);
 	}

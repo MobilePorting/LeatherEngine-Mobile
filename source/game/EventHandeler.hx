@@ -172,7 +172,7 @@ class EventHandeler {
 				char.shouldDance = funny;
 			case "change character":
 				if (Options.getData("charsAndBGs"))
-					game.eventCharacterShit(event);
+					game.cacheEventCharacter(event);
 			case "change stage":
 				if (Options.getData("charsAndBGs")) {
 					game.removeBgStuff();

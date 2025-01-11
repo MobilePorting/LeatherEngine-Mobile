@@ -29,6 +29,7 @@ class GameOverSubstate extends MusicBeatSubstate {
 		instance = this;
 		super();
 		PlayState.playCutscenes = true;
+		FlxG.camera.bgColor = FlxColor.BLACK;
 
 		FlxG.camera.scroll.set();
 		FlxG.camera.target = null;

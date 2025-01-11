@@ -1,32 +1,11 @@
 package states;
 
-import utilities.Options;
-import substates.UISkinSelect;
-import substates.ControlMenuSubstate;
 import utilities.MusicUtilities;
 import ui.Option;
-import ui.Checkbox;
-import flixel.group.FlxGroup;
-import toolbox.ChartingState;
-import toolbox.StageMakingState;
-import flixel.sound.FlxSound;
-import toolbox.CharacterCreator;
-import utilities.Controls.Control;
-import openfl.text.TextField;
 import flixel.FlxG;
 import flixel.FlxSprite;
-import flixel.addons.display.FlxGridOverlay;
 import flixel.group.FlxGroup.FlxTypedGroup;
-import flixel.input.keyboard.FlxKey;
-import flixel.math.FlxMath;
-import flixel.text.FlxText;
-import flixel.util.FlxColor;
-import lime.utils.Assets;
-import ui.Alphabet;
-import game.SongLoader;
-import toolbox.StageMakingState;
-import game.Highscore;
-import openfl.utils.Assets as OpenFLAssets;
+import openfl.utils.Assets;
 
 using utilities.BackgroundUtil;
 
@@ -38,7 +17,7 @@ class OptionsMenu extends MusicBeatState {
 
 	#if android final lastStorageType = Options.getData("storageType"); #end
 
-	public var pages:Map<String, Array<Dynamic>> = [
+	public var pages:Map<String, Array<Option>> = [
 		"Categories" => [
 			new PageOption("Gameplay", "Gameplay", "Test Description"),
 			new PageOption("Graphics", "Graphics"),
@@ -115,12 +94,13 @@ class OptionsMenu extends MusicBeatState {
 			new PageOption("Back", "Graphics"),
 			new DisplayFontOption("Display Font", [
 				"_sans",
-				OpenFLAssets.getFont(Paths.font("vcr.ttf")).fontName,
-				OpenFLAssets.getFont(Paths.font("pixel.otf")).fontName
+				Assets.getFont(Paths.font("vcr.ttf")).fontName,
+				Assets.getFont(Paths.font("pixel.otf")).fontName
 			],
 				"infoDisplayFont"),
 			new BoolOption("FPS Counter", "fpsCounter"),
-			new BoolOption("Memory Counter", "memoryCounter")
+			new BoolOption("Memory Counter", "memoryCounter"),
+			new BoolOption("Commit Hash", "showCommitHash")
 		],
 		"Judgements" => [
 			new PageOption("Back", "Gameplay"),

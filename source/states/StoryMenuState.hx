@@ -23,6 +23,7 @@ import game.Highscore;
 
 using StringTools;
 
+@:publicFields
 class StoryMenuState extends MusicBeatState {
 	/* WEEK GROUPS */
 	static var groupIndex:Int = 0;

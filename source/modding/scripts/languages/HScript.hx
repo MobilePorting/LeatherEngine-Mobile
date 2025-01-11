@@ -1,5 +1,6 @@
 package modding.scripts.languages;
 
+import haxe.PosInfos;
 import states.PlayState;
 import openfl.utils.Assets;
 import sys.io.File;
@@ -173,9 +174,16 @@ class HScript extends Script {
 				trace(class_name + " isn't a valid class or enum!", WARNING);
 		});
 
-		set("trace", function(value:Dynamic) {
-			trace(value);
-		});
+
+		set("trace", Reflect.makeVarArgs(function(el) {
+			@:privateAccess
+			var inf = cast {fileName: path, lineNumber: interp.curExpr.line};
+			var v = el.shift();
+			if (el.length > 0)
+				inf.customParams = el;
+			
+			haxe.Log.trace(Std.string(v), inf);
+		}));
 
 		set("load", function(path:String) {
 			var newScript:HScript = new HScript(path);

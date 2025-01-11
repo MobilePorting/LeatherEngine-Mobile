@@ -41,6 +41,7 @@ import game.StageGroup;
 import game.StrumNote;
 import game.TimeBar;
 import lime.utils.Assets;
+import modding.*;
 import modding.scripts.*;
 import modding.scripts.languages.*;
 import substates.GameOverSubstate;
@@ -73,159 +74,160 @@ import modcharting.PlayfieldRenderer;
 /**
 	The main gameplay state.
 **/
+@:publicFields
 class PlayState extends MusicBeatState {
 	/**
 		Current instance of `PlayState`.
 	**/
-	public static var instance:PlayState = null;
+	static var instance:PlayState = null;
 
 	/**
 		The current stage in `PlayState`.
 	**/
-	public static var curStage:String = '';
+	static var curStage:String = '';
 
 	/**
 		Current song data in `PlayState`.
 	**/
-	public static var SONG:SongData;
+	static var SONG:SongData;
 
 	/**
 		`Bool` for whether we are currently in Story Mode.
 	**/
-	public static var isStoryMode:Bool = false;
+	static var isStoryMode:Bool = false;
 
 	/**
 		Current Story Mode week as an `Int`.
 
 		(Generally unused / deprecated).
 	**/
-	public static var storyWeek:Int = 0;
+	static var storyWeek:Int = 0;
 
 	/**
 		`Array` of all the songs that you are going
 		to play next in Story Mode as `String`.
 	**/
-	public static var storyPlaylist:Array<String> = [];
+	static var storyPlaylist:Array<String> = [];
 
 	/**
 		`String` representation of the current Story Mode difficulty.
 	**/
-	public static var storyDifficultyStr:String = "NORMAL";
+	static var storyDifficultyStr:String = "NORMAL";
 
 	/**
 		Total score over your current run in Story Mode.
 	**/
-	public static var campaignScore:Int = 0;
+	static var campaignScore:Int = 0;
 
 	/**
 		Title of current week in Story Mode.
 	**/
-	public static var campaignTitle:String;
+	static var campaignTitle:String;
 
 	/**
 		Vocal tracks for the current song as a `SoundGroup`.
 	**/
-	public var vocals:SoundGroup = new SoundGroup(2);
+	var vocals:SoundGroup = new SoundGroup(2);
 
 	/**
 		Your current opponent.
 	**/
-	public static var dad:Character;
+	static var dad:Character;
 
 	/**
 		The current character in the middle of the 3 main characters.
 	**/
-	public static var gf:Character;
+	static var gf:Character;
 
 	/**
 		The current player character.
 	**/
-	public static var boyfriend:Boyfriend;
+	static var boyfriend:Boyfriend;
 
 	/**
 		The current stage.
 	**/
-	public var stage:StageGroup;
+	var stage:StageGroup;
 
 	/**
 		`FlxTypedGroup` of all currently active notes in the game.
 	**/
-	public var notes:FlxTypedGroup<Note>;
+	var notes:FlxTypedGroup<Note>;
 
 	/**
 		`Array` of all the notes waiting to be spawned into the game (when their time comes to prevent lag).
 	**/
-	public var unspawnNotes:Array<Note> = [];
+	var unspawnNotes:Array<Note> = [];
 
 	/**
 		Simple `FlxSprite` to help represent the strum line the strums initially spawn at.
 	**/
-	public var strumLine:FlxSprite;
+	var strumLine:FlxSprite;
 
 	/**
 		`FlxTypedGroup` of all current strums (enemy strums are first).
 	**/
-	public static var strumLineNotes:FlxTypedGroup<StrumNote>;
+	static var strumLineNotes:FlxTypedGroup<StrumNote>;
 
 	/**
 		`FlxTypedGroup` of all current player strums.
 	**/
-	public static var playerStrums:FlxTypedGroup<StrumNote>;
+	static var playerStrums:FlxTypedGroup<StrumNote>;
 
 	/**
 		`FlxTypedGroup` of all current enemy strums.
 	**/
-	public static var enemyStrums:FlxTypedGroup<StrumNote>;
+	static var enemyStrums:FlxTypedGroup<StrumNote>;
 
 	/**
 		Simple `FlxObject` to store the camera's current position that it's following.
 	**/
-	public var camFollow:FlxObject;
+	var camFollow:FlxObject;
 
 	/**
 	 * Should the camera be centered?
 	 */
-	public var centerCamera:Bool = false;
+	var centerCamera:Bool = false;
 
 	/**
 		Copy of `camFollow` used for transitioning between songs smoother.
 	**/
-	public static var prevCamFollow:FlxObject;
+	static var prevCamFollow:FlxObject;
 
 	/**
 		`Bool` for whether or not the camera is currently zooming in and out to the song's beat.
 	**/
-	public var camZooming:Bool = false;
+	var camZooming:Bool = false;
 
 	/**
 	 * `Bool` for if the camera is allowed to zoom in.
 	 */
-	public var cameraZooms:Bool = Options.getData("cameraZooms");
+	var cameraZooms:Bool = Options.getData("cameraZooms");
 
 	/**
 		Speed of camera.
 	**/
-	public var cameraSpeed:Float = 1;
+	var cameraSpeed:Float = 1;
 
 	/**
 		Speed of camera zooming.
 	**/
-	public var cameraZoomSpeed:Float = 1;
+	var cameraZoomSpeed:Float = 1;
 
 	/**
 	 * Multiplier for strength of camera bops.
 	 */
-	public var cameraZoomStrength:Float = 1;
+	var cameraZoomStrength:Float = 1;
 
 	/**
 	 * Multiplier for speed of camera bops.
 	 */
-	public var cameraZoomRate:Float = 1;
+	var cameraZoomRate:Float = 1;
 
 	/**
 		Shortner for `SONG.song`.
 	**/
-	public var curSong:String = "";
+	var curSong:String = "";
 
 	/**
 		The interval of beats the current `gf` waits till their `dance` function gets called. (as an `Int`)
@@ -235,241 +237,241 @@ class PlayState extends MusicBeatState {
 			2 = Every Other Beat,
 			etc.
 	**/
-	public var gfSpeed:Int = 1;
+	var gfSpeed:Int = 1;
 
 	/**
 		Current `health` of the player (stored as a range from `minHealth` to `maxHealth`, which is by default 0 to 2).
 	**/
-	public var health:Float = 1;
+	var health:Float = 1;
 
 	/**
 		Current `health` being shown on the `healthBar`. (Is inverted from normal when playing as opponent)
 	**/
-	public var healthShown:Float = 1;
+	var healthShown:Float = 1;
 
 	/**
 		Minimum `health` value. (Defaults to 0)
 	**/
-	public var minHealth:Float = 0;
+	var minHealth:Float = 0;
 
 	/**
 		Maximum `health` value. (Defaults to 2)
 	**/
-	public var maxHealth:Float = 2;
+	var maxHealth:Float = 2;
 
 	/**
 		Current combo (or amount of notes hit in a row without a combo break).
 	**/
-	public var combo:Int = 0;
+	var combo:Int = 0;
 
 	/**
 		Current combo (or amount of notes hit in a row without a combo break).
 	**/
-	public var maxCombo:Int = 0;
+	var maxCombo:Int = 0;
 
 	/**
 		Current score for the player.
 	**/
-	public var songScore:Int = 0;
+	var songScore:Int = 0;
 
 	/**
 		Current miss count for the player.
 	**/
-	public var misses:Int = 0;
+	var misses:Int = 0;
 
 	/**
 		Current accuracy for the player (0 - 100).
 	**/
-	public var accuracy:Float = 100.0;
+	var accuracy:Float = 100.0;
 
 	/**
 		Background sprite for the health bar.
 	**/
-	public var healthBarBG:FlxSprite;
+	var healthBarBG:FlxSprite;
 
 	/**
 		The health bar.
 	**/
-	public var healthBar:FlxBar;
+	var healthBar:FlxBar;
 
 	/**
 		The progress bar.
 	**/
-	public var timeBar:TimeBar;
+	var timeBar:TimeBar;
 
 	/**
 		Variable for if `generateSong` has been called successfully yet.
 	**/
-	public var generatedMusic:Bool = false;
+	var generatedMusic:Bool = false;
 
 	/**
 		Whether or not the player has started the song yet.
 	**/
-	public var startingSong:Bool = false;
+	var startingSong:Bool = false;
 
 	/**
 		The icon for the player character (`bf`).
 	**/
-	public var iconP1:HealthIcon;
+	var iconP1:HealthIcon;
 
 	/**
 		The icon for the opponent character (`dad`).
 	**/
-	public var iconP2:HealthIcon;
+	var iconP2:HealthIcon;
 
 	/**
 		`FlxCamera` for all HUD/UI elements.
 	**/
-	public var camHUD:FlxCamera;
+	var camHUD:FlxCamera;
 
 	/**
 		`FlxCamera` for all elements part of the main scene.
 	**/
-	public var camGame:FlxCamera;
+	var camGame:FlxCamera;
 
 	/**
 		Current text under the health bar (displays score and other stats).
 	**/
-	public var scoreTxt:FlxText;
+	var scoreTxt:FlxText;
 
 	/**
 		Total notes interacted with. (Includes missing and hitting)
 	**/
-	public var totalNotes:Int = 0;
+	var totalNotes:Int = 0;
 
 	/**
 		Total notes hit (is a `Float` because it's used for accuracy calculations).
 	**/
-	public var hitNotes:Float = 0.0;
+	var hitNotes:Float = 0.0;
 
 	/**
 		`FlxGroup` for all the sprites that should go above the characters in a stage.
 	**/
-	public var foregroundSprites:FlxGroup = new FlxGroup();
+	var foregroundSprites:FlxGroup = new FlxGroup();
 
 	/**
 		The default camera zoom (used for camera zooming properly).
 	**/
-	public var defaultCamZoom:Float = 1.05;
+	var defaultCamZoom:Float = 1.05;
 
 	/**
 		The default hud camera zoom (used for zoom the hud properly).
 	**/
-	public var defaultHudCamZoom:Float = 1.0;
+	var defaultHudCamZoom:Float = 1.0;
 
 	/**
 		Current alt animation for any characters that may be using it (should just be `dad`).
 	**/
-	public var altAnim:String = "";
+	var altAnim:String = "";
 
 	/**
 		Whether or not you are currently in a cutscene.
 	**/
-	public var inCutscene:Bool = false;
+	var inCutscene:Bool = false;
 
 	/**
 		Current group of weeks you are playing from.
 	**/
-	public static var groupWeek:String = "";
+	static var groupWeek:String = "";
 
 	/**
 		Small Icon to use in RPC.
 	**/
-	public var iconRPC:String = "";
+	var iconRPC:String = "";
 
 	/**
 		Details to use in RPC.
 	**/
-	public var detailsText:String = "Freeplay";
+	var detailsText:String = "Freeplay";
 
 	/**
 		Paused Details to use in RPC.
 	**/
-	public var detailsPausedText:String = "";
+	var detailsPausedText:String = "";
 
 	/**
 		Length of the current song's instrumental track in milliseconds.
 	**/
-	public var songLength:Float = 0;
+	var songLength:Float = 0;
 
 	/**
 		Your current key bindings stored as `Strings`.
 	**/
-	public var binds:Array<String>;
+	var binds:Array<String>;
 
 	// wack ass ui shit i need to fucking change like oh god i hate this shit mate
-	public var ui_settings:Array<String>;
-	public var mania_size:Array<String>;
-	public var mania_offset:Array<String>;
-	public var mania_gap:Array<String>;
-	public var types:Array<String>;
+	var ui_settings:Array<String>;
+	var mania_size:Array<String>;
+	var mania_offset:Array<String>;
+	var mania_gap:Array<String>;
+	var types:Array<String>;
 
 	// this sucks too, sorry i'm not documentating this bullshit that ima replace at some point with nice clean yummy jsons
 	// - leather128
-	public var arrow_Configs:Map<String, Array<String>> = new Map<String, Array<String>>();
-	public var type_Configs:Map<String, Array<String>> = new Map<String, Array<String>>();
+	var arrow_Configs:Map<String, Array<String>> = new Map<String, Array<String>>();
+	var type_Configs:Map<String, Array<String>> = new Map<String, Array<String>>();
 
 	/**
 		`Array` of cached miss sounds.
 	**/
-	public var missSounds:Array<FlxSound> = [];
+	var missSounds:Array<FlxSound> = [];
 
 	/**
 		Current song multiplier. (Should be minimum 0.25)
 	**/
-	public static var songMultiplier:Float = 1;
+	static var songMultiplier:Float = 1;
 
 	/**
 		Variable that stores the original scroll speed before being divided by `songMultiplier`.
 
 		Usage: ChartingState
 	**/
-	public static var previousScrollSpeedLmao:Float = 0;
+	static var previousScrollSpeedLmao:Float = 0;
 
 	/**
 		Current `Cutscene` data.
 	**/
-	public var cutscene:Cutscene;
+	var cutscene:Cutscene;
 
 	/**
 		Current time of the song in milliseconds used for the progress bar.
 	**/
-	public var time:Float = 0.0;
+	var time:Float = 0.0;
 
 	/**
 		A `Map` of the `String` names of the ratings to the amount of times you got them.
 	**/
-	public var ratings:Map<String, Int> = ["marvelous" => 0, "sick" => 0, "good" => 0, "bad" => 0, "shit" => 0];
+	var ratings:Map<String, Int> = ["marvelous" => 0, "sick" => 0, "good" => 0, "bad" => 0, "shit" => 0];
 
 	/**
 		Current text that displays your ratings (plus misses and MA/PA).
 	**/
-	public var ratingText:FlxText;
+	var ratingText:FlxText;
 
 	/**
 		Variable used by Lua Modcharts to stop the song midway.
 	**/
-	public var stopSong:Bool = false;
+	var stopSong:Bool = false;
 
 	/**
 		`Array` of current events used by the song.
 	**/
-	public var events:Array<Array<Dynamic>> = [];
+	var events:Array<Array<Dynamic>> = [];
 
 	/**
 		Original `Array` of the current song's events.
 	**/
-	public var baseEvents:Array<Array<Dynamic>> = [];
+	var baseEvents:Array<Array<Dynamic>> = [];
 
 	/**
 	 * Used lua cameras?
 	 */
-	public var usedLuaCameras:Bool = false;
+	var usedLuaCameras:Bool = false;
 
 	/**
 	 * Is the player charting?
 	 */
-	public static var chartingMode:Bool = false;
+	static var chartingMode:Bool = false;
 
 	/**
 		Current character you are playing as stored as an `Int`.
@@ -482,93 +484,93 @@ class PlayState extends MusicBeatState {
 
 		-1 = both
 	**/
-	public static var characterPlayingAs:Int = 0;
+	static var characterPlayingAs:Int = 0;
 
 	/**
 		The current hitsound the player is using. (By default is 'none')
 	**/
-	public var hitSoundString:String = Options.getData("hitsound");
+	var hitSoundString:String = Options.getData("hitsound");
 
 	/**
 		`Map` of `String` to `Boyfriend` for changing `bf`'s character.
 	**/
-	public var bfMap:Map<String, Boyfriend> = [];
+	var bfMap:Map<String, Boyfriend> = [];
 
 	/**
 		`Map` of `String` to `Character` for changing `gf`'s character.
 	**/
-	public var gfMap:Map<String, Character> = [];
+	var gfMap:Map<String, Character> = [];
 
 	/**
 		`Map` of `String` to `Character` for changing `dad`'s character.
 	**/
-	public var dadMap:Map<String, Character> = [];
+	var dadMap:Map<String, Character> = [];
 
 	/**
 		`Map` of `String` to `StageGroup` for changing the `stage`.
 	**/
-	public var stageMap:Map<String, StageGroup> = [];
+	var stageMap:Map<String, StageGroup> = [];
 
 	/**
 		Whether the game will or will not load events from the chart's `events.json` file.
 		(Disabled while charting as the events are already loaded)
 	**/
-	public static var loadChartEvents:Bool = true;
+	static var loadChartEvents:Bool = true;
 
 	/**
 		Current time bar style selected by the player.
 	**/
-	public var funnyTimeBarStyle:String = Options.getData("timeBarStyle");
+	var funnyTimeBarStyle:String = Options.getData("timeBarStyle");
 
 	/**
 		Keeps track of the original player key count.
 
 		(Used when playing as opponent).
 	**/
-	public var ogPlayerKeyCount:Int = 4;
+	var ogPlayerKeyCount:Int = 4;
 
 	/**
 		Keeps track of the original opponent (or both if not specified for player) key count.
 
 		(Used when playing as opponent).
 	**/
-	public var ogKeyCount:Int = 4;
+	var ogKeyCount:Int = 4;
 
 	/**
 		`Map` of `String` to `LuaScript` used for custom events.
 	**/
-	public var scripts:Map<String, Script> = [];
+	var scripts:Map<String, Script> = [];
 
 	/**
 		`FlxTypedGroup` of `NoteSplash`s used to contain all note splashes
 		and make performance better as a result by using `.recycle`.
 	**/
-	public var splash_group:FlxTypedSpriteGroup<NoteSplash> = new FlxTypedSpriteGroup<NoteSplash>();
+	var splash_group:FlxTypedSpriteGroup<NoteSplash> = new FlxTypedSpriteGroup<NoteSplash>();
 
 	/**
 	 * Should the player spawn a notesplash on a sick or marvelous rating?
 	 */
-	public var playerNoteSplashes:Bool = Options.getData("playerNoteSplashes");
+	var playerNoteSplashes:Bool = Options.getData("playerNoteSplashes");
 
 	/**
 	 * Should the opponent spawn a notesplash on a sick or marvelous rating?
 	 */
-	public var opponentNoteSplashes:Bool = Options.getData("opponentNoteSplashes");
+	var opponentNoteSplashes:Bool = Options.getData("opponentNoteSplashes");
 
-	public var enemyStrumsGlow:Bool = Options.getData("enemyStrumsGlow");
+	var enemyStrumsGlow:Bool = Options.getData("enemyStrumsGlow");
 
-	public var ratingsGroup:FlxSpriteGroup = new FlxSpriteGroup();
+	var ratingsGroup:FlxSpriteGroup = new FlxSpriteGroup();
 
-	public var marvelousRatings:Bool = Options.getData("marvelousRatings");
+	var marvelousRatings:Bool = Options.getData("marvelousRatings");
 
-	public static var playCutscenes:Bool = false;
+	static var playCutscenes:Bool = false;
 
 	/**
 	 * Manages tweens in lua scripts to pause when game is
 	 */
-	public var tweenManager:FlxTweenManager;
+	var tweenManager:FlxTweenManager;
 
-	override public function create() {
+	override function create() {
 		tweenManager = new FlxTweenManager();
 		// set instance because duh
 		instance = this;
@@ -760,7 +762,6 @@ class PlayState extends MusicBeatState {
 		DiscordClient.changePresence(detailsText, SONG.song + " (" + storyDifficultyStr + ")", iconRPC);
 		#end
 
-		
 		strumLine = new FlxSprite(0, 100).makeGraphic(FlxG.width, 10);
 
 		if (Options.getData("downscroll"))
@@ -910,8 +911,14 @@ class PlayState extends MusicBeatState {
 			'assets/data/song data/${curSong.toLowerCase()}/',
 			'mods/${Options.getData("curMod")}/data/scripts/local/',
 			'mods/${Options.getData("curMod")}/data/song data/${curSong.toLowerCase()}/',
-			PolymodAssets.getPath('data/scripts/global/')
+			//PolymodAssets.getPath('data/scripts/global/')
 		];
+
+		for(mod in ModList.getActiveMods(PolymodHandler.metadataArrays)){
+			if(FileSystem.exists('mods/$mod/data/scripts/global/')){
+				foldersToCheck.push('mods/$mod/data/scripts/global/');
+			}
+		}
 
 		for (folder in foldersToCheck) {
 			if (FileSystem.exists(folder)) {
@@ -1131,7 +1138,7 @@ class PlayState extends MusicBeatState {
 		updateSongInfoText();
 	}
 
-	public function reorderCameras(?newCam:FlxCamera = null) {
+	function reorderCameras(?newCam:FlxCamera = null) {
 		var cameras = FlxG.cameras.list.copy();
 		for (c in cameras) {
 			FlxG.cameras.remove(c, false);
@@ -1145,8 +1152,8 @@ class PlayState extends MusicBeatState {
 		FlxG.cameras.setDefaultDrawTarget(camGame, true);
 	}
 
-	public static var playCutsceneLmao:Bool = false;
-	public static var playCutsceneOnPauseLmao:Bool = false;
+	static var playCutsceneLmao:Bool = false;
+	static var playCutsceneOnPauseLmao:Bool = false;
 
 	function startDialogue(?dialogueBox:DialogueBox, ?endSongVar:Bool = false):Void {
 		if (endSongVar) {
@@ -1201,10 +1208,10 @@ class PlayState extends MusicBeatState {
 	}
 
 	#if VIDEOS_ALLOWED
-	public var videoHandler:FlxVideo = new FlxVideo();
+	var videoHandler:FlxVideo = new FlxVideo();
 	#end
 
-	public function startVideo(name:String, ?ext:String, ?endSongVar:Bool = false):Void {
+	function startVideo(name:String, ?ext:String, ?endSongVar:Bool = false):Void {
 		inCutscene = true;
 
 		if (endSongVar) {
@@ -1272,7 +1279,7 @@ class PlayState extends MusicBeatState {
 
 	var startTimer:FlxTimer = new FlxTimer();
 
-	public static var startOnTime:Float = 0;
+	static var startOnTime:Float = 0;
 
 	function startCountdown():Void {
 		call("startCountdown", []);
@@ -1438,9 +1445,9 @@ class PlayState extends MusicBeatState {
 		}, 5);
 	}
 
-	public var invincible:Bool = false;
+	var invincible:Bool = false;
 
-	public function clearNotesBefore(time:Float) {
+	function clearNotesBefore(time:Float) {
 		var i:Int = unspawnNotes.length - 1;
 		while (i >= 0) {
 			var note:Note = unspawnNotes[i];
@@ -1467,13 +1474,13 @@ class PlayState extends MusicBeatState {
 		}
 	}
 
-	public inline function invalidateNote(note:Note):Void {
+	inline function invalidateNote(note:Note):Void {
 		//if (!Options.getData("botplay")) note.kill();
 		notes.remove(note, true);
 		note.destroy();
 	}
 
-	public function setSongTime(time:Float) {
+	function setSongTime(time:Float) {
 		invincible = true;
 		set("bot", true);
 		if (time < 0)
@@ -1528,15 +1535,15 @@ class PlayState extends MusicBeatState {
 		resyncVocals();
 	}
 
-	public var maniaChanges:Array<Dynamic> = [];
+	var maniaChanges:Array<Dynamic> = [];
 
 	// https://github.com/TheZoroForce240/LeatherEngine/blob/main/source/states/PlayState.hx#L1432
-	public var currentParsingKeyCount:Int = SONG.keyCount;
-	public var currentParsingPlayerKeyCount:Int = SONG.playerKeyCount;
+	var currentParsingKeyCount:Int = SONG.keyCount;
+	var currentParsingPlayerKeyCount:Int = SONG.playerKeyCount;
 
-	public var addedVocals:Array<String> = [];
+	var addedVocals:Array<String> = [];
 
-	public function generateSong(dataPath:String):Void {
+	function generateSong(dataPath:String):Void {
 		Conductor.changeBPM(SONG.bpm, songMultiplier);
 
 		if (SONG.needsVoices) {
@@ -1677,7 +1684,7 @@ class PlayState extends MusicBeatState {
 		SONG.validScore = SONG.validScore == true ? songMultiplier >= 1 : false;
 	}
 
-	public inline function sortNotes(Obj1:Note, Obj2:Note):Int {
+	inline function sortNotes(Obj1:Note, Obj2:Note):Int {
 		return FlxSort.byValues(FlxSort.ASCENDING, Obj1.strumTime, Obj2.strumTime);
 	}
 
@@ -1685,9 +1692,9 @@ class PlayState extends MusicBeatState {
 	 * The note underlay colored black.
 	 * Turned off by default.
 	 */
-	public var noteBG:FlxSprite;
+	var noteBG:FlxSprite;
 
-	public function generateStaticArrows(pos:Float, ?isPlayer:Bool = false, ?showReminders:Bool = true):Void {
+	function generateStaticArrows(pos:Float, ?isPlayer:Bool = false, ?showReminders:Bool = true):Void {
 		call("generateStaticArrows", [pos, isPlayer, showReminders]);
 		var usedKeyCount:Int = SONG.keyCount;
 
@@ -1817,7 +1824,7 @@ class PlayState extends MusicBeatState {
 		super.closeSubState();
 	}
 
-	override public function onFocus():Void {
+	override function onFocus():Void {
 		#if DISCORD_ALLOWED
 		if (health > minHealth && !paused) {
 			if (Conductor.songPosition > 0.0) {
@@ -1832,7 +1839,7 @@ class PlayState extends MusicBeatState {
 		super.onFocus();
 	}
 
-	override public function onFocusLost():Void {
+	override function onFocusLost():Void {
 		#if DISCORD_ALLOWED
 		if (health > minHealth && !paused) {
 			DiscordClient.changePresence(detailsPausedText, SONG.song + " (" + storyDifficultyStr + ")", iconRPC);
@@ -1842,7 +1849,7 @@ class PlayState extends MusicBeatState {
 		super.onFocusLost();
 	}
 
-	public function resyncVocals():Void {
+	function resyncVocals():Void {
 		FlxG.sound.music.pitch = songMultiplier;
 
 		if (vocals.active && vocals.playing)
@@ -1884,25 +1891,25 @@ class PlayState extends MusicBeatState {
 		}
 	}
 
-	public var paused:Bool = false;
+	var paused:Bool = false;
 
-	public var startedCountdown:Bool = false;
-	public var canPause:Bool = true;
+	var startedCountdown:Bool = false;
+	var canPause:Bool = true;
 
-	public var canFullscreen:Bool = true;
+	var canFullscreen:Bool = true;
 
-	public var switchedStates:Bool = false;
+	var switchedStates:Bool = false;
 
 	// give: [noteDataThingy, noteType]
 	// get : [xOffsetToUse]
-	public var prevPlayerXVals:Map<String, Float> = [];
-	public var prevEnemyXVals:Map<String, Float> = [];
+	var prevPlayerXVals:Map<String, Float> = [];
+	var prevEnemyXVals:Map<String, Float> = [];
 
-	public var speed(default, set):Float = 1.0;
+	var speed(default, set):Float = 1.0;
 
-	public var ratingStr:String = "";
+	var ratingStr:String = "";
 
-	public var song_info_timer:Float = 0.0;
+	var song_info_timer:Float = 0.0;
 
 	inline function fixedUpdate() {
 		call("fixedUpdate", [1 / 120]);
@@ -1910,7 +1917,7 @@ class PlayState extends MusicBeatState {
 
 	var fixedUpdateTime:Float = 0.0;
 
-	override public function update(elapsed:Float) {
+	override function update(elapsed:Float) {
 		super.update(elapsed);
 		tweenManager.update(elapsed);
 
@@ -2105,6 +2112,7 @@ class PlayState extends MusicBeatState {
 			#end
 
 			call("onDeath", [Conductor.songPosition]);
+			closeScripts();
 		}
 
 		health = Math.max(health, minHealth);
@@ -2440,7 +2448,7 @@ class PlayState extends MusicBeatState {
 			#end
 		}
 
-		if(FlxG.keys.justPressed.F6){
+		if (FlxG.keys.justPressed.F6) {
 			Options.setData(!Options.getData("botplay"), "botplay");
 			set("bot", Options.getData("botplay"));
 			SONG.validScore = false;
@@ -2536,10 +2544,11 @@ class PlayState extends MusicBeatState {
 	override function destroy() {
 		call("onDestroy", []);
 		closeScripts();
+		FlxG.camera.bgColor = FlxColor.BLACK;
 		super.destroy();
 	}
 
-	public function turnChange(char:String) {
+	function turnChange(char:String) {
 		call("turnChange", [char]);
 		switch (char) {
 			case 'dad':
@@ -2662,7 +2671,7 @@ class PlayState extends MusicBeatState {
 		}
 	}
 
-	public function finishSongStuffs() {
+	function finishSongStuffs() {
 		if (isStoryMode) {
 			campaignScore += songScore;
 
@@ -2733,20 +2742,20 @@ class PlayState extends MusicBeatState {
 		}
 	}
 
-	public var endingSong:Bool = false;
+	var endingSong:Bool = false;
 
-	public var rating:FlxSprite = new FlxSprite();
-	public var ratingTween:VarTween;
+	var rating:FlxSprite = new FlxSprite();
+	var ratingTween:VarTween;
 
-	public var accuracyText:FlxText = new FlxText(0, 0, 0, "bruh", 24);
-	public var accuracyTween:VarTween;
+	var accuracyText:FlxText = new FlxText(0, 0, 0, "bruh", 24);
+	var accuracyTween:VarTween;
 
-	public var numbers:Array<FlxSprite> = [];
-	public var number_Tweens:Array<VarTween> = [];
+	var numbers:Array<FlxSprite> = [];
+	var number_Tweens:Array<VarTween> = [];
 
-	public var uiMap:Map<String, FlxGraphicAsset> = [];
+	var uiMap:Map<String, FlxGraphicAsset> = [];
 
-	public function popUpScore(strumtime:Float, noteData:Int, ?setNoteDiff:Float):Void {
+	function popUpScore(strumtime:Float, noteData:Int, ?setNoteDiff:Float):Void {
 		var noteDiff:Float = (strumtime - Conductor.songPosition);
 
 		if (Options.getData("botplay"))
@@ -2941,7 +2950,7 @@ class PlayState extends MusicBeatState {
 		}
 	}
 
-	public function updateScoreText() {
+	function updateScoreText() {
 		scoreTxt.text = '<  ${Options.getData('showScore') ? 'Score:${songScore} ~ ' : ''}Misses:${misses} ~ Accuracy:${accuracy}% ~ ${ratingStr}  >';
 		scoreTxt.screenCenter(X);
 	}
@@ -2952,7 +2961,7 @@ class PlayState extends MusicBeatState {
 	var heldArray:Array<Bool> = [];
 	var previousReleased:Array<Bool> = [];
 
-	public function keyShit() {
+	function keyShit() {
 		if (generatedMusic && startedCountdown) {
 			if (!Options.getData("botplay")) {
 				var bruhBinds:Array<String> = ["LEFT", "DOWN", "UP", "RIGHT"];
@@ -3619,7 +3628,7 @@ class PlayState extends MusicBeatState {
 		call("beatHit", [curBeat]);
 	}
 
-	public function updateRatingText() {
+	function updateRatingText() {
 		if (Options.getData("sideRatings")) {
 			ratingText.text = getRatingText();
 			ratingText.screenCenter(Y);
@@ -3666,7 +3675,7 @@ class PlayState extends MusicBeatState {
 		openSubState(res);
 	}
 
-	public function getRatingText():String {
+	function getRatingText():String {
 		var ratingArray:Array<Int> = [
 			ratings.get("marvelous"),
 			ratings.get("sick"),
@@ -3701,7 +3710,7 @@ class PlayState extends MusicBeatState {
 				&& PA > 0 ? "PA: " + Std.string(FlxMath.roundDecimal((ratingArray[1] + ratingArray[0]) / PA, 2)) + "\n" : ""));
 	}
 
-	public static function getCharFromEvent(eventVal:String):Character {
+	static function getCharFromEvent(eventVal:String):Character {
 		switch (eventVal.toLowerCase()) {
 			case "girlfriend" | "gf" | "player3" | "2":
 				return PlayState.gf.getMainCharacter();
@@ -3712,7 +3721,7 @@ class PlayState extends MusicBeatState {
 		return PlayState.boyfriend.getMainCharacter();
 	}
 
-	public function removeBgStuff() {
+	function removeBgStuff() {
 		remove(stage);
 		remove(stage.foregroundSprites);
 		remove(stage.infrontOfGFSprites);
@@ -3760,7 +3769,7 @@ class PlayState extends MusicBeatState {
 		}
 	}
 
-	public function addBgStuff() {
+	function addBgStuff() {
 		stage.setCharOffsets();
 
 		add(stage);
@@ -3840,7 +3849,7 @@ class PlayState extends MusicBeatState {
 		add(stage.foregroundSprites);
 	}
 
-	public function eventCharacterShit(event:Array<Dynamic>) {
+	function cacheEventCharacter(event:Array<Dynamic>) {
 		removeBgStuff();
 
 		if (gfMap.exists(event[3]) || bfMap.exists(event[3]) || dadMap.exists(event[3])) // prevent game crash
@@ -3949,7 +3958,7 @@ class PlayState extends MusicBeatState {
 		addBgStuff();
 	}
 
-	public function updateSongInfoText() {
+	function updateSongInfoText() {
 		var songThingy:Float = songLength - FlxG.sound.music.time;
 
 		var seconds:Int = Math.floor(songThingy / 1000);
@@ -3972,7 +3981,7 @@ class PlayState extends MusicBeatState {
 		}
 	}
 
-	public inline function set(name:String, data:Any, ?executeOn:ExecuteOn = BOTH) {
+	inline function set(name:String, data:Any, ?executeOn:ExecuteOn = BOTH) {
 		for (script in scripts) {
 			if (script.executeOn == executeOn || executeOn == BOTH) {
 				script.set(name, data);
@@ -3980,9 +3989,9 @@ class PlayState extends MusicBeatState {
 		}
 	}
 
-	public function call(name:String, ?args:Array<Any>, ?executeOn:ExecuteOn = BOTH) {
+	function call(name:String, ?args:Array<Any>, ?executeOn:ExecuteOn = BOTH) {
 		for (script in scripts) {
-			if((script.executeOn == executeOn || executeOn == BOTH)){
+			if ((script.executeOn == executeOn || executeOn == BOTH)) {
 				script.call(name, args);
 			}
 		}
@@ -4008,7 +4017,7 @@ class PlayState extends MusicBeatState {
 		return null;
 	}
 
-	public inline function closeScripts() {
+	function closeScripts() {
 		for (script in scripts) {
 			script?.destroy();
 		}
@@ -4028,9 +4037,10 @@ class PlayState extends MusicBeatState {
 		LuaScript.lua_Jsons.clear();
 
 		scripts.clear();
+		scripts = null;
 	}
 
-	public function processEvent(event:Array<Dynamic>) {
+	function processEvent(event:Array<Dynamic>) {
 		#if LUA_ALLOWED
 		if (scripts.exists(event[0].toLowerCase())) {
 			for (i in 0...strumLineNotes.length) {
@@ -4055,7 +4065,7 @@ class PlayState extends MusicBeatState {
 		call("onEvent", [event[0], event[1], event[2], event[3]]);
 	}
 
-	public function calculateAccuracy() {
+	function calculateAccuracy() {
 		if (totalNotes != 0 && !switchedStates)
 			accuracy = FlxMath.roundDecimal(100.0 / (totalNotes / hitNotes), 2);
 
@@ -4067,7 +4077,7 @@ class PlayState extends MusicBeatState {
 		updateScoreText();
 	}
 
-	public inline function updateRating()
+	inline function updateRating()
 		ratingStr = Ratings.getRank(accuracy, misses);
 
 	function generareNoteChangeEvents():Void {
@@ -4192,7 +4202,9 @@ class PlayState extends MusicBeatState {
 		}
 	}
 
-	public function setupNoteTypeScript(noteType:String) {
+	function setupNoteTypeScript(noteType:String) {
+		if(FlxG.state != this)
+			return;
 		#if LUA_ALLOWED
 		if (!scripts.exists(noteType.toLowerCase()) && Assets.exists(Paths.lua("arrow types/" + noteType))) {
 			scripts.set(noteType.toLowerCase(), new LuaScript(PolymodAssets.getPath(Paths.lua("arrow types/" + noteType))));
@@ -4224,19 +4236,19 @@ class PlayState extends MusicBeatState {
 		 * @param behind The object to add behind
 		 * @param obj The object that will be in front
 		 */
-	public function addBehind(behind:FlxBasic, obj:FlxBasic) {
+	function addBehind(behind:FlxBasic, obj:FlxBasic) {
 		insert(members.indexOf(obj), behind);
 	}
 
-	public function addBehindGF(behind:FlxBasic) {
+	function addBehindGF(behind:FlxBasic) {
 		insert(members.indexOf(gf), behind);
 	}
 
-	public function addBehindDad(behind:FlxBasic) {
+	function addBehindDad(behind:FlxBasic) {
 		insert(members.indexOf(dad), behind);
 	}
 
-	public function addBehindBF(behind:FlxBasic) {
+	function addBehindBF(behind:FlxBasic) {
 		insert(members.indexOf(boyfriend), behind);
 	}
 

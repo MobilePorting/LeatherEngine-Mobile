@@ -57,7 +57,6 @@ class ModsMenu extends MusicBeatState {
 		menuBG.setGraphicSize(menuBG.width * 1.1);
 		menuBG.updateHitbox();
 		menuBG.screenCenter();
-		menuBG.antialiasing = true;
 		add(menuBG);
 
 		super.create();

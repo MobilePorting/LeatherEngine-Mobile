@@ -77,6 +77,8 @@ class TitleState extends MusicBeatState {
 			Options.init();
 			Options.fixBinds();
 
+			FlxSprite.defaultAntialiasing = Options.getData("antialiasing");
+
 			PlayerSettings.init();
 			PlayerSettings.player1.controls.loadKeyBinds();
 
@@ -182,7 +184,6 @@ class TitleState extends MusicBeatState {
 
 		logoBl = new FlxSprite(0, 0);
 		logoBl.frames = Paths.getSparrowAtlas('title/logoBumpin');
-		logoBl.antialiasing = Options.getData("antialiasing");
 		logoBl.animation.addByPrefix('bump', 'logo bumpin', 24);
 		logoBl.animation.play('bump');
 		logoBl.updateHitbox();
@@ -192,14 +193,12 @@ class TitleState extends MusicBeatState {
 		gfDance.frames = Paths.getSparrowAtlas('title/gfDanceTitle');
 		gfDance.animation.addByIndices('danceLeft', 'gfDance', [30, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14], "", 24, false);
 		gfDance.animation.addByIndices('danceRight', 'gfDance', [15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29], "", 24, false);
-		gfDance.antialiasing = Options.getData("antialiasing");
 		gfDance.shader = swagShader.shader;
 
 		titleText = new FlxSprite(100, FlxG.height * 0.8);
 		titleText.frames = Paths.getSparrowAtlas('title/titleEnter');
 		titleText.animation.addByPrefix('idle', "Press Enter to Begin", 24);
 		titleText.animation.addByPrefix('press', "ENTER PRESSED", 24);
-		titleText.antialiasing = Options.getData("antialiasing");
 		titleText.animation.play('idle');
 		titleText.updateHitbox();
 		titleText.shader = swagShader.shader;
@@ -219,7 +218,6 @@ class TitleState extends MusicBeatState {
 		newgrounds.scale.set(0.8, 0.8);
 		newgrounds.updateHitbox();
 		newgrounds.screenCenter(X);
-		newgrounds.antialiasing = Options.getData("antialiasing");
 		newgrounds.visible = false;
 		add(newgrounds);
 

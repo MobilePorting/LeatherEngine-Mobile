@@ -116,7 +116,6 @@ class MainMenuState extends MusicBeatState {
 			menuItem.screenCenter(X);
 			menuItems.add(menuItem);
 			menuItem.scrollFactor.set(0.5, 0.5);
-			menuItem.antialiasing = true;
 		}
 
 		FlxG.camera.follow(camFollow, null, 0.06);

@@ -350,7 +350,7 @@ class EventHandeler {
 
 					note.updateHitbox();
 
-					note.antialiasing = game.ui_settings[3] == "true";
+					note.antialiasing = game.ui_settings[3] == "true" && Options.getData("antialiasing");
 
 					var localKeyCount:Int = note.mustPress ? note.song.playerKeyCount : note.song.keyCount;
 
@@ -379,7 +379,7 @@ class EventHandeler {
 
 					note.updateHitbox();
 
-					note.antialiasing = game.ui_settings[3] == "true";
+					note.antialiasing = game.ui_settings[3] == "true" && Options.getData("antialiasing");
 
 					
 					var localKeyCount:Int = note.mustPress ? note.song.playerKeyCount : note.song.keyCount;

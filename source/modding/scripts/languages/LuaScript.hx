@@ -482,7 +482,6 @@ class LuaScript extends Script {
 					Sprite.loadGraphic(Paths.gpuBitmap(PlayState.instance.stage.stage + "/" + filename, "stages"));
 
 				Sprite.scale.set(size, sizeY == null ? size : sizeY);
-				Sprite.antialiasing = Options.getData("antialiasing");
 				Sprite.updateHitbox();
 
 				lua_Sprites.set(id, Sprite);
@@ -500,7 +499,7 @@ class LuaScript extends Script {
 					Sprite.frames = Paths.getSparrowAtlas(PlayState.instance.stage.stage + "/" + filename, "stages");
 
 				Sprite.scale.set(size, sizeY == null ? size : sizeY);
-				Sprite.antialiasing = Options.getData("antialiasing");
+				
 				Sprite.updateHitbox();
 
 				lua_Sprites.set(id, Sprite);
@@ -519,7 +518,7 @@ class LuaScript extends Script {
 						Sprite.frames = Paths.getSparrowAtlas(PlayState.instance.stage.stage + "/" + filename, "stages");
 
 					Sprite.scale.set(size, sizeY == null ? size : sizeY);
-					Sprite.antialiasing = Options.getData("antialiasing");
+					
 					Sprite.updateHitbox();
 
 					lua_Sprites.set(id, Sprite);
@@ -678,7 +677,6 @@ class LuaScript extends Script {
 				Sprite.setFormat(Paths.font("vcr.ttf"), size, FlxColor.WHITE, CENTER, FlxTextBorderStyle.OUTLINE, FlxColor.TRANSPARENT);
 				// Sprite.setFormat(Paths.font(font), size);
 				Sprite.font = Paths.font(font);
-				Sprite.antialiasing = true;
 
 				lua_Sprites.set(id, Sprite);
 
@@ -705,7 +703,7 @@ class LuaScript extends Script {
 					Sprite.loadGraphic(Paths.gpuBitmap(filename));
 
 				Sprite.scale.set(size, sizeY == null ? size : sizeY);
-				Sprite.antialiasing = Options.getData("antialiasing");
+				
 				Sprite.updateHitbox();
 
 				lua_Sprites.set(id, Sprite);
@@ -759,7 +757,7 @@ class LuaScript extends Script {
 					Sprite.frames = Paths.getSparrowAtlas(filename);
 
 				Sprite.scale.set(size, sizeY == null ? size : sizeY);
-				Sprite.antialiasing = Options.getData("antialiasing");
+				
 				Sprite.updateHitbox();
 
 				lua_Sprites.set(id, Sprite);
@@ -776,7 +774,7 @@ class LuaScript extends Script {
 						Sprite.frames = Paths.getSparrowAtlas(filename);
 
 					Sprite.scale.set(size, sizeY == null ? size : sizeY);
-					Sprite.antialiasing = Options.getData("antialiasing");
+					
 					Sprite.updateHitbox();
 
 					lua_Sprites.set(id, Sprite);
@@ -792,7 +790,7 @@ class LuaScript extends Script {
 					Sprite.loadGraphic(Paths.gpuBitmap(filename));
 
 				Sprite.scale.set(size, sizeY == null ? size : sizeY);
-				Sprite.antialiasing = Options.getData("antialiasing");
+				
 				Sprite.updateHitbox();
 
 				lua_Sprites.set(id, Sprite);
@@ -850,7 +848,7 @@ class LuaScript extends Script {
 					Sprite.frames = Paths.getSparrowAtlas(filename);
 
 				Sprite.scale.set(size, sizeY == null ? size : sizeY);
-				Sprite.antialiasing = Options.getData("antialiasing");
+				
 				Sprite.updateHitbox();
 
 				lua_Sprites.set(id, Sprite);
@@ -869,7 +867,7 @@ class LuaScript extends Script {
 						Sprite.frames = Paths.getSparrowAtlas(filename);
 
 					Sprite.scale.set(size, sizeY == null ? size : sizeY);
-					Sprite.antialiasing = Options.getData("antialiasing");
+					
 					Sprite.updateHitbox();
 
 					lua_Sprites.set(id, Sprite);
@@ -1533,7 +1531,7 @@ class LuaScript extends Script {
 
 		setFunction("setActorAntialiasing", function(antialiasing:Bool, id:String) {
 			if (getActorByName(id) != null) {
-				getActorByName(id).antialiasing = antialiasing;
+				getActorByName(id).antialiasing = antialiasing && Options.getData("antialiasing");
 			}
 		});
 

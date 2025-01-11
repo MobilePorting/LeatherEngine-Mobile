@@ -69,6 +69,8 @@ class Note extends FlxSkewedSprite {
 
 	public var speed(default, set):Float = 1;
 
+	public var playedHitSound:Bool = false;
+
 	#if MODCHARTING_TOOLS
 	/**
 	 * The mesh used for sustains to make them stretchy
@@ -177,7 +179,7 @@ class Note extends FlxSkewedSprite {
 
 		updateHitbox();
 
-		antialiasing = PlayState.instance.ui_settings[3] == "true";
+		antialiasing = PlayState.instance.ui_settings[3] == "true" && Options.getData("antialiasing");
 
 		x += swagWidth * noteData;
 		animation.play("default");

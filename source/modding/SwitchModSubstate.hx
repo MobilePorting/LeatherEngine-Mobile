@@ -56,7 +56,6 @@ class SwitchModSubstate extends MusicBeatSubstate {
 		menuBG.alpha = 0.5;
 		menuBG.updateHitbox();
 		menuBG.screenCenter();
-		menuBG.antialiasing = true;
 		menuBG.scrollFactor.set();
 		add(menuBG);
 

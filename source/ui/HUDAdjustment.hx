@@ -285,7 +285,6 @@ class HUDAdjustment extends MusicBeatState {
 
 		_ratingText = new FlxText(4, 0, 0, get_ratingText());
 		_ratingText.setFormat(Paths.font("vcr.ttf"), 16, FlxColor.WHITE, LEFT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
-		_ratingText.antialiasing = Options.getData("antialiasing");
 		_ratingText.alignment = Options.getData("ratingTextAlign");
 		_ratingText.camera = hud;
 		_ratingText.screenCenter(Y);
@@ -312,7 +311,6 @@ class HUDAdjustment extends MusicBeatState {
 		offsets.font = Paths.font("vcr.ttf");
 		offsets.camera = info;
 		offsets.alignment = RIGHT;
-		offsets.antialiasing = Options.getData("antialiasing");
 		add(offsets);
 		
 		final escape:String = controls.mobileC ? 'B' : 'ESCAPE';
@@ -325,7 +323,6 @@ class HUDAdjustment extends MusicBeatState {
 		guide.font = Paths.font("vcr.ttf");
 		guide.camera = info;
 		guide.alignment = RIGHT;
-		guide.antialiasing = Options.getData("antialiasing");
 		guide.x = FlxG.width - guide.width - 4;
 		guide.y = FlxG.height - guide.height - 4;
 		add(guide);

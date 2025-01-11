@@ -177,7 +177,6 @@ class StoryMenuState extends MusicBeatState {
 			text.alignment = CENTER;
 			text.borderStyle = OUTLINE;
 			text.size = 32;
-			text.antialiasing = Options.getData("antialiasing");
 			text.screenCenter();
 			add(text);
 			return;
@@ -212,12 +211,10 @@ class StoryMenuState extends MusicBeatState {
 		leftArrow.animation.addByPrefix('idle', "arrow0");
 		leftArrow.animation.addByPrefix('press', "arrow push", 24, false);
 		leftArrow.animation.play('idle');
-		leftArrow.antialiasing = Options.getData("antialiasing");
 
 		difficultySprite = new FlxSprite(leftArrow.x + leftArrow.width + 4, leftArrow.y);
 		difficultySprite.loadGraphic(Paths.gpuBitmap("campaign menu/difficulties/default/normal"));
 		difficultySprite.updateHitbox();
-		difficultySprite.antialiasing = Options.getData("antialiasing");
 		changeDifficulty();
 
 		rightArrow = new FlxSprite(difficultySprite.x + difficultySprite.width + 4, leftArrow.y);
@@ -226,7 +223,6 @@ class StoryMenuState extends MusicBeatState {
 		rightArrow.animation.addByPrefix('press', "arrow push", 24, false);
 		rightArrow.animation.play('idle');
 		rightArrow.flipX = true;
-		rightArrow.antialiasing = Options.getData("antialiasing");
 
 		difficultySelectorGroup.add(leftArrow);
 		difficultySelectorGroup.add(difficultySprite);
@@ -271,7 +267,6 @@ class StoryMenuState extends MusicBeatState {
 		for (char in 0...3) {
 			var weekCharacterThing:MenuCharacter = new MenuCharacter((FlxG.width * 0.25) * (1 + char) - 150, currentGroup.weeks[curWeek].characters[char]);
 			weekCharacterThing.y += 70;
-			weekCharacterThing.antialiasing = true;
 			menuCharacters.add(weekCharacterThing);
 		}
 	}
@@ -294,7 +289,6 @@ class StoryMenuState extends MusicBeatState {
 			weekGraphics.add(weekGraphic);
 
 			weekGraphic.screenCenter(X);
-			weekGraphic.antialiasing = true;
 		}
 
 		if (leftArrow != null) {

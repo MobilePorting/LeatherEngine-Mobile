@@ -97,7 +97,7 @@ class StageGroup extends FlxGroup {
 							if (Object.color != null && Object.color != [])
 								Sprite.color = FlxColor.fromRGB(Object.color[0], Object.color[1], Object.color[2]);
 
-							Sprite.antialiasing = Object.antialiased;
+							Sprite.antialiasing = Object.antialiased && Options.getData("antialiasing");
 							Sprite.scrollFactor.set(Object.scroll_Factor[0], Object.scroll_Factor[1]);
 
 							if (Object.object_Name != null && Object.object_Name != "")

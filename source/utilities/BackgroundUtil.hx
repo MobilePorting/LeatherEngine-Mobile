@@ -27,7 +27,6 @@ class BackgroundUtil{
             return sprite;
         }
         sprite.color = color;
-        sprite.antialiasing = Options.getData("antialiasing");
         var skin:String = Assets.exists(Paths.image('ui skins/${Options.getData('uiSkin')}/backgrounds/menuDesat')) ? Options.getData('uiSkin') : 'default';
         return sprite.loadGraphic(Paths.gpuBitmap('ui skins/${skin}/backgrounds/menuDesat'));
 	}

@@ -72,8 +72,6 @@ class Character extends FlxSprite {
 		this.isPlayer = isPlayer;
 		this.isDeathCharacter = isDeathCharacter;
 
-		antialiasing = true;
-
 		dancesLeftAndRight = false;
 
 		var ilikeyacutg:Bool = false;

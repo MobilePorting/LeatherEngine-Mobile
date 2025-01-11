@@ -101,16 +101,13 @@ class ResultsSubstate extends MusicBeatSubstate {
 		songName.text = params.title;
 		songName.letterSpacing = -15;
 		songName.angle = -4.4;
-		songName.antialiasing = Options.getData("antialiasing");
 		// songName.zIndex = 1000;
 
 		difficulty = new FlxSprite(555);
-		difficulty.antialiasing = Options.getData("antialiasing");
 		// difficulty.zIndex = 1000;
 
 		clearPercentSmall = new ClearPercentCounter(FlxG.width / 2 + 300, FlxG.height / 2 - 100, 100, true);
 		clearPercentSmall.shader = maskShaderDifficulty;
-		clearPercentSmall.antialiasing = Options.getData("antialiasing");
 		// clearPercentSmall.zIndex = 1000;
 		clearPercentSmall.visible = false;
 
@@ -118,18 +115,14 @@ class ResultsSubstate extends MusicBeatSubstate {
 
 		resultsAnim = new FlxSprite(-200, -10);
 		resultsAnim.frames = Paths.getSparrowAtlas("resultScreen/results");
-		resultsAnim.antialiasing = Options.getData("antialiasing");
 
 		ratingsPopin = new FlxSprite(-135, 135);
 		ratingsPopin.frames = Paths.getSparrowAtlas("resultScreen/ratingsPopin");
-		ratingsPopin.antialiasing = Options.getData("antialiasing");
 
 		scorePopin = new FlxSprite(-180, 515);
 		scorePopin.frames = Paths.getSparrowAtlas("resultScreen/scorePopin");
-		resultsAnim.antialiasing = Options.getData("antialiasing");
 
 		highscoreNew = new FlxSprite(44, 557);
-		highscoreNew.antialiasing = Options.getData("antialiasing");
 
 		score = new ResultScore(35, 305, 10, params.scoreData.score);
 
@@ -261,7 +254,6 @@ class ResultsSubstate extends MusicBeatSubstate {
 				gfGood.animation.addByPrefix("clap", "Girlfriend Good Anim", 24, false);
 				gfGood.visible = false;
 				// gfGood.zIndex = 500;
-				gfGood.antialiasing = Options.getData("antialiasing");
 				gfGood.animation.onFinish.add((animName:String) -> {
 					if (gfGood != null) {
 						gfGood.animation.play('clap', true, false, 9);
@@ -274,7 +266,6 @@ class ResultsSubstate extends MusicBeatSubstate {
 				bfGood.animation.addByPrefix("fall", "Boyfriend Good Anim0", 24, false);
 				bfGood.visible = false;
 				// bfGood.zIndex = 501;
-				bfGood.antialiasing = Options.getData("antialiasing");
 				bfGood.animation.onFinish.add(function(_) {
 					if (bfGood != null) {
 						bfGood.animation.play('fall', true, false, 14);
@@ -303,7 +294,6 @@ class ResultsSubstate extends MusicBeatSubstate {
 		}
 		else
 			difficulty.loadGraphic(Paths.gpuBitmap("resultScreen/" + diffSpr));
-		difficulty.antialiasing = Options.getData("antialiasing");
 		add(difficulty);
 
 		add(songName);
@@ -326,7 +316,6 @@ class ResultsSubstate extends MusicBeatSubstate {
 		var blackTopBar:FlxSprite = new FlxSprite().loadGraphic(Paths.gpuBitmap("resultScreen/topBarBlack"));
 		blackTopBar.y = -blackTopBar.height;
 		FlxTween.tween(blackTopBar, {y: 0}, 7 / 24, {ease: FlxEase.quartOut, startDelay: 3 / 24});
-		blackTopBar.antialiasing = Options.getData("antialiasing");
 		// blackTopBar.zIndex = 1010;
 		add(blackTopBar);
 
@@ -339,7 +328,6 @@ class ResultsSubstate extends MusicBeatSubstate {
 			soundSystem.animation.play("idle");
 			soundSystem.visible = true;
 		});
-		soundSystem.antialiasing = Options.getData("antialiasing");
 		// soundSystem.zIndex = 1100;
 		add(soundSystem);
 		insert(members.indexOf(soundSystem), clearPercentSmall);
@@ -347,7 +335,6 @@ class ResultsSubstate extends MusicBeatSubstate {
 		resultsAnim.animation.addByPrefix("result", "results", 24, false);
 		resultsAnim.visible = false;
 		// resultsAnim.zIndex = 1200;
-		resultsAnim.antialiasing = Options.getData("antialiasing");
 		add(resultsAnim);
 		try{
 			new FlxTimer().start(6 / 24, _ -> {
@@ -361,7 +348,6 @@ class ResultsSubstate extends MusicBeatSubstate {
 
 		ratingsPopin.animation.addByPrefix("idle", "Categories", 24, false);
 		ratingsPopin.visible = false;
-		ratingsPopin.antialiasing = Options.getData("antialiasing");
 		// ratingsPopin.zIndex = 1200;
 		add(ratingsPopin);
 		new FlxTimer().start(21 / 24, _ -> {
@@ -377,7 +363,6 @@ class ResultsSubstate extends MusicBeatSubstate {
 
 		scorePopin.animation.addByPrefix("score", "tally score", 24, false);
 		scorePopin.visible = false;
-		scorePopin.antialiasing = Options.getData("antialiasing");
 		// scorePopin.zIndex = 1200;
 		add(scorePopin);
 
@@ -410,7 +395,6 @@ class ResultsSubstate extends MusicBeatSubstate {
 		highscoreNew.frames = Paths.getSparrowAtlas("resultScreen/highscoreNew");
 		highscoreNew.animation.addByPrefix("new", "highscoreAnim0", 24, false);
 		highscoreNew.visible = false;
-		highscoreNew.antialiasing = Options.getData("antialiasing");
 		highscoreNew.updateHitbox();
 		add(highscoreNew);
 

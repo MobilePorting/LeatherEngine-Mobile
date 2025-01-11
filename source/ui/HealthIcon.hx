@@ -27,7 +27,6 @@ class HealthIcon extends TrackerSprite {
 	}
 
 	public function setupIcon(char:String = 'placeholder') {
-		antialiasing = Options.getData("antialiasing");
 		var iconPath:String = 'placeholder-icons';
 		var iconConfig:HealthIconConfig = {
 			offset: [0, 0],

@@ -66,7 +66,6 @@ class TimeBar extends FlxSpriteGroup{
 		text.setFormat(Paths.font("vcr.ttf"), Options.getData("biggerInfoText") ? 20 : 16, FlxColor.WHITE, CENTER, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
 		text.screenCenter(X);
 		text.scrollFactor.set();
-		text.antialiasing = Options.getData("antialiasing");
 
         // Sets up the time bar according to the style of the time bar.
         switch (Options.getData("timeBarStyle").toLowerCase()){

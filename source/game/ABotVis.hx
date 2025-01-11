@@ -43,7 +43,6 @@ class ABotVis extends FlxSpriteGroup
             viz.frames = visFrms;
             viz.width = totalWidth;
             //viz.height = FlxG.height;
-            viz.antialiasing = Options.getData("antialiasing");
             viz.x += posX;
             viz.y += posY;
             add(viz);

@@ -247,7 +247,7 @@ class NoteColorSubstate extends MusicBeatSubstate
 
             babyArrow.frames = Paths.getSparrowAtlas("ui skins/default/arrows/default", 'shared');
 
-			babyArrow.antialiasing = ui_settings[3] == "true";
+			babyArrow.antialiasing = ui_settings[3] == "true" && Options.getData("antialiasing");
 
 			babyArrow.setGraphicSize((babyArrow.width * Std.parseFloat(ui_settings[0])) * (Std.parseFloat(ui_settings[2]) - (Std.parseFloat(mania_size[key_Count-1]))));
 			babyArrow.updateHitbox();

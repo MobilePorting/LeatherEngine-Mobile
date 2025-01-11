@@ -24,7 +24,6 @@ class Checkbox extends FlxSprite
         this.sprTracker = tracking;
         scrollFactor.set();
 
-        antialiasing = Options.getData("antialiasing");
     }
 
     override function update(elapsed:Float)

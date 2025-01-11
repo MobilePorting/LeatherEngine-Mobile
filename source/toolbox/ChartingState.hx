@@ -41,85 +41,86 @@ import openfl.net.FileReference;
 using StringTools;
 using utilities.BackgroundUtil;
 
+@:publicFields
 class ChartingState extends MusicBeatState {
-	public var _file:FileReference;
+	var _file:FileReference;
 
-	public var UI_box:FlxUITabMenu;
+	var UI_box:FlxUITabMenu;
 
 	/**
 	 * Array of notes showing when each section STARTS in STEPS
 	 * Usually rounded up??
 	 */
-	public var curSection:Int = 0;
+	var curSection:Int = 0;
 
-	public var bpmTxt:FlxText;
+	var bpmTxt:FlxText;
 
-	public var strumLine:FlxSprite;
+	var strumLine:FlxSprite;
 
-	public static inline final GRID_SIZE:Int = 40;
+	static inline final GRID_SIZE:Int = 40;
 
-	public var dummyArrow:FlxSprite;
+	var dummyArrow:FlxSprite;
 
-	public var curRenderedNotes:FlxTypedGroup<Note>;
-	public var curRenderedIds:FlxTypedGroup<FlxSprite>;
-	public var curRenderedEvents:FlxTypedGroup<EventSprite>;
+	var curRenderedNotes:FlxTypedGroup<Note>;
+	var curRenderedIds:FlxTypedGroup<FlxSprite>;
+	var curRenderedEvents:FlxTypedGroup<EventSprite>;
 
-	public var gridBG:FlxSprite;
+	var gridBG:FlxSprite;
 
-	public var _song:SongData;
+	var _song:SongData;
 
-	public var difficulty:String = 'normal';
+	var difficulty:String = 'normal';
 
-	public var typingShit:FlxUIInputText;
-	public var swagShit:FlxUIInputText;
-	public var modchart_Input:FlxUIInputText;
-	public var cutscene_Input:FlxUIInputText;
-	public var endCutscene_Input:FlxUIInputText;
-	public var characterGroup_Input:FlxUIInputText;
+	var typingShit:FlxUIInputText;
+	var swagShit:FlxUIInputText;
+	var modchart_Input:FlxUIInputText;
+	var cutscene_Input:FlxUIInputText;
+	var endCutscene_Input:FlxUIInputText;
+	var characterGroup_Input:FlxUIInputText;
 
 	/*
 	 * WILL BE THE CURRENT / LAST PLACED NOTE
 	**/
-	public var curSelectedNote:Array<Dynamic>;
-	public var curSelectedEvent:Array<Dynamic>;
+	var curSelectedNote:Array<Dynamic>;
+	var curSelectedEvent:Array<Dynamic>;
 
-	public var tempBpm:Float = 0;
+	var tempBpm:Float = 0;
 
-	public var vocals:SoundGroup;
+	var vocals:SoundGroup;
 
-	public var leftIcon:HealthIcon;
-	public var rightIcon:HealthIcon;
+	var leftIcon:HealthIcon;
+	var rightIcon:HealthIcon;
 
-	public var characters:Map<String, Array<String>> = new Map<String, Array<String>>();
-	public var gridBlackLine:FlxSprite;
-	public var gridEventBlackLine:FlxSprite;
+	var characters:Map<String, Array<String>> = new Map<String, Array<String>>();
+	var gridBlackLine:FlxSprite;
+	var gridEventBlackLine:FlxSprite;
 
-	public var selected_mod:String = "default";
+	var selected_mod:String = "default";
 
-	public var stepperSusLength:FlxUINumericStepper;
-	public var stepperCharLength:FlxUINumericStepper;
+	var stepperSusLength:FlxUINumericStepper;
+	var stepperCharLength:FlxUINumericStepper;
 
-	public var current_Note_Character:Int = 0;
+	var current_Note_Character:Int = 0;
 
-	public static var loadedAutosave:Bool = false;
+	static var loadedAutosave:Bool = false;
 
-	public static var hitsounds:Bool = false;
+	static var hitsounds:Bool = false;
 
-	public var eventList:Array<String> = [];
-	public var eventListData:Array<Array<String>> = [];
+	var eventList:Array<String> = [];
+	var eventListData:Array<Array<String>> = [];
 
-	public var zoom_level:Float = 1;
+	var zoom_level:Float = 1;
 
-	public var min_zoom:Float = 0.5;
-	public var max_zoom:Float = 16;
+	var min_zoom:Float = 0.5;
+	var max_zoom:Float = 16;
 
-	public var lilBuddiesBox:FlxUICheckBox;
+	var lilBuddiesBox:FlxUICheckBox;
 
-	public var lilStage:FlxSprite;
-	public var lilBf:FlxSprite;
-	public var lilOpp:FlxSprite;
+	var lilStage:FlxSprite;
+	var lilBf:FlxSprite;
+	var lilOpp:FlxSprite;
 
-	public var menuBG:FlxSprite;
+	var menuBG:FlxSprite;
 
 	override function create() {
 		#if NO_PRELOAD_ALL
@@ -586,8 +587,8 @@ class ChartingState extends MusicBeatState {
 		FlxG.camera.follow(cameraShitThing);
 	}
 
-	public static var muteInstShit:Bool = false;
-	public static var muteVocalShit:Bool = false;
+	static var muteInstShit:Bool = false;
+	static var muteVocalShit:Bool = false;
 
 	var cameraShitThing:FlxObject = new FlxObject(0, 0, Std.int(FlxG.width / 2), 4);
 
@@ -659,6 +660,8 @@ class ChartingState extends MusicBeatState {
 	var cur_Note_Type:String = "default";
 
 	var copiedSection:Int = 0;
+
+	var arrowTypes:Array<String> = CoolUtil.coolTextFile(Paths.txt("arrowTypes"));
 
 	function addSectionUI():Void {
 		// SECTION CREATION
@@ -745,16 +748,8 @@ class ChartingState extends MusicBeatState {
 			pasteSection();
 		});
 
-		var copyEventsButton:FlxButton = new FlxButton(copySectionButton.x, copySectionButton.y + copySectionButton.height + 2, "Copy Events", function() {
-			updateGrid();
-		});
-
-		var pasteEventsButton:FlxButton = new FlxButton(copyEventsButton.x + copyEventsButton.width + 2, copyEventsButton.y, "Paste Events", function() {
-			pasteEvents();
-		});
-
 		// Labels for Interactive Stuff
-		var noteText = new FlxText(10, 240 + copyEventsButton.height + 2, 0, "Note Options", 9);
+		var noteText = new FlxText(10, 240 + copySectionButton.height + 2, 0, "Note Options", 9);
 		var stepperText:FlxText = new FlxText(110 + copySectionCount.width, 130, 0, "Sections back", 9);
 		var bpmText:FlxText = new FlxText(12 + stepperSectionBPM.width, 100, 0, "New BPM", 9);
 
@@ -763,7 +758,7 @@ class ChartingState extends MusicBeatState {
 		// NOTE SECTION //
 
 		// numbers
-		stepperSusLength = new FlxUINumericStepper(10, 260 + copyEventsButton.height + 2, Conductor.stepCrochet / 2, 0, 0, 9999);
+		stepperSusLength = new FlxUINumericStepper(10, 260 + copySectionButton.height + 2, Conductor.stepCrochet / 2, 0, 0, 9999);
 		stepperSusLength.value = 0;
 		stepperSusLength.name = 'note_susLength';
 
@@ -787,12 +782,12 @@ class ChartingState extends MusicBeatState {
 			});
 
 		// dropdown lmao
-		var arrow_Types = CoolUtil.coolTextFile(Paths.txt("arrowTypes"));
-
-		var typeDropDown = new FlxScrollableDropDownMenu(setCharacterLeftSide.x, setCharacterLeftSide.y + setCharacterLeftSide.height,
-			FlxScrollableDropDownMenu.makeStrIdLabelArray(arrow_Types, true), function(type:String) {
-				cur_Note_Type = arrow_Types[Std.parseInt(type)];
+		var typeDropDown:FlxScrollableDropDownMenu = new FlxScrollableDropDownMenu(setCharacterLeftSide.x, setCharacterLeftSide.y + 40,
+			FlxScrollableDropDownMenu.makeStrIdLabelArray(arrowTypes, true), function(type:String) {
+				cur_Note_Type = arrowTypes[Std.parseInt(type)];
 		});
+
+		characterGroup_Input = new FlxUIInputText(typeDropDown.x, setCharacterLeftSide.y + 22, 70, "", 8);
 
 		typeDropDown.selectedLabel = cur_Note_Type;
 
@@ -800,15 +795,13 @@ class ChartingState extends MusicBeatState {
 
 		// funny input box
 
-		characterGroup_Input = new FlxUIInputText(typeDropDown.x, typeDropDown.y + 20, 70, "", 8);
-
 		blockPressWhileTypingOn.push(characterGroup_Input);
 
 		// labels
 		var susText = new FlxText(stepperSusLength.x + stepperSusLength.width + 1, stepperSusLength.y, 0, "Sustain note length", 9);
 		var charText = new FlxText(stepperCharLength.x + stepperCharLength.width + 1, stepperCharLength.y, 0, "Character", 9);
 
-		var charGroupText = new FlxText(characterGroup_Input.x + characterGroup_Input.width + 1, characterGroup_Input.y, 0,
+		var charGroupText = new FlxText(characterGroup_Input.x + characterGroup_Input.width + 1, setCharacterLeftSide.y + setCharacterLeftSide.height, 0,
 			"Character Group (seperated by ',')", 9);
 
 		// note stuff
@@ -849,9 +842,6 @@ class ChartingState extends MusicBeatState {
 
 		tab_group_section.add(copySectionButton);
 		tab_group_section.add(pasteSectionButton);
-
-		tab_group_section.add(copyEventsButton);
-		tab_group_section.add(pasteEventsButton);
 
 		// final addition
 		UI_box.addGroup(tab_group_section);
@@ -999,9 +989,9 @@ class ChartingState extends MusicBeatState {
 		UI_box.addGroup(tab_group_note);
 	}
 
-	public var addedVocals:Array<String> = [];
+	var addedVocals:Array<String> = [];
 
-	public function loadSong(daSong:String):Void {
+	function loadSong(daSong:String):Void {
 		if (FlxG.sound.music != null)
 			FlxG.sound.music.stop();
 
@@ -1280,8 +1270,8 @@ class ChartingState extends MusicBeatState {
 						if (note.isSustainNote)
 							return;
 
-						if (!claps.contains(note)) {
-							claps.push(note);
+						if (!note.playedHitSound) {
+							note.playedHitSound = true;
 
 							if (note.rawNoteData % (_song.keyCount + _song.playerKeyCount) < _song.keyCount
 								&& _song.notes[curSection].mustHitSection
@@ -1614,9 +1604,7 @@ class ChartingState extends MusicBeatState {
 		super.update(elapsed);
 	}
 
-	var beatSnaps:Array<Int> = [4, 6, 8, 12, 16, 24, 32, 48, 64, 128, 192];
-
-	var claps:Array<Note> = [];
+	final beatSnaps:Array<Int> = [4, 6, 8, 12, 16, 24, 32, 48, 64, 128, 192];
 
 	function changeNoteSustain(value:Float):Void {
 		if (curSelectedNote != null) {
@@ -1676,7 +1664,7 @@ class ChartingState extends MusicBeatState {
 	}
 
 	function changeSection(sec:Int = 0, ?updateMusic:Bool = true):Void {
-		//trace('changing section' + sec);
+		// trace('changing section' + sec);
 
 		if (_song.notes[sec] != null) {
 			curSection = sec;
@@ -1740,23 +1728,7 @@ class ChartingState extends MusicBeatState {
 		if (daSec != curSection) {
 			for (note in _song.notes[daSec].sectionNotes) {
 				var strum = sectionStartTime() + (note[0] - sectionStartTime(daSec));
-
-				var copiedEvent:Array<Dynamic> = [strum, note[1], note[2], note[3], note[4]];
-				_song.notes[curSection].sectionNotes.push(copiedEvent);
 			}
-		}
-
-		updateGrid();
-	}
-
-	function pasteEvents() {
-		var daSec = copiedSection;
-
-		if (daSec != curSection) {
-			var noteStrum = getStrumTime(dummyArrow.y) + sectionStartTime();
-
-			var copiedEvent:Array<Dynamic> = [eventName, noteStrum, eventValue1, eventValue2];
-			events.push(copiedEvent);
 		}
 
 		updateGrid();
@@ -1810,12 +1782,12 @@ class ChartingState extends MusicBeatState {
 		return (json.healthIcon ?? char);
 	}
 
-	public function updateNoteUI():Void {
+	function updateNoteUI():Void {
 		if (curSelectedNote != null)
 			stepperSusLength.value = curSelectedNote[2];
 	}
 
-	public function updateGrid():Void {
+	function updateGrid():Void {
 		var uiSettings:Array<String> = CoolUtil.coolTextFile(Paths.txt("ui skins/" + _song.ui_Skin + "/config"));
 		remove(gridBG);
 		gridBG.kill();
@@ -1959,23 +1931,21 @@ class ChartingState extends MusicBeatState {
 				sustainNote.sustains = sustainGroup;
 			}
 			note.sustains = sustainGroup;
+		}
 
-			if (events.length >= 1) {
-				for (event in events) {
-					if (Std.int(event[1]) >= Std.int(sectionStartTime())
-						&& Std.int(event[1]) < Std.int(sectionStartTime(curSection + 1))) {
-						var eventSprite:EventSprite = new EventSprite(event[1]);
+		if (events.length >= 1) {
+			for (event in events) {
+				if (Std.int(event[1]) >= Std.int(sectionStartTime()) && Std.int(event[1]) < Std.int(sectionStartTime(curSection + 1))) {
+					var eventSprite:EventSprite = new EventSprite(event[1]);
 
-						eventSprite.loadGraphic(Paths.gpuBitmap("charter/eventSprite", "shared"));
+					eventSprite.loadGraphic(Paths.gpuBitmap("charter/eventSprite", "shared"));
 
-						eventSprite.setGraphicSize(GRID_SIZE, GRID_SIZE);
-						eventSprite.updateHitbox();
+					eventSprite.setGraphicSize(GRID_SIZE, GRID_SIZE);
+					eventSprite.updateHitbox();
 
-						eventSprite.y = Math.floor(getYfromStrum((event[1] - sectionStartTime()) % (Conductor.stepCrochet * Conductor.stepsPerSection)));
-						eventSprite.antialiasing = Options.getData("antialiasing");
+					eventSprite.y = Math.floor(getYfromStrum((event[1] - sectionStartTime()) % (Conductor.stepCrochet * Conductor.stepsPerSection)));
 
-						curRenderedEvents.add(eventSprite);
-					}
+					curRenderedEvents.add(eventSprite);
 				}
 			}
 		}
@@ -1983,7 +1953,7 @@ class ChartingState extends MusicBeatState {
 
 	var events = [];
 
-	private function addSection(?coolLength:Int = 0):Void {
+	function addSection(?coolLength:Int = 0):Void {
 		var col:Int = Conductor.stepsPerSection;
 
 		if (coolLength == 0)
@@ -2156,8 +2126,7 @@ class ChartingState extends MusicBeatState {
 			noteData = Math.floor((FlxG.mouse.x / GRID_SIZE) - 1);
 		}
 		var noteSus = 0;
-
-		if (noteData != -1) {
+		if (noteData > -1) {
 			var characters:Array<Int> = [];
 
 			if (characterGroup_Input.text != "" && characterGroup_Input.text != " ") {

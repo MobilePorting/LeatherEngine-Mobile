@@ -208,17 +208,14 @@ class MusicBeatState extends #if MODCHARTING_TOOLS modcharting.ModchartMusicBeat
 
 		super.update(elapsed);
 
-		if (FlxG.stage != null)
-			FlxG.stage.frameRate = #if mobile (FlxG.state is mobile.states.CopyState) ? Application.current.window.displayMode.refreshRate : #end FlxMath.bound(Options.getData("maxFPS"), 0.1, 1000);
-
-		if (!Options.getData("antialiasing")) {
+		/*if (!Options.getData("antialiasing")) {
 			forEachAlive(function(basic:FlxBasic) {
 				if (!(basic is FlxSprite)) {
 					return;
 				}
 				cast(basic, FlxSprite).antialiasing = false;
 			}, true);
-		}
+		}*/
 
 		if (#if mobile !(FlxG.state is mobile.states.CopyState) && #end FlxG.keys.checkStatus(FlxKey.fromString(Options.getData("fullscreenBind", "binds")), FlxInputState.JUST_PRESSED))
 			FlxG.fullscreen = !FlxG.fullscreen;

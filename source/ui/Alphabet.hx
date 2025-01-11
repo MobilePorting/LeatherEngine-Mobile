@@ -206,7 +206,6 @@ class AlphaCharacter extends FlxSprite {
 
 		frames = Paths.getSparrowAtlas('alphabet');
 
-		antialiasing = Options.getData("antialiasing");
 
 		setGraphicSize(width);
 		updateHitbox();

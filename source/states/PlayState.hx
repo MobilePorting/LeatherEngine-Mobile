@@ -1010,7 +1010,6 @@ class PlayState extends MusicBeatState {
 		scoreTxt.screenCenter(X);
 		scoreTxt.setFormat(Paths.font("vcr.ttf"), Options.getData("biggerScoreInfo") ? 20 : 16, FlxColor.WHITE, CENTER, FlxTextBorderStyle.OUTLINE,
 			FlxColor.BLACK);
-		scoreTxt.antialiasing = Options.getData("antialiasing");
 		scoreTxt.scrollFactor.set();
 
 		// settings again
@@ -1021,6 +1020,7 @@ class PlayState extends MusicBeatState {
 
 		timeBar = new TimeBar(SONG, storyDifficultyStr);
 		timeBar.cameras = [camHUD];
+		timeBar.bar.color = dad.barColor;
 		add(timeBar);
 
 		if (Options.getData("sideRatings")) {
@@ -1029,7 +1029,6 @@ class PlayState extends MusicBeatState {
 			ratingText.screenCenter(Y);
 			ratingText.x += Options.getData("ratingTextOffset")[0];
 			ratingText.y += Options.getData("ratingTextOffset")[1];
-			ratingText.antialiasing = Options.getData("antialiasing");
 			ratingText.alignment = Options.getData("ratingTextAlign");
 			ratingText.scrollFactor.set();
 			add(ratingText);
@@ -1388,7 +1387,7 @@ class PlayState extends MusicBeatState {
 					var ready:FlxSprite = new FlxSprite().loadGraphic(Paths.gpuBitmap('$introPath/ready'));
 					ready.scrollFactor.set();
 					ready.updateHitbox();
-					ready.antialiasing = ui_settings[3] == "true";
+					ready.antialiasing = ui_settings[3] == "true" && Options.getData("antialiasing");
 
 					ready.setGraphicSize(ready.width * Std.parseFloat(ui_settings[0]) * Std.parseFloat(ui_settings[7]));
 					ready.updateHitbox();
@@ -1406,7 +1405,7 @@ class PlayState extends MusicBeatState {
 					var set:FlxSprite = new FlxSprite().loadGraphic(Paths.gpuBitmap('$introPath/set'));
 					set.scrollFactor.set();
 					set.updateHitbox();
-					set.antialiasing = ui_settings[3] == "true";
+					set.antialiasing = ui_settings[3] == "true" && Options.getData("antialiasing"); 
 
 					set.setGraphicSize(set.width * Std.parseFloat(ui_settings[0]) * Std.parseFloat(ui_settings[7]));
 					set.updateHitbox();
@@ -1424,7 +1423,7 @@ class PlayState extends MusicBeatState {
 					var go:FlxSprite = new FlxSprite().loadGraphic(Paths.gpuBitmap('$introPath/go'));
 					go.scrollFactor.set();
 					go.updateHitbox();
-					go.antialiasing = ui_settings[3] == "true";
+					go.antialiasing = ui_settings[3] == "true" && Options.getData("antialiasing");
 
 					go.setGraphicSize(go.width * Std.parseFloat(ui_settings[0]) * Std.parseFloat(ui_settings[7]));
 					go.updateHitbox();
@@ -2856,7 +2855,7 @@ class PlayState extends MusicBeatState {
 			accuracyText.borderStyle = FlxTextBorderStyle.OUTLINE;
 			accuracyText.borderSize = 1;
 			accuracyText.font = Paths.font("vcr.ttf");
-			accuracyText.antialiasing = ui_settings[3] == "true";
+			accuracyText.antialiasing = ui_settings[3] == "true" && Options.getData("antialiasing");
 
 			ratingsGroup.add(accuracyText);
 		}
@@ -2864,7 +2863,7 @@ class PlayState extends MusicBeatState {
 		ratingsGroup.add(rating);
 
 		rating.setGraphicSize(rating.width * Std.parseFloat(ui_settings[0]) * Std.parseFloat(ui_settings[4]));
-		rating.antialiasing = ui_settings[3] == "true";
+		rating.antialiasing = ui_settings[3] == "true" && Options.getData("antialiasing");
 		rating.updateHitbox();
 
 		var seperatedScore:Array<Int> = [];
@@ -2895,7 +2894,7 @@ class PlayState extends MusicBeatState {
 			numScore.setGraphicSize(numScore.width * Std.parseFloat(ui_settings[1]));
 			numScore.updateHitbox();
 
-			numScore.antialiasing = ui_settings[3] == "true";
+			numScore.antialiasing = ui_settings[3] == "true" && Options.getData("antialiasing");
 
 			numScore.velocity.y = FlxG.random.int(30, 60);
 			numScore.velocity.x = FlxG.random.float(-5, 5);

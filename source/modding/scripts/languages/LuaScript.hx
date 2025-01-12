@@ -1223,7 +1223,7 @@ class LuaScript extends Script {
 		});
 
 		setFunction("getRenderedNoteType", function(id:Int) {
-			return PlayState.instance.notes.members[id].noteData;
+			return PlayState.instance.notes.members[id].arrow_Type;
 		});
 
 		setFunction("getRenderedNoteData", function(id:Int) {

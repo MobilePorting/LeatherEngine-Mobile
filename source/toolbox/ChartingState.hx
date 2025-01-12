@@ -1493,55 +1493,43 @@ class ChartingState extends MusicBeatState {
 				playbackSpeed = 1.0;
 
 			if (!controls.mobileC && FlxG.mouse.wheel != 0 && !control) {
+				if (control) {
+					cameraShitThing.x += FlxG.mouse.wheel * 5;
+
+					if (cameraShitThing.x > gridBG.x + gridBG.width)
+						cameraShitThing.x = gridBG.x + gridBG.width;
+
+					if (cameraShitThing.x < 0)
+						cameraShitThing.x = 0;
+				} else {
+					lilBf.animation.play("idle", true);
+					lilOpp.animation.play("idle", true);
+					FlxG.sound.music.pause();
+					vocals.pause();
+
+					FlxG.sound.music.time -= (FlxG.mouse.wheel * Conductor.stepCrochet * 0.4);
+					vocals.time = FlxG.sound.music.time;
+
+					if (FlxG.sound.music.time < sectionStartTime()) {
+						changeSection(curSection - 1);
+					}
+				}
+			}
+
+			if ((virtualPad.buttonUp.justPressed || FlxG.keys.justPressed.W) || (virtualPad.buttonDown.justPressed || FlxG.keys.justPressed.S)) {
 				lilBf.animation.play("idle", true);
 				lilOpp.animation.play("idle", true);
 				FlxG.sound.music.pause();
 				vocals.pause();
 
-				FlxG.sound.music.time -= (FlxG.mouse.wheel * Conductor.stepCrochet * 0.4);
+				var daTime:Float = ((FlxG.keys.pressed.SHIFT || virtualPad.buttonY.pressed) ? Conductor.stepCrochet * 2 : 700 * FlxG.elapsed);
+
+				if ((virtualPad.buttonUp.justPressed || FlxG.keys.justPressed.W)) {
+					FlxG.sound.music.time -= daTime;
+				} else
+					FlxG.sound.music.time += daTime;
+
 				vocals.time = FlxG.sound.music.time;
-			} else if (!controls.mobileC && FlxG.mouse.wheel != 0) {
-				cameraShitThing.x += FlxG.mouse.wheel * 5;
-
-				if (cameraShitThing.x > gridBG.x + gridBG.width)
-					cameraShitThing.x = gridBG.x + gridBG.width;
-
-				if (cameraShitThing.x < 0)
-					cameraShitThing.x = 0;
-			}
-
-			if (!(FlxG.keys.pressed.SHIFT || virtualPad.buttonY.pressed)) {
-				if ((virtualPad.buttonUp.pressed || FlxG.keys.pressed.W) || (virtualPad.buttonDown.pressed || FlxG.keys.pressed.S)) {
-					lilBf.animation.play("idle", true);
-					lilOpp.animation.play("idle", true);
-					FlxG.sound.music.pause();
-					vocals.pause();
-
-					var daTime:Float = 700 * FlxG.elapsed;
-
-					if (virtualPad.buttonUp.pressed || FlxG.keys.pressed.W) {
-						FlxG.sound.music.time -= daTime;
-					} else
-						FlxG.sound.music.time += daTime;
-
-					vocals.time = FlxG.sound.music.time;
-				}
-			} else {
-				if (FlxG.keys.justPressed.W || FlxG.keys.justPressed.S) {
-					lilBf.animation.play("idle", true);
-					lilOpp.animation.play("idle", true);
-					FlxG.sound.music.pause();
-					vocals.pause();
-
-					var daTime:Float = Conductor.stepCrochet * 2;
-
-					if (FlxG.keys.justPressed.W) {
-						FlxG.sound.music.time -= daTime;
-					} else
-						FlxG.sound.music.time += daTime;
-
-					vocals.time = FlxG.sound.music.time;
-				}
 			}
 
 			var shiftThing:Int = 1;
@@ -1600,6 +1588,13 @@ class ChartingState extends MusicBeatState {
 
 		leftIcon.x = gridBG.x + GRID_SIZE;
 		rightIcon.x = gridBlackLine.x;
+
+		for(n in curRenderedNotes.members){
+			if(n.isSustainNote && !StringTools.endsWith(n.animation.curAnim.name, "end")){
+				n.setGraphicSize(n.frameWidth * n.scale.x, 40);
+				n.updateHitbox();
+			}
+		}
 
 		super.update(elapsed);
 	}

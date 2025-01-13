@@ -137,8 +137,7 @@ class LuaScript extends Script {
 
 	override public function destroy() {
 		trails.clear();
-		/*Lua.close(lua);
-			lua = null; */
+		Lua.close(lua);
 	}
 
 	function getLuaErrorMessage(l) {
@@ -1152,6 +1151,10 @@ class LuaScript extends Script {
 
 		setFunction("getUnspawnNotes", function() {
 			return PlayState.instance.unspawnNotes.length;
+		});
+
+		setFunction("getUnspawnedNoteType", function(id:Int) {
+			return PlayState.instance.unspawnNotes[id].arrow_Type;
 		});
 
 		setFunction("getUnspawnedNoteNoteType", function(id:Int) {

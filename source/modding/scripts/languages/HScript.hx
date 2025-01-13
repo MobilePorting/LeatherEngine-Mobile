@@ -76,14 +76,7 @@ class HScript extends Script {
 	}
 
 	override public function destroy(){
-		interp?.variables?.clear();
-		parser = null;
-		program = null;
-		interp = null;
 		
-		for (script in otherScripts) {
-			script?.destroy();
-		}
 	}
 
 	override public function setup() {

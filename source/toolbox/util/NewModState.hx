@@ -20,7 +20,7 @@ import flixel.FlxG;
 import utilities.Discord.DiscordClient;
 #end
 import states.MusicBeatState;
-import flixel.addons.ui.FlxUIInputText;
+import flixel.text.FlxInputText;
 import lime.ui.FileDialog;
 import lime.app.Application;
 import flixel.tweens.FlxTween;
@@ -36,7 +36,7 @@ class NewModState extends MusicBeatState{
     public var bg:FlxSprite;
 
     public var modNameText:FlxText;
-    public var modName:FlxUIInputText;
+    public var modName:FlxInputText;
 
     public var UI_box:FlxUITabMenu;
 
@@ -46,19 +46,19 @@ class NewModState extends MusicBeatState{
     public var modIconPath:String = Paths.image('template mod');
 
     public var descriptionText:FlxText;
-    public var description:FlxUIInputText;
+    public var description:FlxInputText;
 
     public var authorText:FlxText;
-    public var author:FlxUIInputText;
+    public var author:FlxInputText;
 
     public var modVersionText:FlxText;
-    public var modVersion:FlxUIInputText;
+    public var modVersion:FlxInputText;
 
     public var checkAutoEnable:FlxUICheckBox;
     public var checkHideModSwitch:FlxUICheckBox;
 
     public var rpc_idText:FlxText;
-    public var rpc_id:FlxUIInputText;
+    public var rpc_id:FlxInputText;
 
     public var createButton:FlxButton;
 
@@ -108,7 +108,7 @@ class NewModState extends MusicBeatState{
         UI_box.addGroup(tab_Group_mod);
 		UI_box.scrollFactor.set();
 
-        modName = new FlxUIInputText(400, 250);
+        modName = new FlxInputText(400, 250);
         add(modName);
 
         modNameText = new FlxText();
@@ -144,7 +144,7 @@ class NewModState extends MusicBeatState{
         modIcon.y = modNameText.y + 100;
         add(modIcon);
 
-        description = new FlxUIInputText(modName.x + 300, modName.y);
+        description = new FlxInputText(modName.x + 300, modName.y);
         add(description);
 
         descriptionText = new FlxText();
@@ -155,7 +155,7 @@ class NewModState extends MusicBeatState{
         descriptionText.text = "Description";
         add(descriptionText);
 
-        author = new FlxUIInputText(description.x , description.y + 45);
+        author = new FlxInputText(description.x , description.y + 45);
         add(author);
 
         authorText = new FlxText();
@@ -167,7 +167,7 @@ class NewModState extends MusicBeatState{
         add(authorText);
 
 
-        modVersion = new FlxUIInputText(authorText.x , authorText.y + 120);
+        modVersion = new FlxInputText(authorText.x , authorText.y + 120);
         modVersion.text = "1.0.0";
         add(modVersion);
 
@@ -179,7 +179,7 @@ class NewModState extends MusicBeatState{
         modVersionText.text = "Mod Version\n(Must follow *.*.*)";
         add(modVersionText);
 
-        rpc_id = new FlxUIInputText(description.x, modName.y + 300);
+        rpc_id = new FlxInputText(description.x, modName.y + 300);
         add(rpc_id);
 
         rpc_idText = new FlxText();

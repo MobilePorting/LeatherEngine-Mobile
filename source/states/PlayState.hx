@@ -260,6 +260,11 @@ class PlayState extends MusicBeatState {
 	var maxHealth:Float = 2;
 
 	/**
+	 * Is the player dead?
+	 */
+	var dead(get, default):Bool = false;
+
+	/**
 		Current combo (or amount of notes hit in a row without a combo break).
 	**/
 	var combo:Int = 0;
@@ -911,11 +916,11 @@ class PlayState extends MusicBeatState {
 			'assets/data/song data/${curSong.toLowerCase()}/',
 			'mods/${Options.getData("curMod")}/data/scripts/local/',
 			'mods/${Options.getData("curMod")}/data/song data/${curSong.toLowerCase()}/',
-			//PolymodAssets.getPath('data/scripts/global/')
+			// PolymodAssets.getPath('data/scripts/global/')
 		];
 
-		for(mod in ModList.getActiveMods(PolymodHandler.metadataArrays)){
-			if(FileSystem.exists('mods/$mod/data/scripts/global/')){
+		for (mod in ModList.getActiveMods(PolymodHandler.metadataArrays)) {
+			if (FileSystem.exists('mods/$mod/data/scripts/global/')) {
 				foldersToCheck.push('mods/$mod/data/scripts/global/');
 			}
 		}
@@ -1405,7 +1410,7 @@ class PlayState extends MusicBeatState {
 					var set:FlxSprite = new FlxSprite().loadGraphic(Paths.gpuBitmap('$introPath/set'));
 					set.scrollFactor.set();
 					set.updateHitbox();
-					set.antialiasing = ui_settings[3] == "true" && Options.getData("antialiasing"); 
+					set.antialiasing = ui_settings[3] == "true" && Options.getData("antialiasing");
 
 					set.setGraphicSize(set.width * Std.parseFloat(ui_settings[0]) * Std.parseFloat(ui_settings[7]));
 					set.updateHitbox();
@@ -2091,7 +2096,7 @@ class PlayState extends MusicBeatState {
 		if ((Options.getData("resetButton") && !switchedStates && controls.RESET) || (Options.getData("noHit") && misses > 0))
 			health = minHealth;
 
-		if (health <= minHealth && !switchedStates && !invincible && !Options.getData("noDeath")) {
+		if (dead) {
 			boyfriend.stunned = true;
 
 			persistentUpdate = false;
@@ -2994,17 +2999,17 @@ class PlayState extends MusicBeatState {
 					}
 				}
 
-				for (i in 0...justPressedArray.length) {
-					if (justPressedArray[i]) {
-						call("keyPressed", [i]);
+					for (i in 0...justPressedArray.length) {
+						if (justPressedArray[i]) {
+							call("keyPressed", [i ?? justPressedArray.length]);
+						}
 					}
-				}
 
-				for (i in 0...releasedArray.length) {
-					if (releasedArray[i]) {
-						call("keyReleased", [i]);
+					for (i in 0...releasedArray.length) {
+						if (releasedArray[i]) {
+							call("keyReleased", [i ?? justPressedArray.length]);
+						}
 					}
-				}
 
 				if (justPressedArray.contains(true) && generatedMusic) {
 					// variables
@@ -4035,8 +4040,6 @@ class PlayState extends MusicBeatState {
 		LuaScript.lua_Cameras.clear();
 		LuaScript.lua_Jsons.clear();
 
-		scripts.clear();
-		scripts = null;
 	}
 
 	function processEvent(event:Array<Dynamic>) {
@@ -4202,7 +4205,7 @@ class PlayState extends MusicBeatState {
 	}
 
 	function setupNoteTypeScript(noteType:String) {
-		if(FlxG.state != this)
+		if (FlxG.state != this)
 			return;
 		#if LUA_ALLOWED
 		if (!scripts.exists(noteType.toLowerCase()) && Assets.exists(Paths.lua("arrow types/" + noteType))) {
@@ -4251,7 +4254,8 @@ class PlayState extends MusicBeatState {
 		insert(members.indexOf(boyfriend), behind);
 	}
 
-	@:noCompletion function set_speed(speed:Float):Float {
+	@:noCompletion
+	function set_speed(speed:Float):Float {
 		if (Options.getData("useCustomScrollSpeed")) {
 			speed = Options.getData("customScrollSpeed") / songMultiplier;
 		}
@@ -4264,6 +4268,11 @@ class PlayState extends MusicBeatState {
 			}
 		}
 		return this.speed = speed;
+	}
+
+	@:noCompletion
+	inline function get_dead():Bool {
+		return health <= minHealth && !switchedStates && !invincible && !Options.getData("noDeath");
 	}
 
 	public function openChartEditor():Void

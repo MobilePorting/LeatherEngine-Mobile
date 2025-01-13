@@ -22,7 +22,7 @@ import flixel.FlxSprite;
 import flixel.addons.display.FlxGridOverlay;
 import flixel.addons.ui.FlxUI;
 import flixel.addons.ui.FlxUICheckBox;
-import flixel.addons.ui.FlxUIInputText;
+import flixel.text.FlxInputText;
 import flixel.addons.ui.FlxUINumericStepper;
 import flixel.addons.ui.FlxUITabMenu;
 import flixel.addons.ui.FlxUISlider;
@@ -71,12 +71,12 @@ class ChartingState extends MusicBeatState {
 
 	var difficulty:String = 'normal';
 
-	var typingShit:FlxUIInputText;
-	var swagShit:FlxUIInputText;
-	var modchart_Input:FlxUIInputText;
-	var cutscene_Input:FlxUIInputText;
-	var endCutscene_Input:FlxUIInputText;
-	var characterGroup_Input:FlxUIInputText;
+	var typingShit:FlxInputText;
+	var swagShit:FlxInputText;
+	var modchart_Input:FlxInputText;
+	var cutscene_Input:FlxInputText;
+	var endCutscene_Input:FlxInputText;
+	var characterGroup_Input:FlxInputText;
 
 	/*
 	 * WILL BE THE CURRENT / LAST PLACED NOTE
@@ -383,11 +383,11 @@ class ChartingState extends MusicBeatState {
 		// interactive
 
 		// inputs
-		var UI_songTitle:FlxUIInputText = new FlxUIInputText(10, 30, 70, _song.song, 8);
+		var UI_songTitle:FlxInputText = new FlxInputText(10, 30, 70, _song.song, 8);
 		typingShit = UI_songTitle;
 		blockPressWhileTypingOn.push(typingShit);
 
-		var UI_songDiff:FlxUIInputText = new FlxUIInputText(10, UI_songTitle.y + UI_songTitle.height + 2, 70, PlayState.storyDifficultyStr, 8);
+		var UI_songDiff:FlxInputText = new FlxInputText(10, UI_songTitle.y + UI_songTitle.height + 2, 70, PlayState.storyDifficultyStr, 8);
 		swagShit = UI_songDiff;
 		blockPressWhileTypingOn.push(swagShit);
 
@@ -468,7 +468,7 @@ class ChartingState extends MusicBeatState {
 			updateGrid();
 		};
 
-		modchart_Input = new FlxUIInputText(10, check_mute_inst.y + check_mute_inst.height + 2, 70, _song.modchartPath, 8);
+		modchart_Input = new FlxInputText(10, check_mute_inst.y + check_mute_inst.height + 2, 70, _song.modchartPath, 8);
 
 		var check_modchart_tools:FlxUICheckBox = new FlxUICheckBox(modchart_Input.x + (modchart_Input.width * 2) + 20, modchart_Input.y, null, null,
 			"Modcharting Tools", 100);
@@ -479,8 +479,8 @@ class ChartingState extends MusicBeatState {
 			trace('CHECKED!');
 		};
 
-		cutscene_Input = new FlxUIInputText(modchart_Input.x, modchart_Input.y + modchart_Input.height + 2, 70, _song.cutscene, 8);
-		endCutscene_Input = new FlxUIInputText(cutscene_Input.x, cutscene_Input.y + cutscene_Input.height + 2, 70, _song.endCutscene, 8);
+		cutscene_Input = new FlxInputText(modchart_Input.x, modchart_Input.y + modchart_Input.height + 2, 70, _song.cutscene, 8);
+		endCutscene_Input = new FlxInputText(cutscene_Input.x, cutscene_Input.y + cutscene_Input.height + 2, 70, _song.endCutscene, 8);
 
 		blockPressWhileTypingOn.push(modchart_Input);
 		blockPressWhileTypingOn.push(cutscene_Input);
@@ -592,8 +592,8 @@ class ChartingState extends MusicBeatState {
 
 	var cameraShitThing:FlxObject = new FlxObject(0, 0, Std.int(FlxG.width / 2), 4);
 
-	var value1:FlxUIInputText;
-	var value2:FlxUIInputText;
+	var value1:FlxInputText;
+	var value2:FlxInputText;
 
 	var valueDescriptions:FlxText;
 
@@ -622,8 +622,8 @@ class ChartingState extends MusicBeatState {
 		blockPressWhileScrolling.push(eventDropDown);
 
 		// inputs
-		value1 = new FlxUIInputText(10, 60, 70, eventValue1, 8);
-		value2 = new FlxUIInputText(value1.x + value1.width + 2, value1.y, 70, eventValue2, 8);
+		value1 = new FlxInputText(10, 60, 70, eventValue1, 8);
+		value2 = new FlxInputText(value1.x + value1.width + 2, value1.y, 70, eventValue2, 8);
 
 		blockPressWhileTypingOn.push(value1);
 		blockPressWhileTypingOn.push(value2);
@@ -787,7 +787,7 @@ class ChartingState extends MusicBeatState {
 				cur_Note_Type = arrowTypes[Std.parseInt(type)];
 		});
 
-		characterGroup_Input = new FlxUIInputText(typeDropDown.x, setCharacterLeftSide.y + 22, 70, "", 8);
+		characterGroup_Input = new FlxInputText(typeDropDown.x, setCharacterLeftSide.y + 22, 70, "", 8);
 
 		typeDropDown.selectedLabel = cur_Note_Type;
 
@@ -1179,7 +1179,7 @@ class ChartingState extends MusicBeatState {
 
 	var beatSnap:Int = 16;
 
-	private var blockPressWhileTypingOn:Array<FlxUIInputText> = [];
+	private var blockPressWhileTypingOn:Array<FlxInputText> = [];
 	private var blockPressWhileTypingOnStepper:Array<FlxUINumericStepper> = [];
 	private var blockPressWhileScrolling:Array<FlxScrollableDropDownMenu> = [];
 
@@ -1199,10 +1199,7 @@ class ChartingState extends MusicBeatState {
 		if (!blockInput) {
 			for (stepper in blockPressWhileTypingOnStepper) {
 				@:privateAccess
-				var leText:Dynamic = stepper.text_field;
-				var leText:FlxUIInputText = leText;
-
-				if (leText.hasFocus) {
+				if (cast(stepper.text_field, flixel.addons.ui.FlxInputText).hasFocus) {
 					FlxG.sound.muteKeys = [];
 					FlxG.sound.volumeDownKeys = [];
 					FlxG.sound.volumeUpKeys = [];

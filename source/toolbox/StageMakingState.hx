@@ -1,6 +1,6 @@
 package toolbox;
 
-import flixel.addons.ui.FlxUIInputText;
+import flixel.text.FlxInputText;
 import flixel.addons.ui.FlxUINumericStepper;
 import flixel.addons.ui.FlxUITabMenu;
 import openfl.events.IOErrorEvent;
@@ -80,7 +80,7 @@ class StageMakingState extends MusicBeatState {
 	private var alphaStepper:FlxUINumericStepper;
 	private var alpha_Label:FlxText;
 
-	private var fileInput:FlxUIInputText;
+	private var fileInput:FlxInputText;
 	private var file_Label:FlxText;
 
 	private var scrollStepper:FlxUINumericStepper;
@@ -207,7 +207,7 @@ class StageMakingState extends MusicBeatState {
 		alpha_Label.scrollFactor.set();
 		alpha_Label.cameras = [camHUD];
 
-		fileInput = new FlxUIInputText(20, scaleStepper.y + scaleStepper.height + 2, 70, "", 8);
+		fileInput = new FlxInputText(20, scaleStepper.y + scaleStepper.height + 2, 70, "", 8);
 		fileInput.scrollFactor.set();
 		fileInput.cameras = [camHUD];
 

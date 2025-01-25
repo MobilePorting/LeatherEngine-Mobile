@@ -2116,7 +2116,7 @@ class PlayState extends MusicBeatState {
 			#end
 
 			call("onDeath", [Conductor.songPosition]);
-			closeScripts();
+			//closeScripts();
 		}
 
 		health = Math.max(health, minHealth);

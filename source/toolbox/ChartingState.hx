@@ -109,7 +109,7 @@ class ChartingState extends MusicBeatState {
 	var eventList:Array<String> = [];
 	var eventListData:Array<Array<String>> = [];
 
-	var zoom_level:Float = 1;
+	var zoomLevel:Float = 1;
 
 	var min_zoom:Float = 0.5;
 	var max_zoom:Float = 16;
@@ -121,6 +121,8 @@ class ChartingState extends MusicBeatState {
 	var lilOpp:FlxSprite;
 
 	var menuBG:FlxSprite;
+
+	var colorQuantization:Bool;
 
 	override function create() {
 		#if NO_PRELOAD_ALL
@@ -229,7 +231,7 @@ class ChartingState extends MusicBeatState {
 		_song.events = [];
 
 		if (PlayState.songMultiplier != 1 && !loadedAutosave)
-			_song.speed = PlayState.previousScrollSpeedLmao;
+			_song.speed = PlayState.previousScrollSpeed;
 
 		FlxG.mouse.visible = true;
 
@@ -284,7 +286,7 @@ class ChartingState extends MusicBeatState {
 
 		beatSnap = Conductor.stepsPerSection;
 
-		if (beatSnaps.indexOf(beatSnap) == -1) // error handling i guess
+		if (NoteVariables.beats.indexOf(beatSnap) == -1) // error handling i guess
 			beatSnap = 16;
 
 		addSongUI();
@@ -310,7 +312,6 @@ class ChartingState extends MusicBeatState {
 	}
 
 	private function backupChart():Void {
-		trace("trying to make a backup of the chart...");
 		var json:Dynamic;
 		var date:String = Date.now().toString();
 		var path:String;
@@ -331,15 +332,11 @@ class ChartingState extends MusicBeatState {
 			if (!sys.FileSystem.exists("./backups/"))
 				sys.FileSystem.createDirectory("./backups/");
 			sys.io.File.saveContent(path, Std.string(data.trim()));
-			trace("chart backup made!");
-			#else
-			trace("failed to make backup!");
 			#end
 		}
 	}
 
 	private function backupEvents():Void {
-		trace("trying to make a backup of the events...");
 		var json:Dynamic;
 		var date:String = Date.now().toString();
 		var path:String;
@@ -368,9 +365,6 @@ class ChartingState extends MusicBeatState {
 			if (!sys.FileSystem.exists("./backups/"))
 				sys.FileSystem.createDirectory("./backups/");
 			sys.io.File.saveContent(path, Std.string(data.trim()));
-			trace("events backup made!");
-			#else
-			trace("failed to make backup!");
 			#end
 		}
 	}
@@ -396,7 +390,6 @@ class ChartingState extends MusicBeatState {
 
 		check_voices.callback = function() {
 			_song.needsVoices = check_voices.checked;
-			trace('CHECKED!');
 		};
 
 		var hitsoundsBox:FlxUICheckBox = new FlxUICheckBox(check_voices.x + check_voices.width, check_voices.y, null, null, "Play hitsounds", 100);
@@ -404,6 +397,14 @@ class ChartingState extends MusicBeatState {
 
 		hitsoundsBox.callback = function() {
 			hitsounds = hitsoundsBox.checked;
+		};
+
+		var quantBox:FlxUICheckBox = new FlxUICheckBox(hitsoundsBox.x, hitsoundsBox.y + hitsoundsBox.height + 2, null, null, "Color Quants", 100);
+		colorQuantization = quantBox.checked = Options.getData("colorQuantization");
+
+		quantBox.callback = function() {
+			colorQuantization = quantBox.checked;
+			updateGrid();
 		};
 
 		var stepperBPM:FlxUINumericStepper = new FlxUINumericStepper(10, check_voices.y + check_voices.height + 5, 0.1, 1, 0.1, 1000, 1);
@@ -476,7 +477,6 @@ class ChartingState extends MusicBeatState {
 
 		check_modchart_tools.callback = function() {
 			_song.modchartingTools = check_modchart_tools.checked;
-			trace('CHECKED!');
 		};
 
 		cutscene_Input = new FlxInputText(modchart_Input.x, modchart_Input.y + modchart_Input.height + 2, 70, _song.cutscene, 8);
@@ -555,6 +555,7 @@ class ChartingState extends MusicBeatState {
 		tab_group_song.add(UI_songDiff);
 		tab_group_song.add(check_voices);
 		tab_group_song.add(hitsoundsBox);
+		tab_group_song.add(quantBox);
 		tab_group_song.add(check_mute_inst);
 		tab_group_song.add(check_mute_vocals);
 		tab_group_song.add(check_char_ids);
@@ -1307,6 +1308,7 @@ class ChartingState extends MusicBeatState {
 		if (_song.notes[curSection] == null)
 			addSection();
 
+<<<<<<< HEAD
 		if (controls.mobileC)
 		{
 			for (touch in FlxG.touches.list) {
@@ -1324,6 +1326,20 @@ class ChartingState extends MusicBeatState {
 								trace('tryin to delete note...');
 								deleteNote(note);
 							}
+=======
+		if (FlxG.mouse.justPressed) {
+			var coolNess = true;
+
+			if (FlxG.mouse.overlaps(curRenderedNotes)) {
+				curRenderedNotes.forEach(function(note:Note) {
+					if (FlxG.mouse.overlaps(note) && (Math.floor(FlxG.mouse.x / GRID_SIZE) - 1) == note.rawNoteData && coolNess) {
+						coolNess = false;
+
+						if (FlxG.keys.pressed.CONTROL) {
+							selectNote(note);
+						} else {
+							deleteNote(note);
+>>>>>>> upstream/main
 						}
 					});
 				}
@@ -1350,6 +1366,7 @@ class ChartingState extends MusicBeatState {
 					}
 				}
 			}
+<<<<<<< HEAD
 	
 			if (touch.x > gridBG.x
 				&& touch.x < gridBG.x + gridBG.width
@@ -1420,6 +1437,22 @@ class ChartingState extends MusicBeatState {
 				else
 					dummyArrow.y = Math.floor(FlxG.mouse.y / snappedGridSize) * snappedGridSize;
 			}
+=======
+		}
+
+		if (FlxG.mouse.x > gridBG.x
+			&& FlxG.mouse.x < gridBG.x + gridBG.width
+			&& FlxG.mouse.y > gridBG.y
+			&& FlxG.mouse.y < gridBG.y + (GRID_SIZE * (Conductor.stepsPerSection * zoomLevel))) {
+			var snappedGridSize = (GRID_SIZE / (beatSnap / Conductor.stepsPerSection));
+
+			dummyArrow.x = Math.floor(FlxG.mouse.x / GRID_SIZE) * GRID_SIZE;
+
+			if (FlxG.keys.pressed.SHIFT)
+				dummyArrow.y = FlxG.mouse.y;
+			else
+				dummyArrow.y = Math.floor(FlxG.mouse.y / snappedGridSize) * snappedGridSize;
+>>>>>>> upstream/main
 		}
 
 		if (!blockInput) {
@@ -1439,6 +1472,7 @@ class ChartingState extends MusicBeatState {
 			if (FlxG.keys.justPressed.Q || virtualPad.buttonUp2.justPressed)
 				changeNoteSustain(-Conductor.stepCrochet);
 
+<<<<<<< HEAD
 			if (FlxG.keys.justPressed.X || virtualPad.buttonD.justPressed)
 				zoom_level *= 2;
 			if (FlxG.keys.justPressed.Z || virtualPad.buttonV.justPressed)
@@ -1449,6 +1483,18 @@ class ChartingState extends MusicBeatState {
 					zoom_level = min_zoom;
 				if (zoom_level > max_zoom)
 					zoom_level = max_zoom;
+=======
+			if (FlxG.keys.justPressed.X)
+				zoomLevel *= 2;
+			if (FlxG.keys.justPressed.Z)
+				zoomLevel /= 2;
+
+			if (FlxG.keys.justPressed.X || FlxG.keys.justPressed.Z) {
+				if (zoomLevel < min_zoom)
+					zoomLevel = min_zoom;
+				if (zoomLevel > max_zoom)
+					zoomLevel = max_zoom;
+>>>>>>> upstream/main
 
 				updateGrid();
 			}
@@ -1539,13 +1585,13 @@ class ChartingState extends MusicBeatState {
 				changeSection(curSection - shiftThing);
 
 			if (controls.RIGHT_P && control) {
-				if (beatSnaps.indexOf(beatSnap) + 1 <= beatSnaps.length - 1)
-					beatSnap = beatSnaps[beatSnaps.indexOf(beatSnap) + 1];
+				if (NoteVariables.beats.indexOf(beatSnap) + 1 <= NoteVariables.beats.length - 1)
+					beatSnap = NoteVariables.beats[NoteVariables.beats.indexOf(beatSnap) + 1];
 			}
 
 			if (controls.LEFT_P && control) {
-				if (beatSnaps.indexOf(beatSnap) - 1 >= 0)
-					beatSnap = beatSnaps[beatSnaps.indexOf(beatSnap) - 1];
+				if (NoteVariables.beats.indexOf(beatSnap) - 1 >= 0)
+					beatSnap = NoteVariables.beats[NoteVariables.beats.indexOf(beatSnap) - 1];
 			}
 		}
 
@@ -1580,23 +1626,23 @@ class ChartingState extends MusicBeatState {
 			+ beatSnap
 			+ ((FlxG.keys.pressed.SHIFT || virtualPad.buttonY.pressed) ? "\n(DISABLED)" : "\n(CONTROL + ARROWS)")
 			+ "\nZoom Level: "
-			+ zoom_level
+			+ zoomLevel
 			+ "\n");
 
 		leftIcon.x = gridBG.x + GRID_SIZE;
 		rightIcon.x = gridBlackLine.x;
 
-		for(n in curRenderedNotes.members){
-			if(n.isSustainNote && !StringTools.endsWith(n.animation.curAnim.name, "end")){
-				n.setGraphicSize(n.frameWidth * n.scale.x, 40);
-				n.updateHitbox();
+		for (n in curRenderedNotes.members) {
+			if(n?.animation?.curAnim != null){
+				if (n.isSustainNote && !StringTools.endsWith(n.animation.curAnim.name, "end")) {
+					n.setGraphicSize(n.frameWidth * n.scale.x, zoomLevel * GRID_SIZE);
+					n.updateHitbox();
+				}
 			}
 		}
 
 		super.update(elapsed);
 	}
-
-	final beatSnaps:Array<Int> = [4, 6, 8, 12, 16, 24, 32, 48, 64, 128, 192];
 
 	function changeNoteSustain(value:Float):Void {
 		if (curSelectedNote != null) {
@@ -1656,8 +1702,6 @@ class ChartingState extends MusicBeatState {
 	}
 
 	function changeSection(sec:Int = 0, ?updateMusic:Bool = true):Void {
-		// trace('changing section' + sec);
-
 		if (_song.notes[sec] != null) {
 			curSection = sec;
 
@@ -1786,7 +1830,7 @@ class ChartingState extends MusicBeatState {
 		gridBG.destroy();
 
 		gridBG = FlxGridOverlay.create(GRID_SIZE, GRID_SIZE, GRID_SIZE * (_song.keyCount + _song.playerKeyCount + 1),
-			Std.int((GRID_SIZE * Conductor.stepsPerSection) * zoom_level));
+			Std.int((GRID_SIZE * Conductor.stepsPerSection) * zoomLevel));
 		add(gridBG);
 
 		remove(gridBlackLine);
@@ -1923,6 +1967,32 @@ class ChartingState extends MusicBeatState {
 				sustainNote.sustains = sustainGroup;
 			}
 			note.sustains = sustainGroup;
+		}
+
+		if (colorQuantization) {
+			var col:Array<Int> = [142, 142, 142];
+			for (note in curRenderedNotes.members) {
+				if (!note.isSustainNote && note.affectedbycolor) {
+					var quantStrumTime:Float = note.strumTime;
+					var currentStepCrochet:Float = Conductor.stepCrochet;
+					var noteBeat:Int = Math.floor(((quantStrumTime / (currentStepCrochet * 4)) * 48) + 0.5);
+					for (beat in 0...Note.beats.length - 1) {
+						if ((noteBeat % (192 / Note.beats[beat]) == 0)) {
+							noteBeat = Note.beats[beat];
+							col = Note.quantColors[beat];
+							break;
+						}
+					}
+					note.colorSwap.r = col[0];
+					note.colorSwap.g = col[1];
+					note.colorSwap.b = col[2];
+					for (sustain in note.sustains) {
+						sustain.colorSwap.r = note.colorSwap.r;
+						sustain.colorSwap.g = note.colorSwap.g;
+						sustain.colorSwap.b = note.colorSwap.b;
+					}
+				}
+			}
 		}
 
 		if (events.length >= 1) {
@@ -2176,12 +2246,12 @@ class ChartingState extends MusicBeatState {
 		autosaveSong();
 	}
 
-	function getStrumTime(yPos:Float):Float {
+	inline function getStrumTime(yPos:Float):Float {
 		return FlxMath.remapToRange(yPos, gridBG.y, gridBG.y + gridBG.height, 0, Conductor.stepsPerSection * Conductor.stepCrochet);
 	}
 
 	function getYfromStrum(strumTime:Float):Float {
-		return FlxMath.remapToRange(strumTime * zoom_level, 0, (Conductor.stepsPerSection * zoom_level) * Conductor.stepCrochet, gridBG.y,
+		return FlxMath.remapToRange(strumTime * zoomLevel, 0, (Conductor.stepsPerSection * zoomLevel) * Conductor.stepCrochet, gridBG.y,
 			gridBG.y + gridBG.height);
 	}
 

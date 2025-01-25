@@ -431,7 +431,7 @@ class PlayState extends MusicBeatState {
 
 		Usage: ChartingState
 	**/
-	static var previousScrollSpeedLmao:Float = 0;
+	static var previousScrollSpeed:Float = 0;
 
 	/**
 		Current `Cutscene` data.
@@ -666,7 +666,7 @@ class PlayState extends MusicBeatState {
 		Conductor.mapBPMChanges(SONG, songMultiplier);
 		Conductor.changeBPM(SONG.bpm, songMultiplier);
 
-		previousScrollSpeedLmao = SONG.speed;
+		previousScrollSpeed = SONG.speed;
 
 		SONG.speed /= songMultiplier;
 

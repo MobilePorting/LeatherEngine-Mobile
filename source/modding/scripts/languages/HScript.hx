@@ -42,6 +42,7 @@ class HScript extends Script {
 
 		setup();
 
+		interp.printCallStack = true;
 		interp.execute(program);
 		call("create", [path]);
 	}
@@ -112,7 +113,6 @@ class HScript extends Script {
 		set("IntMap", haxe.ds.IntMap);
 		set("EnumValueMap", haxe.ds.EnumValueMap);
 		set("ObjectMap", haxe.ds.ObjectMap);
-
 
 
 		// game classes

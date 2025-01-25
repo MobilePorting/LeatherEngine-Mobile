@@ -113,7 +113,7 @@ class ChartingStateRevamp extends MusicBeatState {
 
 		if (PlayState.SONG != null) {
 			SONG = PlayState.SONG;
-			SONG.speed = PlayState.previousScrollSpeedLmao;
+			SONG.speed = PlayState.previousScrollSpeed;
 		} else
 			SONG = Song.loadFromJson("tutorial", "tutorial");
 

@@ -1308,47 +1308,30 @@ class ChartingState extends MusicBeatState {
 		if (_song.notes[curSection] == null)
 			addSection();
 
-<<<<<<< HEAD
-		if (controls.mobileC)
-		{
+		if (controls.mobileC) {
 			for (touch in FlxG.touches.list) {
 			if (touch.justPressed) {
 				var coolNess = true;
-	
+
 				if (touch.overlaps(curRenderedNotes)) {
 					curRenderedNotes.forEach(function(note:Note) {
 						if (touch.overlaps(note) && (Math.floor(touch.x / GRID_SIZE) - 1) == note.rawNoteData && coolNess) {
 							coolNess = false;
-	
+
 							if (virtualPad.buttonZ.pressed) {
 								selectNote(note);
 							} else {
-								trace('tryin to delete note...');
 								deleteNote(note);
 							}
-=======
-		if (FlxG.mouse.justPressed) {
-			var coolNess = true;
-
-			if (FlxG.mouse.overlaps(curRenderedNotes)) {
-				curRenderedNotes.forEach(function(note:Note) {
-					if (FlxG.mouse.overlaps(note) && (Math.floor(FlxG.mouse.x / GRID_SIZE) - 1) == note.rawNoteData && coolNess) {
-						coolNess = false;
-
-						if (FlxG.keys.pressed.CONTROL) {
-							selectNote(note);
-						} else {
-							deleteNote(note);
->>>>>>> upstream/main
 						}
 					});
 				}
-	
+
 				if (touch.overlaps(curRenderedEvents)) {
 					curRenderedEvents.forEach(function(event:EventSprite) {
 						if (touch.overlaps(event) && coolNess) {
 							coolNess = false;
-	
+
 							if (virtualPad.buttonZ.pressed)
 								selectEvent(event);
 							else
@@ -1356,7 +1339,7 @@ class ChartingState extends MusicBeatState {
 						}
 					});
 				}
-	
+
 				if (coolNess) {
 					if (touch.x > gridBG.x
 						&& touch.x < gridBG.x + gridBG.width
@@ -1366,16 +1349,15 @@ class ChartingState extends MusicBeatState {
 					}
 				}
 			}
-<<<<<<< HEAD
-	
+
 			if (touch.x > gridBG.x
 				&& touch.x < gridBG.x + gridBG.width
 				&& touch.y > gridBG.y
-				&& touch.y < gridBG.y + (GRID_SIZE * (Conductor.stepsPerSection * zoom_level))) {
+				&& touch.y < gridBG.y + (GRID_SIZE * (Conductor.stepsPerSection * zoomLevel))) {
 				var snappedGridSize = (GRID_SIZE / (beatSnap / Conductor.stepsPerSection));
-	
+
 				dummyArrow.x = Math.floor(touch.x / GRID_SIZE) * GRID_SIZE;
-	
+
 				if (virtualPad.buttonY.pressed)
 					dummyArrow.y = touch.y;
 				else
@@ -1385,27 +1367,26 @@ class ChartingState extends MusicBeatState {
 		} else {
 			if (FlxG.mouse.justPressed) {
 				var coolNess = true;
-	
+
 				if (FlxG.mouse.overlaps(curRenderedNotes)) {
 					curRenderedNotes.forEach(function(note:Note) {
 						if (FlxG.mouse.overlaps(note) && (Math.floor(FlxG.mouse.x / GRID_SIZE) - 1) == note.rawNoteData && coolNess) {
 							coolNess = false;
-	
+
 							if (FlxG.keys.pressed.CONTROL) {
 								selectNote(note);
 							} else {
-								trace('tryin to delete note...');
 								deleteNote(note);
 							}
 						}
 					});
 				}
-	
+
 				if (FlxG.mouse.overlaps(curRenderedEvents)) {
 					curRenderedEvents.forEach(function(event:EventSprite) {
 						if (FlxG.mouse.overlaps(event) && coolNess) {
 							coolNess = false;
-	
+
 							if (FlxG.keys.pressed.CONTROL)
 								selectEvent(event);
 							else
@@ -1413,7 +1394,7 @@ class ChartingState extends MusicBeatState {
 						}
 					});
 				}
-	
+
 				if (coolNess) {
 					if (FlxG.mouse.x > gridBG.x
 						&& FlxG.mouse.x < gridBG.x + gridBG.width
@@ -1423,36 +1404,20 @@ class ChartingState extends MusicBeatState {
 					}
 				}
 			}
-	
+
 			if (FlxG.mouse.x > gridBG.x
 				&& FlxG.mouse.x < gridBG.x + gridBG.width
 				&& FlxG.mouse.y > gridBG.y
-				&& FlxG.mouse.y < gridBG.y + (GRID_SIZE * (Conductor.stepsPerSection * zoom_level))) {
+				&& FlxG.mouse.y < gridBG.y + (GRID_SIZE * (Conductor.stepsPerSection * zoomLevel))) {
 				var snappedGridSize = (GRID_SIZE / (beatSnap / Conductor.stepsPerSection));
-	
+
 				dummyArrow.x = Math.floor(FlxG.mouse.x / GRID_SIZE) * GRID_SIZE;
-	
+
 				if (FlxG.keys.pressed.SHIFT)
 					dummyArrow.y = FlxG.mouse.y;
 				else
 					dummyArrow.y = Math.floor(FlxG.mouse.y / snappedGridSize) * snappedGridSize;
 			}
-=======
-		}
-
-		if (FlxG.mouse.x > gridBG.x
-			&& FlxG.mouse.x < gridBG.x + gridBG.width
-			&& FlxG.mouse.y > gridBG.y
-			&& FlxG.mouse.y < gridBG.y + (GRID_SIZE * (Conductor.stepsPerSection * zoomLevel))) {
-			var snappedGridSize = (GRID_SIZE / (beatSnap / Conductor.stepsPerSection));
-
-			dummyArrow.x = Math.floor(FlxG.mouse.x / GRID_SIZE) * GRID_SIZE;
-
-			if (FlxG.keys.pressed.SHIFT)
-				dummyArrow.y = FlxG.mouse.y;
-			else
-				dummyArrow.y = Math.floor(FlxG.mouse.y / snappedGridSize) * snappedGridSize;
->>>>>>> upstream/main
 		}
 
 		if (!blockInput) {
@@ -1472,29 +1437,16 @@ class ChartingState extends MusicBeatState {
 			if (FlxG.keys.justPressed.Q || virtualPad.buttonUp2.justPressed)
 				changeNoteSustain(-Conductor.stepCrochet);
 
-<<<<<<< HEAD
 			if (FlxG.keys.justPressed.X || virtualPad.buttonD.justPressed)
-				zoom_level *= 2;
-			if (FlxG.keys.justPressed.Z || virtualPad.buttonV.justPressed)
-				zoom_level /= 2;
-
-			if ((FlxG.keys.justPressed.X || virtualPad.buttonD.justPressed) || (FlxG.keys.justPressed.Z || virtualPad.buttonV.justPressed)) {
-				if (zoom_level < min_zoom)
-					zoom_level = min_zoom;
-				if (zoom_level > max_zoom)
-					zoom_level = max_zoom;
-=======
-			if (FlxG.keys.justPressed.X)
 				zoomLevel *= 2;
-			if (FlxG.keys.justPressed.Z)
+			if (FlxG.keys.justPressed.Z || virtualPad.buttonV.justPressed)
 				zoomLevel /= 2;
 
-			if (FlxG.keys.justPressed.X || FlxG.keys.justPressed.Z) {
+			if ((FlxG.keys.justPressed.X || virtualPad.buttonD.justPressed) || (FlxG.keys.justPressed.Z || virtualPad.buttonV.justPressed)) {
 				if (zoomLevel < min_zoom)
 					zoomLevel = min_zoom;
 				if (zoomLevel > max_zoom)
 					zoomLevel = max_zoom;
->>>>>>> upstream/main
 
 				updateGrid();
 			}

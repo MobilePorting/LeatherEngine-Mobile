@@ -276,19 +276,6 @@ class StageGroup extends FlxGroup {
 		}
 	}
 
-	// LUA SHIT LOL
-
-	override public function destroy() {
-		#if linc_luajit
-		if (stageScript != null) {
-			stageScript.destroy();
-			stageScript = null;
-		}
-		#end
-
-		super.destroy();
-	}
-
 	/**
 	 * Returns a named sprite from a string, if it exists. 
 	 * Otherwise, returns `null`.

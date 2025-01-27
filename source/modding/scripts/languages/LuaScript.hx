@@ -136,8 +136,11 @@ class LuaScript extends Script {
 	}
 
 	override public function destroy() {
-		trails.clear();
-		Lua.close(lua);
+		if(lua != null){
+			trails.clear();
+			Lua.close(lua);
+			lua = null;
+		}
 	}
 
 	function getLuaErrorMessage(l) {

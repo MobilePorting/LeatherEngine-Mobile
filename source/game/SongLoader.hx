@@ -5,12 +5,12 @@ import haxe.Json;
 import lime.utils.Assets;
 
 class SongLoader {
-	public static function loadFromJson(difficulty:String, ?folder:String, ?mix:String):SongData {
+	public static function getPath(difficulty:String, ?folder:String, ?mix:String):String {
 		var chartSuffix:String = '';
-		if(difficulty.toLowerCase() == 'erect' || difficulty.toLowerCase() == 'nightmare'){
+		if (difficulty.toLowerCase() == 'erect' || difficulty.toLowerCase() == 'nightmare') {
 			chartSuffix = '-erect';
 		}
-		if(mix != null){
+		if (mix != null) {
 			chartSuffix += '-${mix.toLowerCase()}';
 		}
 		folder = folder.toLowerCase();
@@ -20,9 +20,20 @@ class SongLoader {
 			path = Paths.json('song data/$folder/$folder${difficulty != 'normal' ? '-$difficulty' : ''}');
 		}
 
+		return path;
+	}
+
+	public static function loadFromJson(difficulty:String, ?folder:String, ?mix:String):SongData {
+		var path:String = getPath(difficulty, folder, mix);
 		var raw:String = Assets.getText(path).trim();
 		if (raw == '') { // should never happen but just in case
-			raw = Assets.getText(Paths.json('song data/tutorial/tutorial')).trim();
+			var tutorialPath:String = getPath('normal', 'tutorial', null);
+			if (!Assets.exists(tutorialPath)) {
+				trace("Why the fuck did you remove tutorial and the song doesn't exist too");
+				return null;
+			}
+
+			raw = Assets.getText(tutorialPath).trim();
 			return parseRaw(raw, folder, difficulty, mix, true);
 		}
 
@@ -40,11 +51,12 @@ class SongLoader {
 	}
 
 	public static function parseFNFC(parsedJSON:Dynamic, songName:String, difficulty:String, ?mix:String):SongData {
+		difficulty = difficulty.toLowerCase();
 		var chartSuffix:String = '';
-		if(difficulty.toLowerCase() == 'erect' || difficulty.toLowerCase() == 'nightmare'){
+		if (difficulty.toLowerCase() == 'erect' || difficulty.toLowerCase() == 'nightmare') {
 			chartSuffix = '-erect';
 		}
-		if(mix != null){
+		if (mix != null) {
 			chartSuffix += '-${mix.toLowerCase()}';
 		}
 		var metaPath:String = Paths.json('song data/$songName/$songName-metadata$chartSuffix');
@@ -101,8 +113,18 @@ class SongLoader {
 			output.ui_Skin = metadata.playData.noteStyle;
 		}
 
-		var notes:Array<FNFCNote> =  cast Reflect.field(song.notes, difficulty);
-		for(note in notes){
+		if (song == null) {
+			trace("Couldn't find FNFC chart json properly");
+			return output;
+		}
+
+		var notes:Array<FNFCNote> = cast Reflect.field(song.notes, difficulty);
+		if (notes == null) {
+			trace("Couldn't find the difficulty '" + difficulty + "' for the chart being loaded, sorry! (FNFC)");
+			return output;
+		}
+
+		for (note in notes) {
 			output.notes[0].sectionNotes.push([note.t, note.d, note.l, 0, note.k ?? 'default']);
 		}
 
@@ -199,9 +221,9 @@ class SongLoader {
 				var noteIndex:Int = 0;
 				while (noteIndex < noteCount) {
 					var note:Array<Dynamic> = notes[noteIndex];
-					if(note[3] is String){
+					if (note[3] is String) {
 						note[4] = note[3];
-					} 
+					}
 					if (note[1] < 0 && note[2] is String) {
 						if (note[3] == null)
 							note[3] = '';
@@ -239,7 +261,7 @@ typedef Section = {
 	var changeTimeScale:Bool;
 }
 
-enum abstract ChartType(String) to String from String{
+enum abstract ChartType(String) to String from String {
 	var LEGACY = "LEGACY";
 	var VSLICE = "VSLICE";
 }
@@ -255,32 +277,31 @@ typedef SongData = {
 	var player2:Null<String>;
 	var validScore:Null<Bool>;
 
-	
 	// engine specific shit
 	var gf:Null<String>;
 	var stage:Null<String>;
 	var ui_Skin:Null<String>;
-	
+
 	var modchartPath:Null<String>;
 	var modchartingTools:Null<Bool>;
-	
+
 	var keyCount:Null<Int>;
 	var playerKeyCount:Null<Int>;
 	var events:Null<Array<Array<Dynamic>>>;
-	
+
 	var cutscene:Null<String>;
 	var endCutscene:Null<String>;
-	
+
 	var timescale:Null<Array<Int>>;
 	var chartOffset:Null<Float>; // in milliseconds
 	var specialAudioName:Null<String>;
-	
+
 	var chartType:ChartType;
 
 	// psych compat
 	var gfVersion:Null<String>;
 	var player3:Null<String>;
-	
+
 	// shaggy moment (ugh)
 	var mania:Null<Int>;
 	var moveCamera:Null<Bool>;

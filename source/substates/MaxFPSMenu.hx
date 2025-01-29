@@ -10,74 +10,69 @@ import flixel.util.FlxColor;
 import flixel.FlxG;
 import flixel.FlxSprite;
 
-class MaxFPSMenu extends MusicBeatSubstate
-{
-    var fps:Int = 0;
-    var offsetText:FlxText = new FlxText(0,0,0,"Max FPS: 120",64).setFormat(Paths.font("vcr.ttf"), 64, FlxColor.WHITE, CENTER, OUTLINE, FlxColor.BLACK);
+class MaxFPSMenu extends MusicBeatSubstate {
+	var fps:Int = 0;
+	var offsetText:FlxText = new FlxText(0, 0, 0, "Max FPS: 120", 64).setFormat(Paths.font("vcr.ttf"), 64, FlxColor.WHITE, CENTER, OUTLINE, FlxColor.BLACK);
 
-    public function new()
-    {
-        super();
+	public function new() {
+		super();
 
-        fps = Options.getData("maxFPS");
-        
-        var bg:FlxSprite = new FlxSprite().makeGraphic(FlxG.width, FlxG.height, FlxColor.BLACK);
-        bg.alpha = 0;
-        bg.scrollFactor.set();
-        add(bg);
+		fps = Options.getData("maxFPS");
 
-        FlxTween.tween(bg, {alpha: 0.5}, 1, {ease: FlxEase.circOut, startDelay: 0});
+		var bg:FlxSprite = new FlxSprite().makeGraphic(FlxG.width, FlxG.height, FlxColor.BLACK);
+		bg.alpha = 0;
+		bg.scrollFactor.set();
+		add(bg);
 
-        offsetText.text = "Max FPS: " + fps;
-        offsetText.screenCenter();
-        add(offsetText);
+		FlxTween.tween(bg, {alpha: 0.5}, 1, {ease: FlxEase.circOut, startDelay: 0});
 
-        addVirtualPad(LEFT_RIGHT, A_B);
-    }
+		offsetText.text = "Max FPS: " + fps;
+		offsetText.screenCenter();
+		add(offsetText);
 
-    override function update(elapsed:Float) {
-        super.update(elapsed);
+		addVirtualPad(LEFT_RIGHT, A_B);
+	}
 
-        FlxG.stage.frameRate = flixel.math.FlxMath.bound(fps, 0.1, 1000);
+	override function update(elapsed:Float) {
+		super.update(elapsed);
 
-        var leftP = controls.LEFT_P;
+		var leftP = controls.LEFT_P;
 		var rightP = controls.RIGHT_P;
 
-        var left = controls.LEFT;
+		var left = controls.LEFT;
 		var right = controls.RIGHT;
 
-        var accept = controls.ACCEPT;
-        var back = controls.BACK;
+		var accept = controls.ACCEPT;
+		var back = controls.BACK;
 
-        if(back)
-        {
-            Options.setData(fps, "maxFPS");
-            states.OptionsMenu.instance.closeSubState();
-                removeVirtualPad();
-        }
+		if (back) {
+			Options.setData(fps, "maxFPS");
+			FlxG.state.closeSubState();
+			removeVirtualPad();
+		}
 
-        if(left && !FlxG.keys.pressed.SHIFT)
-            fps --;
-        if(right && !FlxG.keys.pressed.SHIFT)
-            fps ++;
+		if (left && !FlxG.keys.pressed.SHIFT)
+			fps--;
+		if (right && !FlxG.keys.pressed.SHIFT)
+			fps++;
 
-        if(leftP && FlxG.keys.pressed.SHIFT)
-            fps --;
-        if(rightP && FlxG.keys.pressed.SHIFT)
-            fps ++;
+		if (leftP && FlxG.keys.pressed.SHIFT)
+			fps--;
+		if (rightP && FlxG.keys.pressed.SHIFT)
+			fps++;
 
-        if(accept)
-            fps = Application.current.window.displayMode.refreshRate;
+		if (accept)
+			fps = Application.current.window.displayMode.refreshRate;
 
-        if(fps > 1000)
-            fps = 1000;
+		if (fps > 1000)
+			fps = 1000;
 
-        if(fps < 10)
-            fps = 10;
+		if (fps < 10)
+			fps = 10;
 
-        final buttonEnter:String = controls.mobileC ? 'A' : 'ENTER';
+		final buttonEnter:String = controls.mobileC ? 'A' : 'ENTER';
 
-        offsetText.text = 'Max FPS: $fps \n$buttonEnter for VSYNC\n';
-        offsetText.screenCenter();
-    }
+		offsetText.text = "Max FPS: " + fps + '\n$buttonEnter for VSYNC\n';
+		offsetText.screenCenter();
+	}
 }

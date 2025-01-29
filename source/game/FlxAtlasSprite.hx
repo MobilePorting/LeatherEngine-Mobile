@@ -111,7 +111,7 @@ class FlxAtlasSprite extends FlxAnimate {
 			loop = false;
 
 		// Skip if not allowed to play animations.
-		if ((!canPlayOtherAnims && !ignoreOther))
+		if ((!canPlayOtherAnims && !ignoreOther) || anim == null)
 			return;
 
 		if (id == null || id == '')

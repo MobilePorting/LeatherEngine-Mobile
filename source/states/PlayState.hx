@@ -2116,7 +2116,7 @@ class PlayState extends MusicBeatState {
 			#end
 
 			call("onDeath", [Conductor.songPosition]);
-			//closeScripts();
+			// closeScripts();
 		}
 
 		health = Math.max(health, minHealth);
@@ -2130,7 +2130,7 @@ class PlayState extends MusicBeatState {
 
 		if (generatedMusic && !switchedStates && startedCountdown && notes != null && playerStrums.members.length != 0 && enemyStrums.members.length != 0) {
 			notes.forEachAlive(function(note:Note) {
-				var coolStrum:StrumNote = (note.shouldHit ? playerStrums.members[Math.floor(Math.abs(note.noteData)) % playerStrums.members.length] : enemyStrums.members[Math.floor(Math.abs(note.noteData)) % enemyStrums.members.length]);
+				var coolStrum:StrumNote = (note.mustPress ? playerStrums.members[Math.floor(Math.abs(note.noteData)) % playerStrums.members.length] : enemyStrums.members[Math.floor(Math.abs(note.noteData)) % enemyStrums.members.length]);
 				note.visible = true;
 				note.active = true;
 				note.y = coolStrum.y + Note.calculateY(note);
@@ -2999,17 +2999,17 @@ class PlayState extends MusicBeatState {
 					}
 				}
 
-					for (i in 0...justPressedArray.length) {
-						if (justPressedArray[i]) {
-							call("keyPressed", [i ?? justPressedArray.length]);
-						}
+				for (i in 0...justPressedArray.length) {
+					if (justPressedArray[i]) {
+						call("keyPressed", [i ?? justPressedArray.length]);
 					}
+				}
 
-					for (i in 0...releasedArray.length) {
-						if (releasedArray[i]) {
-							call("keyReleased", [i ?? justPressedArray.length]);
-						}
+				for (i in 0...releasedArray.length) {
+					if (releasedArray[i]) {
+						call("keyReleased", [i ?? justPressedArray.length]);
 					}
+				}
 
 				if (justPressedArray.contains(true) && generatedMusic) {
 					// variables
@@ -4039,7 +4039,6 @@ class PlayState extends MusicBeatState {
 		LuaScript.lua_Custom_Shaders.clear();
 		LuaScript.lua_Cameras.clear();
 		LuaScript.lua_Jsons.clear();
-
 	}
 
 	function processEvent(event:Array<Dynamic>) {

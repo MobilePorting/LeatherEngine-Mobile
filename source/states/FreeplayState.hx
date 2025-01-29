@@ -416,18 +416,16 @@ class FreeplayState extends MusicBeatState {
 			if (virtualPad.buttonX.justPressed || FlxG.keys.justPressed.SPACE) {
 				destroyFreeplayVocals();
 
-				var poop:String = Highscore.formatSong(songs[curSelected].songName.toLowerCase(), curDiffString, mix);
-
-				// TODO: CHANGE THIS
-				if (Assets.exists(Paths.json("song data/" + songs[curSelected].songName.toLowerCase() + "/" + poop))) {
+				// TODO: maybe change this idrc actually it seems ok now
+				if (Assets.exists(SongLoader.getPath(curDiffString, songs[curSelected].songName.toLowerCase(), mix))) {
 					PlayState.SONG = SongLoader.loadFromJson(curDiffString, songs[curSelected].songName.toLowerCase(), mix);
 					Conductor.changeBPM(PlayState.SONG.bpm, curSpeed);
 				}
 
 				vocals = new FlxSound();
 
-				var voicesPath:String = Paths.voices(songs[curSelected].songName.toLowerCase(),
-					PlayState.SONG.specialAudioName ?? curDiffString.toLowerCase(), mix ?? '');
+				var voicesDiff:String = (PlayState.SONG != null ? (PlayState.SONG.specialAudioName ?? curDiffString.toLowerCase()) : curDiffString.toLowerCase());
+				var voicesPath:String = Paths.voices(songs[curSelected].songName.toLowerCase(), voicesDiff, mix ?? '');
 
 				if (Assets.exists(voicesPath))
 					vocals.loadEmbedded(voicesPath);
@@ -476,8 +474,8 @@ class FreeplayState extends MusicBeatState {
 
 	/**
 		 * Plays a specific song
-		 * @param songName 
-		 * @param diff 
+		 * @param songName
+		 * @param diff
 		 */
 	public function playSong(songName:String, diff:String) {
 		if (!CoolUtil.songExists(songName, diff, mix)) {

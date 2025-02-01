@@ -18,7 +18,7 @@ import toolbox.util.NewModState;
 
 using utilities.BackgroundUtil;
 
-class ToolboxPlaceholder extends MusicBeatState {
+class ToolboxState extends MusicBeatState {
 	public var curSelected:Int = 0;
 
 	public static var inMenu = false;
@@ -48,19 +48,19 @@ class ToolboxPlaceholder extends MusicBeatState {
 	];
 
 	public var page:FlxTypedGroup<Option> = new FlxTypedGroup<Option>();
-	public static var instance:ToolboxPlaceholder;
+
+	public static var instance:ToolboxState;
 
 	public var menuBG:FlxSprite;
 
 	override function create():Void {
-
 		if (PlayState.instance == null) {
+			pages["Tools"][3] = null;
 			pages["Tools"][0] = null;
 		}
 
 		MusicBeatState.windowNameSuffix = "";
 		instance = this;
-
 
 		menuBG = new FlxSprite().makeBackground(0x00FF6A);
 		menuBG.scale.set(1.1, 1.1);
@@ -110,12 +110,12 @@ class ToolboxPlaceholder extends MusicBeatState {
 			}
 
 			if (controls.UP_P) {
-				curSelected --;
+				curSelected--;
 				FlxG.sound.play(Paths.sound('scrollMenu'), 0.4);
 			}
 
 			if (controls.DOWN_P) {
-				curSelected ++;
+				curSelected++;
 				FlxG.sound.play(Paths.sound('scrollMenu'), 0.4);
 			}
 
@@ -152,10 +152,11 @@ class ToolboxPlaceholder extends MusicBeatState {
 		}
 	}
 }
+
 /**
  * Very simple option that transfers you to a different page when selecting it.
  */
- class ToolboxPageOption extends ui.Option {
+class ToolboxPageOption extends ui.Option {
 	// OPTIONS //
 	public var pageName:String = "Categories";
 
@@ -169,7 +170,7 @@ class ToolboxPlaceholder extends MusicBeatState {
 	override function update(elapsed:Float) {
 		super.update(elapsed);
 
-		if (FlxG.keys.justPressed.ENTER && Std.int(alphabetText.targetY) == 0 && !ToolboxPlaceholder.inMenu)
-			ToolboxPlaceholder.LoadPage(pageName);
+		if (FlxG.keys.justPressed.ENTER && Std.int(alphabetText.targetY) == 0 && !ToolboxState.inMenu)
+			ToolboxState.LoadPage(pageName);
 	}
 }

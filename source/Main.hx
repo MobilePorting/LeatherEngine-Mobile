@@ -67,9 +67,9 @@ class Main extends Sprite {
 		addChild(logsOverlay);
 
 		#if !mobile
-		LogStyle.WARNING.onLog.add(data -> trace(data, WARNING));
-		LogStyle.ERROR.onLog.add(data -> trace(data, ERROR));
-		LogStyle.NOTICE.onLog.add(data -> trace(data));
+		LogStyle.WARNING.onLog.add((data, ?pos) -> trace(data, WARNING, pos));
+		LogStyle.ERROR.onLog.add((data, ?pos) -> trace(data, ERROR, pos));
+		LogStyle.NOTICE.onLog.add((data, ?pos) -> trace(data, LOG, pos));
 		#end
 
 		display = new SimpleInfoDisplay(8, 3, 0xFFFFFF, "_sans");

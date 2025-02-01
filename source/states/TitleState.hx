@@ -91,7 +91,7 @@ class TitleState extends MusicBeatState {
 			MusicBeatState.windowNamePrefix = Options.getData("curMod");
 			CoolUtil.setWindowIcon("mods/" + Options.getData("curMod") + "/_polymod_icon.png");
 			FlxG.drawFramerate = Options.getData("maxFPS");
-			
+
 			#if FLX_NO_DEBUG
 			if (Options.getData("flixelStartupScreen") && !doneFlixelSplash) {
 				doneFlixelSplash = true;
@@ -99,12 +99,12 @@ class TitleState extends MusicBeatState {
 				return;
 			}
 			#end
-			
+
 			if (Options.getData("flashingLights") == null)
 				FlxG.switchState(new FlashingLightsMenu());
-			
+
 			curWacky = FlxG.random.getObject(getIntroTextShit());
-			
+
 			super.create();
 
 			#if DISCORD_ALLOWED
@@ -127,7 +127,6 @@ class TitleState extends MusicBeatState {
 		new FlxTimer().start(1, function(tmr:FlxTimer) startIntro());
 		call('createPost');
 	}
-	
 
 	public var logoBl:FlxSprite;
 	public var gfDance:FlxSprite;
@@ -177,8 +176,11 @@ class TitleState extends MusicBeatState {
 			call("startIntroPost");
 		}
 
-		version = '${Application.current.meta.get('name')} ${CoolUtil.getCurrentVersion()}';
+		if (FlxG.sound.music == null || !FlxG.sound.music.playing) {
+			playTitleMusic();
+		}
 
+		version = '${Application.current.meta.get('name')} ${CoolUtil.getCurrentVersion()}';
 
 		call("createTitleAssets");
 
@@ -223,7 +225,6 @@ class TitleState extends MusicBeatState {
 
 		call("createTitleAssetsPost");
 
-
 		titleTextData = CoolUtil.coolTextFile(Paths.txt("titleText", "preload"));
 
 		if (initialized) {
@@ -250,7 +251,6 @@ class TitleState extends MusicBeatState {
 	public var transitioning:Bool = false;
 
 	public override function update(elapsed:Float) {
-
 		if (FlxG.keys.justPressed.Y) {
 			FlxTween.tween(FlxG.stage.window, {x: FlxG.stage.window.x + 300}, 1.4, {ease: FlxEase.quadInOut, type: PINGPONG, startDelay: 0.35});
 			FlxTween.tween(FlxG.stage.window, {y: FlxG.stage.window.y + 100}, 0.7, {ease: FlxEase.quadInOut, type: PINGPONG});
@@ -410,11 +410,11 @@ class TitleState extends MusicBeatState {
 				textDataText(2);
 			case 7:
 				textDataText(3);
-				if(newgrounds != null)
+				if (newgrounds != null)
 					newgrounds.visible = true;
 			case 8:
 				deleteCoolText();
-				if(newgrounds != null)
+				if (newgrounds != null)
 					newgrounds.visible = false;
 			case 9:
 				if (curWacky[0] != null) {

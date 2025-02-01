@@ -309,14 +309,7 @@ class Note extends FlxSkewedSprite {
 			if (strumTime < Conductor.songPosition - Conductor.safeZoneOffset && !wasGoodHit)
 				tooLate = true;
 		} else {
-			canBeHit = false;
-
-			if (!isSustainNote) {
-				if (strumTime <= Conductor.songPosition)
-					canBeHit = true;
-			} else {
-				canBeHit = (strumTime < Conductor.songPosition - Conductor.safeZoneOffset / 3);
-			}
+			canBeHit = strumTime <= Conductor.songPosition;
 		}
 	}
 

@@ -311,8 +311,7 @@ class OptionsMenu extends MusicBeatState {
 	
 		try
 		{
-			if (Options.getData("storageType") != "EXTERNAL")
-				Sys.command('rm', ['-rf', lastStoragePath]);
+			Sys.command('rm', ['-rf', lastStoragePath]);
 		}
 		catch (e:haxe.Exception)
 			CoolUtil.coolError('Failed to remove last directory. (${e.message})');

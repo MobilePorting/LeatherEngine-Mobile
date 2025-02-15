@@ -153,7 +153,7 @@ class StageMakingState extends MusicBeatState {
 		stage_Dropdown.cameras = [camHUD];
 
 		cam_Zoom = new FlxText(10, 0, 0, "Camera Zoom: " + stageCam.zoom, 24);
-		cam_Zoom.setFormat(Paths.font("vcr.ttf"), 24, FlxColor.WHITE, RIGHT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
+		cam_Zoom.setFormat(Paths.font("vcr.ttf"), 24, FlxColor.WHITE, RIGHT, FlxTextBorderStyle.OUTLINE_FAST, FlxColor.BLACK);
 		cam_Zoom.scrollFactor.set();
 		cam_Zoom.cameras = [camHUD];
 

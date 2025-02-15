@@ -676,7 +676,7 @@ class LuaScript extends Script {
 		setFunction("makeText", function(id:String, text:String, x:Float, y:Float, size:Int = 32, font:String = "vcr.ttf", fieldWidth:Float = 0) {
 			if (!lua_Sprites.exists(id)) {
 				var Sprite:FlxTextFix = new FlxTextFix(x, y, fieldWidth, text, size);
-				Sprite.setFormat(Paths.font("vcr.ttf"), size, FlxColor.WHITE, CENTER, FlxTextBorderStyle.OUTLINE, FlxColor.TRANSPARENT);
+				Sprite.setFormat(Paths.font("vcr.ttf"), size, FlxColor.WHITE, CENTER, FlxTextBorderStyle.OUTLINE_FAST, FlxColor.TRANSPARENT);
 				// Sprite.setFormat(Paths.font(font), size);
 				Sprite.font = Paths.font(font);
 
@@ -3508,6 +3508,8 @@ class LuaScript extends Script {
 		});
 		#end
 
+		setup();
+
 		call("onCreate", []);
 		call("createLua", []);
 		call("new", []);
@@ -3529,8 +3531,10 @@ class LuaScript extends Script {
 			lua_Sounds.set("Voices" + sound, PlayState.instance.vocals.members[sound]);
 		}
 
-		for (object in PlayState.instance.stage.stageObjects) {
-			lua_Sprites.set(object[0], object[1]);
+		if(PlayState.instance.stage != null){
+			for (object in PlayState.instance.stage.stageObjects) {
+				lua_Sprites.set(object[0], object[1]);
+			}
 		}
 
 		if (PlayState.dad.otherCharacters != null) {
@@ -3560,7 +3564,7 @@ class LuaScript extends Script {
 			}
 		}
 
-		if (PlayState.instance != null) {
+		if (PlayState?.strumLineNotes?.members != null) {
 			for (i in 0...PlayState.strumLineNotes.length) {
 				lua_Sprites.set("defaultStrum" + i, PlayState.strumLineNotes.members[i]);
 

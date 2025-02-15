@@ -282,7 +282,7 @@ class CoolUtil {
 		text.color = 0xFF6183;
 		text.alignment = CENTER;
 		text.borderSize = 1.5;
-		text.borderStyle = OUTLINE;
+		text.borderStyle = OUTLINE_FAST;
 		text.borderColor = FlxColor.BLACK;
 		text.scrollFactor.set();
 		text.cameras = [FlxG.cameras.list[FlxG.cameras.list.length - 1]];

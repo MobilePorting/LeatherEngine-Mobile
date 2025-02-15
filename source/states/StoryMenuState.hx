@@ -175,7 +175,7 @@ class StoryMenuState extends MusicBeatState {
 			text.text = "This mod has no weeks!";
 			text.font = Paths.font("vcr.ttf");
 			text.alignment = CENTER;
-			text.borderStyle = OUTLINE;
+			text.borderStyle = OUTLINE_FAST;
 			text.size = 32;
 			text.screenCenter();
 			add(text);
@@ -240,7 +240,7 @@ class StoryMenuState extends MusicBeatState {
 		groupSwitchText.alignment = CENTER;
 		groupSwitchText.font = weekSongListText.font;
 		groupSwitchText.color = FlxColor.WHITE;
-		groupSwitchText.borderStyle = OUTLINE;
+		groupSwitchText.borderStyle = OUTLINE_FAST;
 		groupSwitchText.borderColor = FlxColor.BLACK;
 		groupSwitchText.borderSize = 1;
 		add(groupSwitchText);
@@ -254,7 +254,7 @@ class StoryMenuState extends MusicBeatState {
 		groupInfoText.alignment = LEFT;
 		groupInfoText.font = weekSongListText.font;
 		groupInfoText.color = FlxColor.WHITE;
-		groupInfoText.borderStyle = OUTLINE;
+		groupInfoText.borderStyle = OUTLINE_FAST;
 		groupInfoText.borderColor = FlxColor.BLACK;
 		groupInfoText.borderSize = 1;
 		add(groupInfoText);

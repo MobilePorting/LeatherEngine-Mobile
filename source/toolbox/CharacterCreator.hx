@@ -127,7 +127,7 @@ class CharacterCreator extends MusicBeatState {
 		animText.scrollFactor.set();
 		animText.color = FlxColor.WHITE;
 		animText.borderColor = FlxColor.BLACK;
-		animText.borderStyle = OUTLINE;
+		animText.borderStyle = OUTLINE_FAST;
 		animText.borderSize = 2;
 		animText.cameras = [camHUD];
 		add(animText);
@@ -138,7 +138,7 @@ class CharacterCreator extends MusicBeatState {
 		moveText.scrollFactor.set();
 		moveText.color = FlxColor.WHITE;
 		moveText.borderColor = FlxColor.BLACK;
-		moveText.borderStyle = OUTLINE;
+		moveText.borderStyle = OUTLINE_FAST;
 		moveText.borderSize = 2;
 		moveText.alignment = RIGHT;
 		moveText.cameras = [camHUD];

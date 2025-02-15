@@ -120,21 +120,21 @@ class MainMenuState extends MusicBeatState {
 
 		var versionShit:FlxText = new FlxText(5, FlxG.height - 18, 0, TitleState.version, 16);
 		versionShit.scrollFactor.set();
-		versionShit.setFormat(Paths.font('vcr.ttf'), 16, FlxColor.WHITE, LEFT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
+		versionShit.setFormat(Paths.font('vcr.ttf'), 16, FlxColor.WHITE, LEFT, FlxTextBorderStyle.OUTLINE_FAST, FlxColor.BLACK);
 		add(versionShit);
 
 		#if MODDING_ALLOWED
 		final buttonTab:String = controls.mobileC ? 'C' : 'TAB';
 		var switchInfo:FlxText = new FlxText(5, versionShit.y - versionShit.height, 0, 'Hit $buttonTab to switch mods.', 16);
 		switchInfo.scrollFactor.set();
-		switchInfo.setFormat(Paths.font('vcr.ttf'), 16, FlxColor.WHITE, LEFT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
+		switchInfo.setFormat(Paths.font('vcr.ttf'), 16, FlxColor.WHITE, LEFT, FlxTextBorderStyle.OUTLINE_FAST, FlxColor.BLACK);
 		add(switchInfo);
 
 		var modInfo:FlxText = new FlxText(5, switchInfo.y - switchInfo.height, 0,
 			'${modding.PolymodHandler.metadataArrays.length} mods loaded, ${modding.ModList.getActiveMods(modding.PolymodHandler.metadataArrays).length} mods active.',
 			16);
 		modInfo.scrollFactor.set();
-		modInfo.setFormat(Paths.font('vcr.ttf'), 16, FlxColor.WHITE, LEFT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
+		modInfo.setFormat(Paths.font('vcr.ttf'), 16, FlxColor.WHITE, LEFT, FlxTextBorderStyle.OUTLINE_FAST, FlxColor.BLACK);
 		add(modInfo);
 		#end
 

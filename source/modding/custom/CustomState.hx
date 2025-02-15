@@ -47,6 +47,6 @@ class CustomState extends MusicBeatState{
 		call("stepHitPost");
     }
     public inline function call(func:String, ?args:Array<Dynamic>) {
-		script.call(func, args);
+		script?.call(func, args);
 	}
 }

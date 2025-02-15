@@ -1013,7 +1013,7 @@ class PlayState extends MusicBeatState {
 		// settings moment
 		scoreTxt = new FlxText(0, healthBarBG.y + 45, 0, "", 20);
 		scoreTxt.screenCenter(X);
-		scoreTxt.setFormat(Paths.font("vcr.ttf"), Options.getData("biggerScoreInfo") ? 20 : 16, FlxColor.WHITE, CENTER, FlxTextBorderStyle.OUTLINE,
+		scoreTxt.setFormat(Paths.font("vcr.ttf"), Options.getData("biggerScoreInfo") ? 20 : 16, FlxColor.WHITE, CENTER, FlxTextBorderStyle.OUTLINE_FAST,
 			FlxColor.BLACK);
 		scoreTxt.scrollFactor.set();
 
@@ -1030,7 +1030,7 @@ class PlayState extends MusicBeatState {
 
 		if (Options.getData("sideRatings")) {
 			ratingText = new FlxText(4, 0, 0, "bruh");
-			ratingText.setFormat(Paths.font("vcr.ttf"), 16, FlxColor.WHITE, LEFT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
+			ratingText.setFormat(Paths.font("vcr.ttf"), 16, FlxColor.WHITE, LEFT, FlxTextBorderStyle.OUTLINE_FAST, FlxColor.BLACK);
 			ratingText.screenCenter(Y);
 			ratingText.x += Options.getData("ratingTextOffset")[0];
 			ratingText.y += Options.getData("ratingTextOffset")[1];
@@ -1226,10 +1226,8 @@ class PlayState extends MusicBeatState {
 		}
 
 		#if VIDEOS_ALLOWED
-		videoHandler.autoPause = true;
 		if (videoHandler.load(PolymodAssets.getPath(Paths.video(name, ext))))
 			FlxTimer.wait(0.001, () -> videoHandler.play());
-		videoHandler.mute = false;
 		videoHandler.onEndReached.add(function() {
 			videoHandler.dispose();
 			FlxG.removeChild(videoHandler);
@@ -2864,7 +2862,7 @@ class PlayState extends MusicBeatState {
 			else
 				accuracyText.color = FlxColor.ORANGE;
 
-			accuracyText.borderStyle = FlxTextBorderStyle.OUTLINE;
+			accuracyText.borderStyle = FlxTextBorderStyle.OUTLINE_FAST;
 			accuracyText.borderSize = 1;
 			accuracyText.font = Paths.font("vcr.ttf");
 			accuracyText.antialiasing = ui_settings[3] == "true" && Options.getData("antialiasing");

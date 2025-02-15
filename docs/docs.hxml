@@ -37,12 +37,8 @@
 --remap flash:openfl
 --macro flixel.system.macros.FlxDefines.run()
 
-
---macro include('game')
---macro include('hxvlc')
 --macro include('android')
 --macro include('mobile')
---macro include('flixel', true, [ 'flixel.addons.editors.spine.*', 'flixel.addons.nape.*', 'flixel.system.macros.*' ])
 --macro keep('Main')
 
 --no-output

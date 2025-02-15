@@ -75,7 +75,7 @@ class SwitchModSubstate extends MusicBeatSubstate {
 		descriptionText.setFormat(Paths.font("vcr.ttf"), 18, FlxColor.WHITE, CENTER);
 		descriptionText.borderColor = FlxColor.BLACK;
 		descriptionText.borderSize = 1;
-		descriptionText.borderStyle = OUTLINE;
+		descriptionText.borderStyle = OUTLINE_FAST;
 		descriptionText.scrollFactor.set();
 		descriptionText.screenCenter(X);
 		add(descriptionText);
@@ -89,7 +89,7 @@ class SwitchModSubstate extends MusicBeatSubstate {
 		text.scrollFactor.set();
 		text.borderColor = FlxColor.BLACK;
 		text.borderSize = 1;
-		text.borderStyle = OUTLINE;
+		text.borderStyle = OUTLINE_FAST;
 		add(text);
 
 		addVirtualPad(UP_DOWN, A_B);

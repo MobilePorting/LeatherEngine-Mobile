@@ -265,7 +265,7 @@ class NewModState extends MusicBeatState {
 		text.color = 0xFF6183;
 		text.alignment = CENTER;
 		text.borderSize = 1.5;
-		text.borderStyle = OUTLINE;
+		text.borderStyle = OUTLINE_FAST;
 		text.borderColor = FlxColor.BLACK;
 		text.scrollFactor.set();
 

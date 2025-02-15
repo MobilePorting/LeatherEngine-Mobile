@@ -196,7 +196,7 @@ class HUDAdjustment extends MusicBeatState {
 		_accuracyText = new FlxText();
 		final ms:Float = FlxMath.roundDecimal(FlxG.random.float(-166, 166), 2);
 		_accuracyText.text = ms + " ms" + (Options.getData("botplay") ? " (BOT)" : "");
-		_accuracyText.borderStyle = FlxTextBorderStyle.OUTLINE;
+		_accuracyText.borderStyle = FlxTextBorderStyle.OUTLINE_FAST;
 		_accuracyText.borderSize = 1;
 		_accuracyText.size = 24;
 		_accuracyText.font = Paths.font("vcr.ttf");
@@ -284,7 +284,7 @@ class HUDAdjustment extends MusicBeatState {
 		add(timeBar);
 
 		_ratingText = new FlxText(4, 0, 0, get_ratingText());
-		_ratingText.setFormat(Paths.font("vcr.ttf"), 16, FlxColor.WHITE, LEFT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
+		_ratingText.setFormat(Paths.font("vcr.ttf"), 16, FlxColor.WHITE, LEFT, FlxTextBorderStyle.OUTLINE_FAST, FlxColor.BLACK);
 		_ratingText.alignment = Options.getData("ratingTextAlign");
 		_ratingText.camera = hud;
 		_ratingText.screenCenter(Y);
@@ -305,7 +305,7 @@ class HUDAdjustment extends MusicBeatState {
 		info.bgColor = FlxColor.TRANSPARENT;
 		FlxG.cameras.add(info, false);
 		offsets = new FlxText(0, 4, 0, "bruh");
-		offsets.borderStyle = OUTLINE;
+		offsets.borderStyle = OUTLINE_FAST;
 		offsets.borderSize = 1;
 		offsets.size = 24;
 		offsets.font = Paths.font("vcr.ttf");
@@ -317,7 +317,7 @@ class HUDAdjustment extends MusicBeatState {
 		final space:String = controls.mobileC ? 'C' : 'SPACE';
 
 		guide = new FlxText(0, 0, 0, "Press " + escape + " to exit and save.\nPress " + space +" to reset to defaults.");
-		guide.borderStyle = OUTLINE;
+		guide.borderStyle = OUTLINE_FAST;
 		guide.borderSize = 1;
 		guide.size = 24;
 		guide.font = Paths.font("vcr.ttf");

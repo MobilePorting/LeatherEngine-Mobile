@@ -37,13 +37,13 @@ class FlxScrollableDropDownMenu extends FlxUIDropDownMenu  {
 						var f = swipe.startPosition.x - swipe.endPosition.x;
 						var g = swipe.startPosition.y - swipe.endPosition.y;
 						if (25 <= Math.sqrt(f * f + g * g)) {
-							if ((-45 <= swipe.startPosition.angleBetween(swipe.endPosition) && 45 >= swipe.startPosition.angleBetween(swipe.endPosition))) {
+							if ((-45 <= swipe.startPosition.degreesBetween(swipe.endPosition) && 45 >= swipe.startPosition.degreesBetween(swipe.endPosition))) {
 								// Go down
 								currentScroll++;
 								if(currentScroll >= list.length) currentScroll = list.length-1;
 									updateButtonPositions();
 							}
-							else if (-180 <= swipe.startPosition.angleBetween(swipe.endPosition) && -135 >= swipe.startPosition.angleBetween(swipe.endPosition) || (135 <= swipe.startPosition.angleBetween(swipe.endPosition) && 180 >= swipe.startPosition.angleBetween(swipe.endPosition))) {
+							else if (-180 <= swipe.startPosition.degreesBetween(swipe.endPosition) && -135 >= swipe.startPosition.degreesBetween(swipe.endPosition) || (135 <= swipe.startPosition.degreesBetween(swipe.endPosition) && 180 >= swipe.startPosition.degreesBetween(swipe.endPosition))) {
 								// Go up
 								--currentScroll;
 								if(currentScroll < 0) currentScroll = 0;

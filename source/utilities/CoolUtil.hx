@@ -23,6 +23,7 @@ import haxe.PosInfos;
  */
 @:cppFileCode('
 	#include <iostream>
+	#include <thread>
 ')
 class CoolUtil {
 	public static function boundTo(value:Float, min:Float, max:Float):Float {
@@ -314,6 +315,16 @@ class CoolUtil {
 		lime.app.Application.current.window.alert(message, title);
 		//#end
 	}
+
+	#if cpp
+    @:functionCode('
+        return std::thread::hardware_concurrency();
+    ')
+	#end
+    public static function getCPUThreadsCount():Int
+    {
+        return 1;
+    }
 
 	/**
 		Simple map that contains useful ansi color strings

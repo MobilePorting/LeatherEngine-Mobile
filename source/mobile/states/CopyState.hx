@@ -25,15 +25,16 @@ package mobile.states;
 import states.TitleState;
 import lime.utils.Assets as LimeAssets;
 import openfl.utils.Assets as OpenFLAssets;
-import flixel.addons.util.FlxAsyncLoop;
 import flixel.FlxG;
 import flixel.text.FlxText;
 import flixel.FlxSprite;
 import flixel.util.FlxColor;
+import flixel.util.FlxTimer;
 import openfl.utils.ByteArray;
 import haxe.io.Path;
 import flixel.ui.FlxBar;
 import flixel.ui.FlxBar.FlxBarFillDirection;
+import lime.system.ThreadPool;
 #if sys
 import sys.io.File;
 import sys.FileSystem;
@@ -78,10 +79,10 @@ class CopyState extends states.MusicBeatState {
 	@:dox(hide) public var loadedText:FlxText;
 
 	/**
-	 * An asynchronous loop that handles the file copying process.
-	 * It will iterate through the files to be copied and handle each file asynchronously.
+	 * A thread pool that handles the file copying process.
+	 * It will iterate through the files to be copied and handle each file concurrently.
 	 */
-	public var copyLoop:FlxAsyncLoop;
+	public var thread:ThreadPool;
 
 	var failedFilesStack:Array<String> = [];
 	var failedFiles:Array<String> = [];
@@ -98,9 +99,7 @@ class CopyState extends states.MusicBeatState {
 			return;
 		}
 
-		#if android
 		CoolUtil.showPopUp("Seems like you have some missing files that are necessary to run the game\nPress OK to begin the copy process", "Notice!");
-		#end
 
 		shouldCopy = true;
 
@@ -120,39 +119,42 @@ class CopyState extends states.MusicBeatState {
 		loadedText.setFormat(Paths.font("vcr.ttf"), 16, FlxColor.WHITE, CENTER);
 		add(loadedText);
 
-		var ticks:Int = 15;
-		if (maxLoopTimes <= 15)
-			ticks = 1;
-
-		copyLoop = new FlxAsyncLoop(maxLoopTimes, copyAsset, ticks);
-		add(copyLoop);
-		copyLoop.start();
+		thread = new ThreadPool(0, CoolUtil.getCPUThreadsCount(), MULTI_THREADED);
+		new FlxTimer().start(0.5, (tmr) -> {
+			thread.run(function(poop, shit) {
+				for (file in locatedFiles) {
+					loopTimes++;
+					copyAsset(file);
+				}
+			}, null);
+		});
 
 		super.create();
 	}
 
 	override function update(elapsed:Float) {
-		if (shouldCopy && copyLoop != null) {
-			loadingBar.percent = loopTimes / maxLoopTimes * 100;
-			if (copyLoop.finished && canUpdate) {
+		if (shouldCopy) {
+			if (loopTimes >= maxLoopTimes && canUpdate) {
 				if (failedFiles.length > 0) {
-					#if android
 					CoolUtil.showPopUp(failedFiles.join('\n'), 'Failed To Copy ${failedFiles.length} File.');
-					#end
 					if (!FileSystem.exists('logs'))
 						FileSystem.createDirectory('logs');
 					File.saveContent('logs/' + Date.now().toString().replace(' ', '-').replace(':', "'") + '-CopyState' + '.txt', failedFilesStack.join('\n'));
 				}
-				canUpdate = false;
+
 				FlxG.sound.play(Paths.sound('confirmMenu')).onComplete = () -> {
 					FlxG.switchState(new TitleState());
 				};
+
+				canUpdate = false;
 			}
 
-			if (loopTimes == maxLoopTimes)
+			if (loopTimes >= maxLoopTimes)
 				loadedText.text = "Completed!";
 			else
 				loadedText.text = '$loopTimes/$maxLoopTimes';
+
+			loadingBar.percent = Math.min((loopTimes / maxLoopTimes) * 100, 100);
 		}
 		super.update(elapsed);
 	}
@@ -160,9 +162,7 @@ class CopyState extends states.MusicBeatState {
 	/**
 	 * Function to copy an asset from internal storage to the file system.
 	 */
-	public function copyAsset() {
-		var file = locatedFiles[loopTimes];
-		loopTimes++;
+	public function copyAsset(file:String) {
 		if (!FileSystem.exists(file)) {
 			var directory = Path.directory(file);
 			if (!FileSystem.exists(directory))

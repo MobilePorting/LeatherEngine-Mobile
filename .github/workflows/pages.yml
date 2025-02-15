@@ -61,7 +61,6 @@ jobs:
             haxelib run hmm install --quiet
             haxelib git dox https://github.com/HaxeFoundation/dox --quiet
             mkdir pages
-            lime rebuild linux
       
       - name: Create Documentation Site 🌐
         run: |

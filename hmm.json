@@ -17,13 +17,13 @@
       "name": "flixel",
       "type": "git",
       "ref": null,
-      "url": "https://github.com/HaxeFlixel/flixel"
+      "url": "https://github.com/swordcubes-grave-of-shite/flixel"
     },
     {
       "name": "flixel-addons",
       "type": "git",
       "ref": null,
-      "url": "https://github.com/HaxeFlixel/flixel-addons"
+      "url": "https://github.com/swordcubes-grave-of-shite/flixel-addons"
     },
     {
       "name": "flixel-ui",
@@ -92,8 +92,9 @@
     },
     {
       "name": "hxvlc",
-      "type": "haxelib",
-      "version": null
+      "type": "git",
+      "ref": null,
+      "url": "https://github.com/Vortex2Oblivion/hxvlc"
     },
     {
       "name": "lime",
@@ -109,8 +110,9 @@
     },
     {
       "name": "openfl",
-      "type": "haxelib",
-      "version": null
+      "type": "git",
+      "ref": null,
+      "url": "https://github.com/swordcubes-grave-of-shite/openfl"
     },
     {
       "name": "scriptless-polymod",

@@ -128,6 +128,8 @@
 	<haxedef name="HXVLC_VERBOSE" value="2" if="debug" />
 	<haxedef name="HXVLC_LOGGING" if="debug" />
 
+	<haxedef name="HXVLC_EXPERIMENTAL_WINDOWSARM" if="windows HXCPP_ARM64" />
+
 	<!-- Aways enable Null Object Reference check for crash dialog -->
 	<haxedef name="HXCPP_CHECK_POINTER" if="release" />
 	<haxedef name="HXCPP_STACK_LINE" if="release" />

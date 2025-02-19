@@ -108,7 +108,7 @@
       "name": "linc_luajit",
       "type": "git",
       "ref": null,
-      "url": "https://github.com/Vortex2Oblivion/linc_luajit"
+      "url": "https://github.com/MobilePorting/linc_luajit"
     },
     {
       "name": "openfl",

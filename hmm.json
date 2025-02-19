@@ -16,12 +16,14 @@
     {
       "name": "flixel",
       "type": "git",
+      "ref": "dev",
       "ref": null,
       "url": "https://github.com/swordcubes-grave-of-shite/flixel"
     },
     {
       "name": "flixel-addons",
       "type": "git",
+      "ref": "dev",
       "ref": null,
       "url": "https://github.com/swordcubes-grave-of-shite/flixel-addons"
     },

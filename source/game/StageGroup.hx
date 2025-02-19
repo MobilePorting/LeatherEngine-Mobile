@@ -34,6 +34,10 @@ class StageGroup extends FlxGroup {
 	public var p2_Scroll:Float = 1.0;
 	public var gf_Scroll:Float = 0.95;
 
+	public var p1ZIndex:Int = 0;
+	public var p2ZIndex:Int = 0;
+	public var gfZIndex:Int = 0;
+
 	public var p1_Cam_Offset:FlxPoint = new FlxPoint(0, 0);
 	public var p2_Cam_Offset:FlxPoint = new FlxPoint(0, 0);
 
@@ -84,6 +88,13 @@ class StageGroup extends FlxGroup {
 							p2_Scroll = stageData.character_Scrolls[1];
 							gf_Scroll = stageData.character_Scrolls[2];
 						}
+
+						if (stageData.characterZIndices != null) {
+							p1ZIndex = stageData.characterZIndices[0];
+							p2ZIndex = stageData.characterZIndices[1];
+							gfZIndex = stageData.characterZIndices[2];
+						}
+
 
 						var null_Object_Name_Loop:Int = 0;
 
@@ -144,6 +155,9 @@ class StageGroup extends FlxGroup {
 							if (Object.alpha != null)
 								Sprite.alpha = Object.alpha;
 
+							if (Object.zIndex != null)
+								Sprite.zIndex = Object.zIndex;
+
 							if (Object.layer != null) {
 								switch (Object.layer.toLowerCase()) {
 									case "foreground":
@@ -166,8 +180,8 @@ class StageGroup extends FlxGroup {
 							stageScript.set(object[0], object[1]);
 						}
 					} else if (Assets.exists(Paths.lua("stage data/" + stageData.scriptName))) {
-						stageScript = new LuaScript(#if MODDING_ALLOWED PolymodAssets #else Assets #end
-							.getPath(Paths.lua("stage data/" + stageData.scriptName)));
+						stageScript = new LuaScript(#if MODDING_ALLOWED PolymodAssets #else Assets #end.getPath(Paths.lua("stage data/" +
+							stageData.scriptName)));
 					}
 				}
 		}
@@ -190,6 +204,12 @@ class StageGroup extends FlxGroup {
 		p1.scrollFactor.set(p1_Scroll, p1_Scroll);
 		p2.scrollFactor.set(p2_Scroll, p2_Scroll);
 		gf.scrollFactor.set(gf_Scroll, gf_Scroll);
+
+		
+		p1.zIndex = p1ZIndex;
+		p2.zIndex = p2ZIndex;
+		gf.zIndex = gfZIndex;
+
 
 		if (p2.curCharacter.startsWith("gf") && gf.curCharacter.startsWith("gf")) {
 			p2.setPosition(gf.x, gf.y);
@@ -295,6 +315,7 @@ class StageGroup extends FlxGroup {
 typedef StageData = {
 	var character_Positions:Array<Array<Float>>;
 	var character_Scrolls:Array<Float>;
+	var characterZIndices:Array<Int>;
 
 	var camera_Zoom:Float;
 	var camera_Offsets:Array<Array<Float>>;
@@ -307,6 +328,7 @@ typedef StageData = {
 typedef StageObject = {
 	// General Sprite Object Data //
 	var position:Array<Float>;
+	var zIndex:Null<Int>;
 	var scale:Float;
 	var antialiased:Bool;
 	var scroll_Factor:Array<Float>;

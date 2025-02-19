@@ -90,6 +90,18 @@
       "animation_name": "BF hit",
       "fps": 24,
       "looped": false
+    },
+    {
+      "name": "attack",
+      "animation_name": "boyfriend attack",
+      "fps": 24,
+      "looped": false
+    },
+    {
+      "name": "pre-attack",
+      "animation_name": "bf pre attack",
+      "fps": 24,
+      "looped": false
     }
   ]
 }

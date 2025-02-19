@@ -12,3 +12,5 @@ singRIGHT -38 -7
 singLEFT 12 -6
 singUPmiss -29 27
 dodge 4 -8
+pre-attack -40 -40
+attack 294 267

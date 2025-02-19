@@ -136,7 +136,7 @@ class LuaScript extends Script {
 	}
 
 	override public function destroy() {
-		if(lua != null){
+		if (lua != null) {
 			trails.clear();
 			Lua.close(lua);
 			lua = null;
@@ -501,7 +501,7 @@ class LuaScript extends Script {
 					Sprite.frames = Paths.getSparrowAtlas(PlayState.instance.stage.stage + "/" + filename, "stages");
 
 				Sprite.scale.set(size, sizeY == null ? size : sizeY);
-				
+
 				Sprite.updateHitbox();
 
 				lua_Sprites.set(id, Sprite);
@@ -520,7 +520,7 @@ class LuaScript extends Script {
 						Sprite.frames = Paths.getSparrowAtlas(PlayState.instance.stage.stage + "/" + filename, "stages");
 
 					Sprite.scale.set(size, sizeY == null ? size : sizeY);
-					
+
 					Sprite.updateHitbox();
 
 					lua_Sprites.set(id, Sprite);
@@ -705,7 +705,7 @@ class LuaScript extends Script {
 					Sprite.loadGraphic(Paths.gpuBitmap(filename));
 
 				Sprite.scale.set(size, sizeY == null ? size : sizeY);
-				
+
 				Sprite.updateHitbox();
 
 				lua_Sprites.set(id, Sprite);
@@ -759,7 +759,7 @@ class LuaScript extends Script {
 					Sprite.frames = Paths.getSparrowAtlas(filename);
 
 				Sprite.scale.set(size, sizeY == null ? size : sizeY);
-				
+
 				Sprite.updateHitbox();
 
 				lua_Sprites.set(id, Sprite);
@@ -776,7 +776,7 @@ class LuaScript extends Script {
 						Sprite.frames = Paths.getSparrowAtlas(filename);
 
 					Sprite.scale.set(size, sizeY == null ? size : sizeY);
-					
+
 					Sprite.updateHitbox();
 
 					lua_Sprites.set(id, Sprite);
@@ -792,7 +792,7 @@ class LuaScript extends Script {
 					Sprite.loadGraphic(Paths.gpuBitmap(filename));
 
 				Sprite.scale.set(size, sizeY == null ? size : sizeY);
-				
+
 				Sprite.updateHitbox();
 
 				lua_Sprites.set(id, Sprite);
@@ -850,7 +850,7 @@ class LuaScript extends Script {
 					Sprite.frames = Paths.getSparrowAtlas(filename);
 
 				Sprite.scale.set(size, sizeY == null ? size : sizeY);
-				
+
 				Sprite.updateHitbox();
 
 				lua_Sprites.set(id, Sprite);
@@ -869,7 +869,7 @@ class LuaScript extends Script {
 						Sprite.frames = Paths.getSparrowAtlas(filename);
 
 					Sprite.scale.set(size, sizeY == null ? size : sizeY);
-					
+
 					Sprite.updateHitbox();
 
 					lua_Sprites.set(id, Sprite);
@@ -2149,6 +2149,16 @@ class LuaScript extends Script {
 				lua_Sounds.get(id).stop();
 		});
 
+		setFunction("pauseSound", function(id:String) {
+			if (lua_Sounds.get(id) != null)
+				lua_Sounds.get(id).pause();
+		});
+
+		setFunction("resumeSound", function(id:String) {
+			if (lua_Sounds.get(id) != null)
+				lua_Sounds.get(id).resume();
+		});
+
 		setFunction("setSoundVolume", function(id:String, volume:Float) {
 			if (lua_Sounds.get(id) != null)
 				lua_Sounds.get(id).volume = volume;
@@ -3037,7 +3047,7 @@ class LuaScript extends Script {
 				if (shader != null) {
 					shader.tween(property, value, duration, easeFromString(ease), startDelay, onComplete);
 				} else {
-					trace('Shader named $shader doesn\'t exist!', ERROR);
+					trace('Shader named $id doesn\'t exist!', ERROR);
 				}
 			});
 
@@ -3052,20 +3062,23 @@ class LuaScript extends Script {
 				return;
 
 			var funnyCustomShader:CustomShader = lua_Custom_Shaders.get(shaderName);
-			if (getCharacterByName(actorStr) != null) {
-				var character = getCharacterByName(actorStr);
-				if (character.otherCharacters != null && character.otherCharacters.length > 0) {
-					for (c in 0...character.otherCharacters.length) {
-						character.otherCharacters[c].shader = funnyCustomShader;
+			if (funnyCustomShader != null) {
+				if (getCharacterByName(actorStr) != null) {
+					var character = getCharacterByName(actorStr);
+					if (character.otherCharacters != null && character.otherCharacters.length > 0) {
+						for (c in 0...character.otherCharacters.length) {
+							character.otherCharacters[c].shader = funnyCustomShader;
+						}
+						return;
 					}
-					return;
 				}
-			}
-			var actor = getActorByName(actorStr);
+				var actor = getActorByName(actorStr);
 
-			if (actor != null && funnyCustomShader != null) {
-				actor.shader = funnyCustomShader;
-			}
+				if (actor != null && funnyCustomShader != null) {
+					actor.shader = funnyCustomShader;
+				}
+			} else
+				trace('Shader named $shaderName doesn\'t exist!', ERROR);
 		});
 
 		setFunction("setCameraShader", function(camera:String, id:String) {
@@ -3074,10 +3087,16 @@ class LuaScript extends Script {
 
 			var cam = lua_Cameras.get(camera);
 			var funnyCustomShader:CustomShader = lua_Custom_Shaders.get(id);
-			if (cam != null && funnyCustomShader != null) {
-				cam.shaders.push(new ShaderFilter(funnyCustomShader));
-				cam.shaderNames.push(id);
-				cam.cam.filters = cam.shaders;
+			if (funnyCustomShader != null) {
+				if (cam != null) {
+					cam.shaders.push(new ShaderFilter(funnyCustomShader));
+					cam.shaderNames.push(id);
+					cam.cam.filters = cam.shaders;
+				} else {
+					trace('Camera named $camera doesn\'t exist!', ERROR);
+				}
+			} else {
+				trace('Shader named $id doesn\'t exist!', ERROR);
 			}
 		});
 
@@ -3093,7 +3112,11 @@ class LuaScript extends Script {
 						cam.shaders.remove(cam.shaders[idx]);
 						cam.cam.filters = cam.shaders;
 					}
+				} else {
+					trace('Camera named $camStr doesn\'t contain the shader $shaderName!', ERROR);
 				}
+			} else {
+				trace('Camera named $camStr doesn\'t exist!', ERROR);
 			}
 		});
 
@@ -3101,20 +3124,24 @@ class LuaScript extends Script {
 			if (!Options.getData("shaders"))
 				return;
 			var funnyCustomShader:CustomShader = lua_Custom_Shaders.get(id);
-			if (value is Float) {
-				funnyCustomShader.setFloat(property, Std.parseFloat(value));
-			} else if (value is Bool) {
-				funnyCustomShader.setBool(property, value);
-			} else if (value is Array) {
-				if (value[0] is Float) {
-					funnyCustomShader.setFloatArray(property, value);
-				} else if (value[0] is Bool) {
-					funnyCustomShader.setBoolArray(property, value);
+			if (funnyCustomShader != null) {
+				if (value is Float) {
+					funnyCustomShader.setFloat(property, Std.parseFloat(value));
+				} else if (value is Bool) {
+					funnyCustomShader.setBool(property, value);
+				} else if (value is Array) {
+					if (value[0] is Float) {
+						funnyCustomShader.setFloatArray(property, value);
+					} else if (value[0] is Bool) {
+						funnyCustomShader.setBoolArray(property, value);
+					} else {
+						funnyCustomShader.setIntArray(property, value);
+					}
 				} else {
-					funnyCustomShader.setIntArray(property, value);
+					funnyCustomShader.setInt(property, Std.parseInt(value));
 				}
 			} else {
-				funnyCustomShader.setInt(property, Std.parseInt(value));
+				trace('Shader named $id doesn\'t exist!');
 			}
 		});
 
@@ -3126,7 +3153,7 @@ class LuaScript extends Script {
 				if (shader != null) {
 					shader.tween(property, value, duration, easeFromString(ease), startDelay, onComplete);
 				} else {
-					trace('Shader named $shader doesn\'t exist!', ERROR);
+					trace('Shader named $id doesn\'t exist!', ERROR);
 				}
 			});
 
@@ -3531,7 +3558,7 @@ class LuaScript extends Script {
 			lua_Sounds.set("Voices" + sound, PlayState.instance.vocals.members[sound]);
 		}
 
-		if(PlayState.instance.stage != null){
+		if (PlayState.instance.stage != null) {
 			for (object in PlayState.instance.stage.stageObjects) {
 				lua_Sprites.set(object[0], object[1]);
 			}

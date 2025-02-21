@@ -152,23 +152,53 @@ class Character extends FlxSprite {
 	}
 
 	public function loadNamedConfiguration(characterName:String) {
-		if (!Assets.exists(Paths.json("character data/" + characterName + "/config"))) {
-			characterName = "bf";
-			curCharacter = characterName;
+		if (!Assets.exists((Paths.json("character data/" + characterName)))) {
+			if (!Assets.exists(Paths.json("character data/" + characterName + "/config"))) {
+				characterName = "bf";
+				curCharacter = characterName;
+			}
+			if (Assets.exists(Paths.hx("data/character data/" + characterName + "/script"))) {
+				script = new HScript(Paths.hx("data/character data/" + characterName + "/script"));
+
+				script.interp.variables.set("character", this);
+				PlayState.instance.scripts.set(characterName, script);
+				script.call("createCharacter", [curCharacter]);
+			}
+
+			if (Options.getData("optimizedChars") && Assets.exists(Paths.json("character data/optimized_" + characterName + "/config")))
+				characterName = "optimized_" + characterName;
+
+			this.config = cast Json.parse(Assets.getText(Paths.json("character data/" + characterName + "/config")).trim());
+		} else {
+			this.config = parsePsychCharacter(characterName);
 		}
-		if (Assets.exists(Paths.hx("data/character data/" + characterName + "/script"))) {
-			script = new HScript(Paths.hx("data/character data/" + characterName + "/script"));
-
-			script.interp.variables.set("character", this);
-			PlayState.instance.scripts.set(characterName, script);
-			script.call("createCharacter", [curCharacter]);
-		}
-
-		if (Options.getData("optimizedChars") && Assets.exists(Paths.json("character data/optimized_" + characterName + "/config")))
-			characterName = "optimized_" + characterName;
-
-		this.config = cast Json.parse(Assets.getText(Paths.json("character data/" + characterName + "/config")).trim());
 		loadCharacterConfiguration(this.config);
+	}
+
+	public function parsePsychCharacter(characterName:String):CharacterConfig {
+		var psychCharacter:PsychCharacterFile = cast Json.parse(Assets.getText(Paths.json("character data/" + characterName)).trim());
+		var returnCharacter:CharacterConfig = cast {
+			imagePath: psychCharacter.image.replace("characters/", ""),
+			graphicSize: psychCharacter.scale,
+			singDuration: psychCharacter.sing_duration,
+			healthIcon: psychCharacter.healthicon,
+			antialiasing: !psychCharacter.no_antialiasing,
+			barColor: psychCharacter.healthbar_colors,
+			defaultFlipX: psychCharacter.flip_x,
+			positionOffset: psychCharacter.position,
+			cameraOffset: psychCharacter.camera_position,
+			animations: []
+		};
+		for (animation in psychCharacter.animations) {
+			returnCharacter.animations.push(cast{
+				name: animation.anim,
+				animation_name: animation.name,
+				fps: animation.fps,
+				looped: animation.loop
+			});
+			animOffsets.set(animation.anim, [animation.offsets[0], animation.offsets[1]]);
+		}
+		return returnCharacter;
 	}
 
 	public var atlasMode:Bool = false;
@@ -532,4 +562,30 @@ class Character extends FlxSprite {
 		}
 		return this;
 	}
+}
+
+typedef PsychCharacterFile = {
+	var animations:Array<PsychAnimArray>;
+	var image:String;
+	var scale:Float;
+	var sing_duration:Float;
+	var healthicon:String;
+
+	var position:Array<Float>;
+	var camera_position:Array<Float>;
+
+	var flip_x:Bool;
+	var no_antialiasing:Bool;
+	var healthbar_colors:Array<Int>;
+	var vocals_file:String;
+	@:optional var _editor_isPlayer:Null<Bool>;
+}
+
+typedef PsychAnimArray = {
+	var anim:String;
+	var name:String;
+	var fps:Int;
+	var loop:Bool;
+	var indices:Array<Int>;
+	var offsets:Array<Int>;
 }

@@ -46,7 +46,7 @@ class FlashingLightsMenu extends MusicBeatState {
 
 			FlxTween.tween(text, {alpha: 0}, 2.0, {
 				ease: FlxEase.cubeInOut,
-				onComplete: (_) -> FlxG.switchState(new TitleState())
+				onComplete: (_) -> FlxG.switchState(TitleState.new)
 			});
 
 			canInput = false;

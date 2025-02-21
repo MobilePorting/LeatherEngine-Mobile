@@ -93,7 +93,7 @@ class HScript extends Script {
 		set('FlxTimer', flixel.util.FlxTimer);
 		set('FlxTween', flixel.tweens.FlxTween);
 		set("FlxTweenUtil", modding.helpers.FlxTweenUtil);
-		set("FlxText", modding.helpers.FlxTextFix);
+		set("FlxText", flixel.text.FlxText);
 		set('FlxColor', modding.helpers.FlxColorHelper);
 		set('FlxEase', flixel.tweens.FlxEase);
 		set("Assets", openfl.utils.Assets);
@@ -127,7 +127,7 @@ class HScript extends Script {
 		set('CustomSubstate', modding.custom.CustomSubstate);
 
 		#if DISCORD_ALLOWED
-		set('DiscordClient', utilities.Discord.DiscordClient);
+		set('DiscordClient', utilities.DiscordClient);
 		#end
 
 		#if MODDING_ALLOWED

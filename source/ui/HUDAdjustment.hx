@@ -22,7 +22,7 @@ import states.MusicBeatState;
 import states.OptionsMenu;
 import ui.HealthIcon;
 #if DISCORD_ALLOWED
-import utilities.Discord.DiscordClient;
+import utilities.DiscordClient;
 #end
 
 class HUDAdjustment extends MusicBeatState {

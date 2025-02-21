@@ -45,13 +45,13 @@ import flixel.tweens.FlxTween;
 import flixel.FlxG;
 import game.Conductor;
 import lime.app.Application;
-import modding.helpers.FlxTextFix;
+import flixel.text.FlxText;
+import haxe.Json;
 #if android
 import android.widget.Toast as AndroidToast;
 import android.Tools as AndroidTools;
 import android.utilities.LeatherJNI;
 #end
-import haxe.Json;
 
 using StringTools;
 
@@ -675,7 +675,7 @@ class LuaScript extends Script {
 
 		setFunction("makeText", function(id:String, text:String, x:Float, y:Float, size:Int = 32, font:String = "vcr.ttf", fieldWidth:Float = 0) {
 			if (!lua_Sprites.exists(id)) {
-				var Sprite:FlxTextFix = new FlxTextFix(x, y, fieldWidth, text, size);
+				var Sprite:FlxText = new FlxText(x, y, fieldWidth, text, size);
 				Sprite.setFormat(Paths.font("vcr.ttf"), size, FlxColor.WHITE, CENTER, FlxTextBorderStyle.OUTLINE_FAST, FlxColor.TRANSPARENT);
 				// Sprite.setFormat(Paths.font(font), size);
 				Sprite.font = Paths.font(font);
@@ -2583,9 +2583,9 @@ class LuaScript extends Script {
 			}
 		});
 
-		setFunction("tweenScaleX", function(id:String, toAlpha:Float, time:Float, easeStr:String = "", onComplete:String = "") {
+		setFunction("tweenScaleX", function(id:String, toScale:Float, time:Float, easeStr:String = "", onComplete:String = "") {
 			if (getActorByName(id) != null)
-				PlayState.instance.tweenManager.tween(getActorByName(id).scale, {x: toAlpha}, time, {
+				PlayState.instance.tweenManager.tween(getActorByName(id).scale, {x: toScale}, time, {
 					ease: easeFromString(easeStr),
 					onComplete: function(flxTween:FlxTween) {
 						if (onComplete != '' && onComplete != null) {
@@ -2594,9 +2594,9 @@ class LuaScript extends Script {
 					}
 				});
 		});
-		setFunction("tweenScaleY", function(id:String, toAlpha:Float, time:Float, easeStr:String = "", onComplete:String = "") {
+		setFunction("tweenScaleY", function(id:String, toScale:Float, time:Float, easeStr:String = "", onComplete:String = "") {
 			if (getActorByName(id) != null)
-				PlayState.instance.tweenManager.tween(getActorByName(id).scale, {y: toAlpha}, time, {
+				PlayState.instance.tweenManager.tween(getActorByName(id).scale, {y: toScale}, time, {
 					ease: easeFromString(easeStr),
 					onComplete: function(flxTween:FlxTween) {
 						if (onComplete != '' && onComplete != null) {

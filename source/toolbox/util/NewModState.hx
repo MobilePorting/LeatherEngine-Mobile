@@ -16,7 +16,7 @@ import lime.ui.FileDialogType;
 import flixel.ui.FlxButton;
 import flixel.FlxG;
 #if DISCORD_ALLOWED
-import utilities.Discord.DiscordClient;
+import utilities.DiscordClient;
 #end
 import states.MusicBeatState;
 import flixel.text.FlxInputText;

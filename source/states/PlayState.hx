@@ -57,7 +57,7 @@ import sys.FileSystem;
 using StringTools;
 
 #if DISCORD_ALLOWED
-import utilities.Discord.DiscordClient;
+import utilities.DiscordClient;
 #end
 #if MODDING_ALLOWED
 import polymod.backends.PolymodAssets;
@@ -929,11 +929,11 @@ class PlayState extends MusicBeatState {
 			if (FileSystem.exists(folder)) {
 				for (file in FileSystem.readDirectory(folder)) {
 					if (file.endsWith('.hx')) {
-						scripts.set(file, new HScript(folder + file));
+						scripts.set('$folder/$file.hx', new HScript('$folder$file'));
 					}
 					#if LUA_ALLOWED
 					else if (file.endsWith('.lua')) {
-						scripts.set(file, new LuaScript(folder + file));
+						scripts.set('$folder$file.lua', new LuaScript('$folder$file'));
 					}
 					#end
 				}
@@ -1572,7 +1572,7 @@ class PlayState extends MusicBeatState {
 		if (Options.getData("invisibleNotes")) // this was really simple lmfao
 			notes.visible = false;
 
-		var noteData:Array<SwagSection> = SONG.notes;
+		var noteData:Array<Section> = SONG.notes;
 
 		for (section in noteData) {
 			Conductor.recalculateStuff(songMultiplier);
@@ -2424,7 +2424,7 @@ class PlayState extends MusicBeatState {
 				vocals.stop();
 				SONG.keyCount = ogKeyCount;
 				SONG.playerKeyCount = ogPlayerKeyCount;
-				FlxG.switchState(new ChartingState());
+				FlxG.switchState(ChartingState.new);
 				#if DISCORD_ALLOWED
 				DiscordClient.changePresence("Chart Editor", null, null, true);
 				#end
@@ -2436,7 +2436,7 @@ class PlayState extends MusicBeatState {
 				vocals.stop();
 				SONG.keyCount = ogKeyCount;
 				SONG.playerKeyCount = ogPlayerKeyCount;
-				FlxG.switchState(new toolbox.CharacterCreator(SONG.player2, curStage));
+				FlxG.switchState(() -> new toolbox.CharacterCreator(SONG.player2, curStage));
 				toolbox.CharacterCreator.lastState = "PlayState";
 				#if DISCORD_ALLOWED
 				DiscordClient.changePresence("Creating A Character", null, null, true);
@@ -2449,7 +2449,7 @@ class PlayState extends MusicBeatState {
 				vocals.stop();
 				SONG.keyCount = ogKeyCount;
 				SONG.playerKeyCount = ogPlayerKeyCount;
-				FlxG.switchState(new modcharting.ModchartEditorState());
+				FlxG.switchState(modcharting.ModchartEditorState.new);
 				#if DISCORD_ALLOWED
 				DiscordClient.changePresence("In The Modchart Editor", null, null, true);
 				#end
@@ -2702,7 +2702,7 @@ class PlayState extends MusicBeatState {
 				SONG.keyCount = ogKeyCount;
 				SONG.playerKeyCount = ogPlayerKeyCount;
 
-				FlxG.switchState(new StoryMenuState());
+				FlxG.switchState(StoryMenuState.new);
 
 				if (SONG.validScore)
 					Highscore.saveWeekScore(campaignScore, storyDifficultyStr, (groupWeek != "" ? groupWeek + "Week" : "week") + Std.string(storyWeek));
@@ -2734,7 +2734,7 @@ class PlayState extends MusicBeatState {
 
 				switchedStates = true;
 				PlayState.loadChartEvents = true;
-				LoadingState.loadAndSwitchState(new PlayState());
+				LoadingState.loadAndSwitchState(PlayState.new);
 			}
 		} else {
 			switchedStates = true;

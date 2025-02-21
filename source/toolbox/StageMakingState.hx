@@ -704,7 +704,7 @@ class StageMakingState extends MusicBeatState {
 				stageCam.zoom -= 0.1;
 
 			if (virtualPad.buttonB.justPressed || FlxG.keys.justPressed.ESCAPE)
-				FlxG.switchState(new OptionsMenu());
+				FlxG.switchState(OptionsMenu.new);
 		}
 
 		// zoom lock

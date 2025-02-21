@@ -5,7 +5,7 @@ import lime.app.Future;
 import flixel.FlxG;
 import flixel.FlxState;
 import flixel.FlxSprite;
-import flixel.graphics.frames.FlxAtlasFrames;
+import flixel.util.typeLimit.NextState;
 import flixel.util.FlxTimer;
 
 import openfl.utils.Assets;
@@ -19,7 +19,7 @@ class LoadingState extends MusicBeatState
 {
 	inline static var MIN_TIME = 1.0;
 	
-	var target:FlxState;
+	var target:NextState;
 	var stopMusic = false;
 	var callbacks:MultiCallback;
 	
@@ -29,7 +29,7 @@ class LoadingState extends MusicBeatState
 
 	public static var instance:LoadingState = null;
 	
-	function new(target:FlxState, stopMusic:Bool)
+	function new(target:NextState, stopMusic:Bool)
 	{
 		super();
 		this.target = target;
@@ -157,12 +157,12 @@ class LoadingState extends MusicBeatState
 		return Paths.voices(PlayState.SONG.song);
 	}
 	
-	inline static public function loadAndSwitchState(target:FlxState, stopMusic = false)
+	inline static public function loadAndSwitchState(target:NextState, stopMusic = false)
 	{
 		FlxG.switchState(getNextState(target, stopMusic));
 	}
 	
-	static function getNextState(target:FlxState, stopMusic = false):FlxState
+	static function getNextState(target:NextState, stopMusic = false):NextState
 	{
 		Paths.currentLevel = ("week" + PlayState.storyWeek).toLowerCase();
 		
@@ -172,7 +172,7 @@ class LoadingState extends MusicBeatState
 			&& isLibraryLoaded("shared");
 		
 		if (!loaded)
-			return new LoadingState(target, stopMusic);
+			return () -> new LoadingState(target, stopMusic);
 		#end
 
 		if (stopMusic && FlxG.sound.music != null)

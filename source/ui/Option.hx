@@ -1,7 +1,7 @@
 package ui;
 
 #if DISCORD_ALLOWED
-import utilities.Discord.DiscordClient;
+import utilities.DiscordClient;
 #end
 
 #if MODDING_ALLOWED
@@ -93,7 +93,7 @@ class BoolOption extends Option {
 			#if DISCORD_ALLOWED
 			case "discordRPC":
 				if (optionChecked && !DiscordClient.active)
-					DiscordClient.initialize();
+					DiscordClient.startup();
 				else if (!optionChecked && DiscordClient.active)
 					DiscordClient.shutdown();
 			#end
@@ -182,9 +182,9 @@ class GameStateOption extends Option {
  class CharacterCreatorOption extends Option {
 	// OPTIONS //
 
-	public var gameState:FlxState;
+	public var gameState:NextState;
 
-	public function new(_optionName:String = "", _gameState:Dynamic) {
+	public function new(_optionName:String = "", _gameState:NextState) {
 		super(_optionName, null);
 
 		// SETTING VALUES //

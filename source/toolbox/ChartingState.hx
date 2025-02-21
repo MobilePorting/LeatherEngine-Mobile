@@ -1428,7 +1428,7 @@ class ChartingState extends MusicBeatState {
 				vocals.stop();
 				PlayState.playCutscenes = true;
 				PlayState.loadChartEvents = false;
-				LoadingState.loadAndSwitchState(new PlayState());
+				LoadingState.loadAndSwitchState(PlayState.new);
 				PlayState.chartingMode = true;
 			}
 

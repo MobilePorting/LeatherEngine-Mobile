@@ -229,7 +229,7 @@ class PauseSubState extends MusicBeatSubstate {
 						pauseMusic.destroy();
 						FlxG.sound.list.remove(pauseMusic);
 						FlxG.cameras.remove(pauseCamera);
-						FlxG.switchState(new PauseOptions());
+						FlxG.switchState(PauseOptions.new);
 						PlayState.chartingMode = false;
 					}
 				case "back":
@@ -243,9 +243,9 @@ class PauseSubState extends MusicBeatSubstate {
 					PlayState.chartingMode = false;
 
 					if (PlayState.isStoryMode) {
-						FlxG.switchState(new StoryMenuState());
+						FlxG.switchState(StoryMenuState.new);
 					} else {
-						FlxG.switchState(new FreeplayState());
+						FlxG.switchState(FreeplayState.new);
 					}
 				case "editors":
 					menu = "editors";
@@ -325,6 +325,6 @@ class PauseOptions extends OptionsMenu {
 			return;
 		}
 
-		FlxG.switchState(new PlayState());
+		FlxG.switchState(PlayState.new);
 	}
 }

@@ -4,7 +4,7 @@ package states;
 import sys.thread.Thread;
 #end
 #if DISCORD_ALLOWED
-import utilities.Discord.DiscordClient;
+import utilities.DiscordClient;
 #end
 import modding.scripts.languages.HScript;
 import modding.ModList;
@@ -409,7 +409,7 @@ class FreeplayState extends MusicBeatState {
 				stop_loading_songs = true;
 				#end
 
-				FlxG.switchState(new MainMenuState());
+				FlxG.switchState(MainMenuState.new);
 			}
 
 			#if PRELOAD_ALL

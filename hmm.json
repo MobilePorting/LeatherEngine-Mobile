@@ -1,10 +1,9 @@
 {
   "dependencies": [
     {
-      "name": "discord_rpc",
-      "type": "git",
-      "ref": null,
-      "url": "https://github.com/Aidan63/linc_discord-rpc"
+      "name": "hxdiscord_rpc",
+      "type": "haxelib",
+      "version": null
     },
     {
       "name": "extension-androidtools",
@@ -16,15 +15,15 @@
     {
       "name": "flixel",
       "type": "git",
+      "dir": null,
       "ref": "dev",
-      "ref": null,
       "url": "https://github.com/swordcubes-grave-of-shite/flixel"
     },
     {
       "name": "flixel-addons",
       "type": "git",
+      "dir": null,
       "ref": "dev",
-      "ref": null,
       "url": "https://github.com/swordcubes-grave-of-shite/flixel-addons"
     },
     {

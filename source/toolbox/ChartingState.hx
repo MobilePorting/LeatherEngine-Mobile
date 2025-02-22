@@ -15,7 +15,6 @@ import states.MusicBeatState;
 import ui.HealthIcon;
 import game.Note;
 import game.Conductor.BPMChangeEvent;
-import game.Section.SwagSection;
 import game.SongLoader.SongData;
 import flixel.FlxG;
 import flixel.FlxSprite;
@@ -43,7 +42,7 @@ using utilities.BackgroundUtil;
 
 @:publicFields
 class ChartingState extends MusicBeatState {
-	var _file:FileReference;
+	var fileDialogue:FileReference;
 
 	var UI_box:FlxUITabMenu;
 
@@ -114,12 +113,6 @@ class ChartingState extends MusicBeatState {
 	var min_zoom:Float = 0.5;
 	var max_zoom:Float = 16;
 
-	var lilBuddiesBox:FlxUICheckBox;
-
-	var lilStage:FlxSprite;
-	var lilBf:FlxSprite;
-	var lilOpp:FlxSprite;
-
 	var menuBG:FlxSprite;
 
 	var colorQuantization:Bool;
@@ -137,34 +130,6 @@ class ChartingState extends MusicBeatState {
 		menuBG.screenCenter();
 		menuBG.scrollFactor.set();
 		add(menuBG);
-
-		lilStage = new FlxSprite(32, 650);
-		lilStage.loadGraphic(Paths.gpuBitmap("charter/lil_stage", "shared"));
-		lilStage.scrollFactor.set();
-		add(lilStage);
-
-		lilBf = new FlxSprite(185, 550);
-		lilBf.frames = Paths.getSparrowAtlas("charter/lil_bf", "shared");
-		lilBf.animation.addByPrefix("idle", "idle", 12, true);
-		lilBf.animation.play("idle", true);
-		lilBf.animation.onFinish.add(function(name:String) {
-			lilBf.animation.play(name, true, false, lilBf.animation.getByName(name).numFrames - 2);
-		});
-		lilBf.scrollFactor.set();
-		add(lilBf);
-
-		lilOpp = new FlxSprite(30, 545);
-		lilOpp.frames = Paths.getSparrowAtlas("charter/lil_opp", "shared");
-		lilOpp.animation.addByPrefix("idle", "idle", 12, true);
-		lilOpp.animation.play("idle", true);
-		lilOpp.animation.onFinish.add(function(name:String) {
-			lilOpp.animation.play(name, true, false, lilOpp.animation.getByName(name).numFrames - 2);
-		});
-		lilOpp.scrollFactor.set();
-		add(lilOpp);
-
-		// loadOffsetFile("lilBf");
-		// loadOffsetFile("lilOpp");
 
 		// preload hitsounds
 		FlxG.sound.cache(Paths.sound('CLAP'));
@@ -453,14 +418,6 @@ class ChartingState extends MusicBeatState {
 		slider_playback_speed.valueLabel.color = FlxColor.BLACK;
 		#end
 
-		lilBuddiesBox = new FlxUICheckBox(check_mute_inst.x, 90, null, null, "Lil' Buddies", 100);
-		lilBuddiesBox.checked = true;
-		lilBuddiesBox.callback = function() {
-			lilBf.visible = lilBuddiesBox.checked;
-			lilOpp.visible = lilBuddiesBox.checked;
-			lilStage.visible = lilBuddiesBox.checked;
-		};
-
 		var check_char_ids:FlxUICheckBox = new FlxUICheckBox(check_mute_vocals.x + check_mute_vocals.width + 4, check_mute_vocals.y, null, null,
 			"Character Ids On Notes", 100);
 		check_char_ids.checked = doFunnyNumbers;
@@ -577,8 +534,6 @@ class ChartingState extends MusicBeatState {
 		#if FLX_PITCH
 		tab_group_song.add(slider_playback_speed);
 		#end
-
-		// tab_group_song.add(lilBuddiesBox);
 
 		// final addings
 		UI_box.addGroup(tab_group_song);
@@ -1283,20 +1238,6 @@ class ChartingState extends MusicBeatState {
 				}
 			});
 		}
-		curRenderedNotes.forEach(function(note:Note) {
-			if (FlxG.sound.music.playing) {
-				FlxG.overlap(strumLine, note, function(_, _) {
-					if (note.rawNoteData % (_song.keyCount + _song.playerKeyCount) < _song.keyCount
-						&& _song.notes[curSection].mustHitSection
-						|| note.rawNoteData % (_song.keyCount + _song.playerKeyCount) >= _song.keyCount && !_song.notes[curSection].mustHitSection) {
-						lilBf.animation.play(NoteVariables.animationDirections[_song.keyCount - 1][note.noteData], true);
-					} else {
-						lilOpp.animation.play(NoteVariables.animationDirections[_song.keyCount - 1][note.noteData], true);
-					}
-				});
-			}
-		});
-
 		if (curBeat % Std.int(Conductor.stepsPerSection / Conductor.timeScale[1]) == 0
 			&& curStep >= (Conductor.stepsPerSection * (curSection + 1))) {
 			if (_song.notes[curSection + 1] == null)
@@ -1466,8 +1407,6 @@ class ChartingState extends MusicBeatState {
 			var control = (virtualPad.buttonZ.pressed || FlxG.keys.pressed.CONTROL);
 
 			if (virtualPad.buttonX.justPressed || FlxG.keys.justPressed.SPACE) {
-				lilBf.animation.play("idle", true);
-				lilOpp.animation.play("idle", true);
 				if (FlxG.sound.music.playing) {
 					FlxG.sound.music.pause();
 					vocals.pause();
@@ -1497,34 +1436,35 @@ class ChartingState extends MusicBeatState {
 					if (cameraShitThing.x < 0)
 						cameraShitThing.x = 0;
 				} else {
-					lilBf.animation.play("idle", true);
-					lilOpp.animation.play("idle", true);
 					FlxG.sound.music.pause();
 					vocals.pause();
 
 					FlxG.sound.music.time -= (FlxG.mouse.wheel * Conductor.stepCrochet * 0.4);
 					vocals.time = FlxG.sound.music.time;
-
-					if (FlxG.sound.music.time < sectionStartTime()) {
-						changeSection(curSection - 1);
-					}
 				}
 			}
 
 			if ((virtualPad.buttonUp.justPressed || FlxG.keys.justPressed.W) || (virtualPad.buttonDown.justPressed || FlxG.keys.justPressed.S)) {
-				lilBf.animation.play("idle", true);
-				lilOpp.animation.play("idle", true);
 				FlxG.sound.music.pause();
 				vocals.pause();
 
-				var daTime:Float = ((FlxG.keys.pressed.SHIFT || virtualPad.buttonY.pressed) ? Conductor.stepCrochet * 2 : 700 * FlxG.elapsed);
+				var daTime:Float = ((FlxG.keys.pressed.SHIFT || virtualPad.buttonY.pressed) ? Conductor.stepCrochet : 700 * FlxG.elapsed);
 
 				if ((virtualPad.buttonUp.justPressed || FlxG.keys.justPressed.W)) {
 					FlxG.sound.music.time -= daTime;
-				} else
+				} else{
 					FlxG.sound.music.time += daTime;
+				}
 
 				vocals.time = FlxG.sound.music.time;
+
+				if (FlxG.sound.music.time < sectionStartTime()) {
+					changeSection(curSection - 1);
+				}
+
+				if (FlxG.sound.music.time > FlxG.sound.music.length) {
+					changeSection(0);
+				}
 			}
 
 			var shiftThing:Int = 1;
@@ -1635,9 +1575,6 @@ class ChartingState extends MusicBeatState {
 		FlxG.sound.music.pause();
 		vocals.pause();
 
-		lilBf.animation.play("idle", true);
-		lilOpp.animation.play("idle", true);
-
 		// Basically old shit from changeSection???
 		FlxG.sound.music.time = sectionStartTime();
 
@@ -1663,9 +1600,6 @@ class ChartingState extends MusicBeatState {
 				FlxG.sound.music.pause();
 				vocals.pause();
 
-				lilBf.animation.play("idle", true);
-				lilOpp.animation.play("idle", true);
-
 				FlxG.sound.music.time = sectionStartTime();
 				vocals.time = FlxG.sound.music.time;
 				updateCurStep();
@@ -1674,8 +1608,6 @@ class ChartingState extends MusicBeatState {
 			updateGrid();
 			updateSectionUI();
 		}
-		lilBf.animation.play("idle", true);
-		lilOpp.animation.play("idle", true);
 	}
 
 	static var doFunnyNumbers:Bool = true;
@@ -1864,10 +1796,6 @@ class ChartingState extends MusicBeatState {
 				goodNoteInfo = daNoteInfo - _song.playerKeyCount;
 
 			var note:Note = new Note(daStrumTime, goodNoteInfo, null, false, 0, daType, _song, [0], mustPress, true);
-			lilBf.animation.addByPrefix(NoteVariables.animationDirections[_song.keyCount - 1][note.noteData],
-				NoteVariables.animationDirections[_song.keyCount - 1][note.noteData] + "0", 12);
-			lilOpp.animation.addByPrefix(NoteVariables.animationDirections[_song.keyCount - 1][note.noteData],
-				NoteVariables.animationDirections[_song.keyCount - 1][note.noteData] + "0", 12);
 			note.sustainLength = daSus;
 
 			note.setGraphicSize((Std.parseInt(PlayState.instance.arrow_Configs.get(daType)[4]) ?? Std.parseInt(PlayState.instance.arrow_Configs.get(daType)[4])),
@@ -2256,10 +2184,10 @@ class ChartingState extends MusicBeatState {
 
 		if ((data != null) && (data.length > 0)) {
 			#if !mobile
-			_file = new FileReference();
-			_file.addEventListener(Event.COMPLETE, onSaveComplete);
-			_file.addEventListener(Event.CANCEL, onSaveCancel);
-			_file.addEventListener(IOErrorEvent.IO_ERROR, onSaveError);
+			fileDialogue = new FileReference();
+			fileDialogue.addEventListener(Event.COMPLETE, onSaveComplete);
+			fileDialogue.addEventListener(Event.CANCEL, onSaveCancel);
+			fileDialogue.addEventListener(IOErrorEvent.IO_ERROR, onSaveError);
 			#end
 
 			var gamingName = _song.song.toLowerCase();
@@ -2273,16 +2201,16 @@ class ChartingState extends MusicBeatState {
 			#if mobile
 			StorageUtil.saveContent('$gamingName.json', data.trim());
 			#else
-			_file.save(data.trim(), gamingName + ".json");
+			fileDialogue.save(data.trim(), gamingName + ".json");
 			#end
 		}
 	}
 
 	function onSaveComplete(_):Void {
-		_file.removeEventListener(Event.COMPLETE, onSaveComplete);
-		_file.removeEventListener(Event.CANCEL, onSaveCancel);
-		_file.removeEventListener(IOErrorEvent.IO_ERROR, onSaveError);
-		_file = null;
+		fileDialogue.removeEventListener(Event.COMPLETE, onSaveComplete);
+		fileDialogue.removeEventListener(Event.CANCEL, onSaveCancel);
+		fileDialogue.removeEventListener(IOErrorEvent.IO_ERROR, onSaveError);
+		fileDialogue = null;
 		FlxG.log.notice("Successfully saved LEVEL DATA.");
 	}
 
@@ -2290,20 +2218,20 @@ class ChartingState extends MusicBeatState {
 	 * Called when the save file dialog is cancelled.
 	 */
 	function onSaveCancel(_):Void {
-		_file.removeEventListener(Event.COMPLETE, onSaveComplete);
-		_file.removeEventListener(Event.CANCEL, onSaveCancel);
-		_file.removeEventListener(IOErrorEvent.IO_ERROR, onSaveError);
-		_file = null;
+		fileDialogue.removeEventListener(Event.COMPLETE, onSaveComplete);
+		fileDialogue.removeEventListener(Event.CANCEL, onSaveCancel);
+		fileDialogue.removeEventListener(IOErrorEvent.IO_ERROR, onSaveError);
+		fileDialogue = null;
 	}
 
 	/**
 	 * Called if there is an error while saving the gameplay recording.
 	 */
 	function onSaveError(_):Void {
-		_file.removeEventListener(Event.COMPLETE, onSaveComplete);
-		_file.removeEventListener(Event.CANCEL, onSaveCancel);
-		_file.removeEventListener(IOErrorEvent.IO_ERROR, onSaveError);
-		_file = null;
+		fileDialogue.removeEventListener(Event.COMPLETE, onSaveComplete);
+		fileDialogue.removeEventListener(Event.CANCEL, onSaveCancel);
+		fileDialogue.removeEventListener(IOErrorEvent.IO_ERROR, onSaveError);
+		fileDialogue = null;
 		FlxG.log.error("Problem saving Level data");
 	}
 }

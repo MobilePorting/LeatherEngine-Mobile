@@ -10,7 +10,7 @@
 -L hxvlc
 -L funkin.vis
 -L grig.audio
--L discord_rpc 
+-L hxdiscord_rpc 
 -L linc_luajit
 -L fnf-modcharting-tools
 -L jsonpath
@@ -27,6 +27,7 @@
 --define VIDEOS_ALLOWED
 --define MODDING_ALLOWED
 --define MODCHARTING_TOOLS
+--define DISCORD_ALLOWED
 --define LEATHER
 --define FLX_NO_HEALTH
 --define FLX_NO_DEBUG

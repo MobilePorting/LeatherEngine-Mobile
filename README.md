@@ -47,20 +47,12 @@ You can have different note types that give different amounts of health or give 
 
 - larsiusprime - Scrollable Drop Down Menu
 
-- PolybiusProxy - hxCodec
-
 - Video LAN Team - People who made VLC Media Player (the thing the game uses to play videos)
 
 - Ronezkj15 - Some Ideas + New Leather Engine Logo
 
 - ShadowMario - Color Swap Shader (for notes and stuffs) + some really weird modchart stuff that im too stupid to know lol
 
-- Smokey555 - Adobe Animate Spritemap -> FlxFramesCollection Support
-
 - larsiusprime + Polymod Contributors - [polymod](https://github.com/larsiusprime/polymod) (funny cool mod loader!!!)
 
 - TheZoroForce240 + FNF-Modcharting-Tools Contributors - [note modifying events (mania changes but modified to work with change ui skin too) generated with song code. Instead of right on the spot](https://github.com/TheZoroForce240/LeatherEngine/blob/main/source/states/PlayState.hx#L1432) and [fnf-modcharting-tools](https://github.com/TheZoroForce240/FNF-Modcharting-Tools) (cool modchart shits, check them out!!!)
-
-- Rozebud - [fps plus](https://github.com/ThatRozebudDude/FPS-Plus-Public) lil' buddies and note glow when can be hit came from here
-
-- gedehari - code for crash handeler, they make some cool stuff check them out

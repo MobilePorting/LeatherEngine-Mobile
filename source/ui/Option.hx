@@ -90,6 +90,8 @@ class BoolOption extends Option {
 				Main.toggleFPS(optionChecked);
 			case "memoryCounter":
 				Main.toggleMem(optionChecked);
+			case "versionDisplay":
+				Main.toggleVers(optionChecked);
 			#if DISCORD_ALLOWED
 			case "discordRPC":
 				if (optionChecked && !DiscordClient.active)

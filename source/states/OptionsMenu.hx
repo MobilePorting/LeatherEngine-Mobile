@@ -100,6 +100,7 @@ class OptionsMenu extends MusicBeatState {
 				"infoDisplayFont"),
 			new BoolOption("FPS Counter", "fpsCounter"),
 			new BoolOption("Memory Counter", "memoryCounter"),
+			new BoolOption("Version Display", "versionDisplay"),
 			new BoolOption("Commit Hash", "showCommitHash")
 		],
 		"Judgements" => [

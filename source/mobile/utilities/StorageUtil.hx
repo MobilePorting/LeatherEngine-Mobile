@@ -50,7 +50,7 @@ class StorageUtil {
 	 * 
 	 * @return The path to the storage directory.
 	 */
-	public static function getStorageDirectory(?force:Bool = false):String
+	public static function getStorageDirectory():String
 		return #if android haxe.io.Path.addTrailingSlash(AndroidContext.getExternalFilesDir()) #elseif ios lime.system.System.documentsDirectory #else Sys.getCwd() #end;
 
 	/**

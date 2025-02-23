@@ -144,6 +144,9 @@
 	<config:ios category_type="public.app-category.music-games" />
 	<config:mac category_type="public.app-category.music-games" />
 
+	<!-- Allow Access to Engine Files in mobile -->
+	<haxedef name="SHARE_MOBILE_FILES" if="mobile" />
+
 	<!--<haxedef name="HXCPP_GC_BIG_BLOCKS" />-->
 	<haxedef name="HXCPP_GC_GENERATIONAL" />
 

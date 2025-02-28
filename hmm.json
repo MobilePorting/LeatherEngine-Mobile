@@ -2,8 +2,10 @@
   "dependencies": [
     {
       "name": "hxdiscord_rpc",
-      "type": "haxelib",
-      "version": null
+      "type": "git",
+      "dir": null,
+      "ref": "main",
+      "url": "https://github.com/MobilePorting/hxdiscord_rpc"
     },
     {
       "name": "extension-androidtools",

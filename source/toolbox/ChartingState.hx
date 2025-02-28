@@ -641,7 +641,6 @@ class ChartingState extends MusicBeatState {
 		blockPressWhileTypingOnStepper.push(stepperSectionBPM);
 		blockPressWhileTypingOnStepper.push(copySectionCount);
 
-		// https://www.youtube.com/watch?v=B5O30UmxKLM&t=186
 		var copyButton:FlxButton = new FlxButton(10, 130, "Copy last", function() {
 			copySection(Std.int(copySectionCount.value));
 		});
@@ -702,6 +701,15 @@ class ChartingState extends MusicBeatState {
 
 		var pasteSectionButton:FlxButton = new FlxButton(copySectionButton.x + copySectionButton.width + 2, copySectionButton.y, "Paste Section", function() {
 			pasteSection();
+		});
+
+		var copyEventsButton:FlxButton = new FlxButton(copySectionButton.x, copySectionButton.y + copySectionButton.height + 2, "Copy Events", function() {
+			copiedEventsSection = curSection;
+			copyEvents(curSection);
+		});
+
+		var pasteEventsButton:FlxButton = new FlxButton(copyEventsButton.x + copyEventsButton.width + 2, copyEventsButton.y, "Paste Events", function() {
+			pasteEvents();
 		});
 
 		// Labels for Interactive Stuff
@@ -798,6 +806,9 @@ class ChartingState extends MusicBeatState {
 
 		tab_group_section.add(copySectionButton);
 		tab_group_section.add(pasteSectionButton);
+
+		tab_group_section.add(copyEventsButton);
+		tab_group_section.add(pasteEventsButton);
 
 		// final addition
 		UI_box.addGroup(tab_group_section);
@@ -1627,18 +1638,26 @@ class ChartingState extends MusicBeatState {
 		updateGrid();
 	}
 
-	function copyEvents(?sectionNum:Int = 1) {
-		var daSec = FlxMath.maxInt(curSection, sectionNum);
+	var copiedEvents:Array<Array<Dynamic>> = [];
+	var copiedEventsSection:Int = 0;
 
-		if (daSec - sectionNum != curSection) {
-			for (note in _song.notes[daSec - sectionNum].sectionNotes) {
-				var strum = note[0] + Conductor.stepCrochet * (Conductor.stepsPerSection * sectionNum);
-
-				var copiedNote:Array<Dynamic> = [strum, note[1], note[2], note[3], note[4]];
-				_song.notes[curSection].sectionNotes.push(copiedNote);
+	function copyEvents(sectionNum:Int = 1) {
+		copiedEvents = [];
+		for(event in events){
+			if(event[1] >= sectionStartTime() && event[1] < sectionStartTime(sectionNum + 1)){
+				copiedEvents.push(event);
 			}
 		}
+	}
 
+	function pasteEvents() {
+		for(event in copiedEvents){
+			var strumTime:Float = sectionStartTime() + (event[1] - sectionStartTime(copiedEventsSection));
+			var pastedEvent:Array<Dynamic> = [event[0], strumTime, event[2], event[3]];
+			if(!events.contains(pastedEvent)){
+				events.push(pastedEvent);
+			}
+		}
 		updateGrid();
 	}
 
@@ -1648,6 +1667,9 @@ class ChartingState extends MusicBeatState {
 		if (daSec != curSection) {
 			for (note in _song.notes[daSec].sectionNotes) {
 				var strum = sectionStartTime() + (note[0] - sectionStartTime(daSec));
+
+				var copiedNote:Array<Dynamic> = [strum, note[1], note[2], note[3], note[4]];
+				_song.notes[curSection].sectionNotes.push(copiedNote);
 			}
 		}
 
@@ -1702,7 +1724,7 @@ class ChartingState extends MusicBeatState {
 		return (json.healthIcon ?? char);
 	}
 
-	function updateNoteUI():Void {
+	inline function updateNoteUI():Void {
 		if (curSelectedNote != null)
 			stepperSusLength.value = curSelectedNote[2];
 	}
@@ -1893,7 +1915,7 @@ class ChartingState extends MusicBeatState {
 		}
 	}
 
-	var events = [];
+	var events:Array<Array<Dynamic>> = [];
 
 	function addSection(?coolLength:Int = 0):Void {
 		var col:Int = Conductor.stepsPerSection;

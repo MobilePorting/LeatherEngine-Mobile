@@ -30,9 +30,9 @@ class ColorSwap {
 	}
 
 	public function new() {
-		r = 255/255;
-		g = 0/255;
-		b = 0/255;
+		r = 1;
+		g = 0;
+		b = 0;
 	}
 }
 

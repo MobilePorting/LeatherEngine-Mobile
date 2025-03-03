@@ -1,6 +1,7 @@
 package external.memory;
 
 #if cpp
+import cpp.SizeT;
 /**
  * Memory class to properly get accurate memory counts
  * for the program.
@@ -19,14 +20,14 @@ extern class Memory {
 	 * determined on this OS.
 	 */
 	@:native("getPeakRSS")
-	public static function getPeakUsage():Float;
+	public static function getPeakUsage():SizeT;
 
 	/**
  	 * Returns the current resident set size (physical memory use) measured
  	 * in bytes, or zero if the value cannot be determined on this OS.
 	 */
 	@:native("getCurrentRSS")
-	public static function getCurrentUsage():Float;
+	public static function getCurrentUsage():SizeT;
 }
 #else
 /**

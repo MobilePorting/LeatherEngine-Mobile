@@ -11,7 +11,7 @@ haxelib --skip-dependencies git linc_luajit https://github.com/MobilePorting/lin
 haxelib --always --skip-dependencies git hscript-improved https://github.com/FNF-CNE-Devs/hscript-improved codename-dev
 haxelib --skip-dependencies git scriptless-polymod https://github.com/Vortex2Oblivion/scriptless-polymod
 haxelib --skip-dependencies git hxNoise https://github.com/whuop/hxNoise
-haxelib --skip-dependencies install hxvlc
+haxelib --skip-dependencies git hxvlc https://github.com/MobilePorting/hxvlc
 haxelib --skip-dependencies git hxdiscord_rpc https://github.com/MobilePorting/hxdiscord_rpc
 haxelib --skip-dependencies git fnf-modcharting-tools https://github.com/Vortex2Oblivion/FNF-Modcharting-Tools
 haxelib --skip-dependencies git flxanimate https://github.com/Vortex2Oblivion/flxanimate

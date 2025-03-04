@@ -9,6 +9,9 @@ on:
       os:
         required: true
         type: string
+      setupCommand:
+        required: true
+        type: string
       buildArgs:
         required: true
         type: string
@@ -43,17 +46,6 @@ jobs:
           sudo add-apt-repository ppa:haxe/releases -y
           sudo apt-get update
           sudo apt install haxe -y
-          haxelib setup ~/haxelib
-
-      - name: Setup MSVC Arm64
-        if: inputs.name == 'Windows ARM64'
-        uses: TheMrMilchmann/setup-msvc-dev@v3
-        with:
-          arch: amd64_arm64
-
-      - name: Install libVLC
-        if: contains(inputs.name, 'Linux')
-        run: sudo apt install libvlc-dev libvlccore-dev
 
       - name: Setup Android NDK
         if: inputs.name == 'Android'
@@ -66,10 +58,18 @@ jobs:
           tar -xf android-ndk.tar.xz
           echo "NDK r28 successfully downloaded and extracted!"
 
+      - name: Setup MSVC Arm64
+        if: inputs.name == 'Windows ARM64'
+        uses: TheMrMilchmann/setup-msvc-dev@v3
+        with:
+          arch: amd64_arm64
+
+      - name: Install libVLC
+        if: contains(inputs.name, 'Linux')
+        run: sudo apt install libvlc-dev libvlccore-dev
+
       - name: Install Libraries
-        run: |
-          haxelib install hmm --quiet
-          haxelib run hmm install --quiet
+        run: ${{ inputs.setupCommand }}
 
       - name: Configure Android
         if: inputs.name == 'Android'

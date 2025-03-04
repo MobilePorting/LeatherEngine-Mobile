@@ -42,10 +42,12 @@ jobs:
           - name: Android
             os: macos-15
             buildArgs: "android -final"
+            setupCommand: sh ./setup/mobile.sh
             artifactName: androidBuild
             artifactPath: "export/release/android/bin/app/build/outputs/apk/release/*.apk"
           - name: iOS
             os: macos-15
+            setupCommand: sh ./setup/mobile.sh
             buildArgs: "ios -final -nosign"
             artifactName: iOSBuild
             artifactPath: "export/release/ios/build/Release-iphoneos/*.ipa"
@@ -53,6 +55,7 @@ jobs:
     with:
         name: ${{ matrix.name }}
         os: ${{ matrix.os }}
+        setupCommand: ${{ matrix.setupCommand }}
         buildArgs: ${{ matrix.buildArgs }}
         artifactName: ${{ matrix.artifactName }}
         artifactPath: ${{ matrix.artifactPath }}

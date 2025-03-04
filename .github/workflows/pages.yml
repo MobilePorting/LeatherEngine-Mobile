@@ -57,8 +57,7 @@ jobs:
       # Runs a set of commands using the runners shell
       - name: Install Haxe Libraries 📚
         run: |
-            haxelib install hmm --quiet
-            haxelib run hmm install --quiet
+            build/install_libraries.sh
             haxelib git dox https://github.com/HaxeFoundation/dox --quiet
             mkdir pages
       

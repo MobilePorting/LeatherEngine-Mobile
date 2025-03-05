@@ -94,7 +94,6 @@
 	<haxelib name="fnf-modcharting-tools" unless="hl" />
 	<haxelib name="funkin.vis" />
 	<haxelib name="grig.audio" />
-	<haxelib name="extension-androidtools" if="android" />
 
 	<!-- Haxedefines -->
 

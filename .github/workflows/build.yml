@@ -49,14 +49,10 @@ jobs:
 
       - name: Setup Android NDK
         if: inputs.name == 'Android'
-        shell: bash
-        run: |
-          cd ${{ runner.temp }}
-          echo "Downloading Android NDK r28..."
-          curl -sSfL -o android-ndk.tar.xz "https://github.com/MobilePorting/android-ndk-cosmo/releases/download/r28/android-ndk-r28-unix.tar.xz"
-          echo "Extracting Android NDK r28..."
-          tar -xf android-ndk.tar.xz
-          echo "NDK r28 successfully downloaded and extracted!"
+        uses: nttld/setup-ndk@main
+        with:
+          ndk-version: r29-beta1
+          add-to-path: false
 
       - name: Setup MSVC Arm64
         if: inputs.name == 'Windows ARM64'
@@ -75,7 +71,7 @@ jobs:
         if: inputs.name == 'Android'
         run: |
           haxelib run lime config ANDROID_SDK $ANDROID_HOME
-          haxelib run lime config ANDROID_NDK_ROOT ${{ runner.temp }}/android-ndk-r28
+          haxelib run lime config ANDROID_NDK_ROOT ${{ steps.setup-ndk.outputs.ndk-path }}
           haxelib run lime config JAVA_HOME $JAVA_HOME_17_arm64
           haxelib run lime config ANDROID_SETUP true
 

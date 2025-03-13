@@ -81,6 +81,7 @@ class NewModState extends MusicBeatState {
 
 	override function create() {
 		super.create();
+		FlxG.mouse.visible = true;
 		#if DISCORD_ALLOWED
 		DiscordClient.changePresence("Creating A New Mod", null, null, true);
 		#end

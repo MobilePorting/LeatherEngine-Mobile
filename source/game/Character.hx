@@ -19,7 +19,7 @@ import states.PlayState;
  * The base character class.
  */
 class Character extends FlxSprite {
-	public var animOffsets:Map<String, Array<Dynamic>>;
+	public var animOffsets:Map<String, Array<Dynamic>> = new Map<String, Array<Dynamic>>();
 	public var debugMode:Bool = false;
 
 	public var isPlayer:Bool = false;
@@ -190,13 +190,14 @@ class Character extends FlxSprite {
 			animations: []
 		};
 		for (animation in psychCharacter.animations) {
-			returnCharacter.animations.push(cast{
+			returnCharacter.animations.push(cast {
 				name: animation.anim,
 				animation_name: animation.name,
 				fps: animation.fps,
-				looped: animation.loop
+				looped: animation.loop,
+				indices: animation.indices
 			});
-			animOffsets.set(animation.anim, [animation.offsets[0], animation.offsets[1]]);
+			addOffset(animation.anim, animation.offsets[0] ?? 0, animation.offsets[1] ?? 0);
 		}
 		return returnCharacter;
 	}
@@ -393,8 +394,6 @@ class Character extends FlxSprite {
 	}
 
 	public function loadOffsetFile(characterName:String) {
-		animOffsets = new Map<String, Array<Dynamic>>();
-
 		if (!Assets.exists(Paths.txt("character data/" + characterName + "/" + "offsets"))) {
 			return;
 		}
@@ -543,9 +542,9 @@ class Character extends FlxSprite {
 			preventDanceForAnim = true;
 
 		var daOffset = animOffsets.get(AnimName);
-		if (animOffsets.exists(AnimName))
+		if (animOffsets.exists(AnimName)) {
 			offset.set((daOffset[0] * _cosAngle) - (daOffset[1] * _sinAngle), (daOffset[1] * _cosAngle) + (daOffset[0] * _sinAngle));
-		else
+		} else
 			offset.set(0, 0);
 	}
 

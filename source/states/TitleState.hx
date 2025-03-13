@@ -90,6 +90,8 @@ class TitleState extends MusicBeatState {
 			#end
 			MusicBeatState.windowNamePrefix = Options.getData("curMod");
 			CoolUtil.setWindowIcon("mods/" + Options.getData("curMod") + "/_polymod_icon.png");
+			NoteVariables.init();
+			Options.fixBinds();
 			FlxG.drawFramerate = Options.getData("maxFPS");
 
 			#if FLX_NO_DEBUG

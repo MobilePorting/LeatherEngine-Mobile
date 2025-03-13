@@ -1,35 +1,15 @@
 package states;
 
 #if MODDING_ALLOWED
-import utilities.Options;
-import ui.ModIcon;
 import modding.ModList;
 import modding.PolymodHandler;
-import substates.UISkinSelect;
-import substates.ControlMenuSubstate;
 import utilities.MusicUtilities;
 import ui.Option;
-import ui.Checkbox;
-import flixel.group.FlxGroup;
-import toolbox.ChartingState;
-import toolbox.StageMakingState;
-import flixel.sound.FlxSound;
-import toolbox.CharacterCreator;
-import utilities.Controls.Control;
-import openfl.text.TextField;
 import flixel.FlxG;
 import flixel.FlxSprite;
-import flixel.addons.display.FlxGridOverlay;
 import flixel.group.FlxGroup.FlxTypedGroup;
-import flixel.input.keyboard.FlxKey;
-import flixel.math.FlxMath;
 import flixel.text.FlxText;
 import flixel.util.FlxColor;
-import lime.utils.Assets;
-import ui.Alphabet;
-import game.SongLoader;
-import toolbox.StageMakingState;
-import game.Highscore;
 
 using utilities.BackgroundUtil;
 

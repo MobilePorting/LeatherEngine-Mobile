@@ -291,9 +291,6 @@ class Note extends FlxSkewedSprite {
 	}
 
 	public function calculateCanBeHit() {
-		if (this == null) {
-			return;
-		}
 		if (mustPress) {
 			/**
 				// TODO: make this shit use something from the arrow config .txt file

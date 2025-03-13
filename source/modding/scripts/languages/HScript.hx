@@ -29,12 +29,13 @@ class HScript extends Script {
 	public var interp:Interp = new Interp();
 
 
-	public function new(path:String) {
+	public function new(path:String, executeOn:ExecuteOn = BOTH) {
 		super(path);
 		// parser settings
 		parser.allowJSON = true;
 		parser.allowTypes = true;
 		parser.allowMetadata = true;
+		this.executeOn = executeOn;
 		// parser.resumeErrors = true;
 
 		// load text
@@ -44,7 +45,8 @@ class HScript extends Script {
 
 		interp.printCallStack = true;
 		interp.execute(program);
-		call("create", [path]);
+		if(this.executeOn != STAGE)
+			call("create", [path]);
 	}
 
 	public inline function update(elapsed:Float)

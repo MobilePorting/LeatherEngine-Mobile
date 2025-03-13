@@ -3,11 +3,10 @@ package ui;
 #if DISCORD_ALLOWED
 import utilities.DiscordClient;
 #end
-
 #if MODDING_ALLOWED
 import modding.PolymodHandler;
 #end
-
+import utilities.NoteVariables;
 import lime.app.Application;
 import states.TitleState;
 import states.MusicBeatState;
@@ -19,6 +18,7 @@ import flixel.FlxG;
 import flixel.group.FlxGroup;
 import ui.ModIcon;
 import flixel.util.typeLimit.NextState;
+import flixel.tweens.*;
 
 /**
  * The base option class that all options inherit from.
@@ -104,8 +104,8 @@ class BoolOption extends Option {
 			case "showCommitHash":
 				Main.toggleCommitHash(optionChecked);
 			case "antialiasing":
-				for(member in FlxG.state.members){
-					if(member is FlxSprite){
+				for (member in FlxG.state.members) {
+					if (member is FlxSprite) {
 						cast(member, FlxSprite).antialiasing = optionChecked;
 					}
 					FlxSprite.defaultAntialiasing = optionChecked;
@@ -181,9 +181,8 @@ class GameStateOption extends Option {
 /**
  * Thing for Animation Debug.
  */
- class CharacterCreatorOption extends Option {
+class CharacterCreatorOption extends Option {
 	// OPTIONS //
-
 	public var gameState:NextState;
 
 	public function new(_optionName:String = "", _gameState:NextState) {
@@ -225,7 +224,7 @@ class ModOption extends FlxTypedGroup<FlxSprite> {
 		this.optionValue = _optionValue;
 
 		// CREATING OTHER OBJECTS //
-		alphabetText = new Alphabet(20, 20 , optionName, true);
+		alphabetText = new Alphabet(20, 20, optionName, true);
 		alphabetText.isMenuItem = true;
 		add(alphabetText);
 
@@ -240,8 +239,15 @@ class ModOption extends FlxTypedGroup<FlxSprite> {
 		super.update(elapsed);
 
 		if (utilities.Controls.instance.ACCEPT && alphabetText.targetY == 0) {
-			modEnabled = !modEnabled;
-			ModList.setModEnabled(optionValue, modEnabled);
+			if (optionValue == Options.getData("curMod")) {
+				CoolUtil.coolError("Leather Engine Mods", "The mod " + optionValue + " is your current mod\nPlease switch to a different mod to disable it!");
+				for (member in members) {
+					FlxTween.color(member, 1, 0xFF0000, 0xFFFFFF, {ease: FlxEase.quartOut});
+				}
+			} else {
+				modEnabled = !modEnabled;
+				ModList.setModEnabled(optionValue, modEnabled);
+			}
 		}
 
 		if (modEnabled) {
@@ -289,26 +295,29 @@ class ChangeModOption extends FlxTypedGroup<FlxSprite> {
 	override function update(elapsed:Float) {
 		super.update(elapsed);
 
-		if(alphabetText.targetY == 0){
+		if (alphabetText.targetY == 0) {
 			alphabetText.alpha = 1;
 			modIcon.alpha = 1;
 			if (utilities.Controls.instance.ACCEPT) {
 				Options.setData(optionValue, "curMod");
 				modEnabled = !modEnabled;
-				if (FlxG.state is TitleState) TitleState.initialized = false;
+				if (FlxG.state is TitleState)
+					TitleState.initialized = false;
 				if (FlxG.sound.music != null) {
 					FlxG.sound.music.fadeOut(0.25, 0);
 					FlxG.sound.music.persist = false;
 				}
 				FlxG.sound.play(Paths.sound('confirmMenu'), 1);
-				CoolUtil.setWindowIcon("mods/"+Options.getData("curMod")+"/_polymod_icon.png");
+				CoolUtil.setWindowIcon("mods/" + Options.getData("curMod") + "/_polymod_icon.png");
 				MusicBeatState.windowNamePrefix = Options.getData("curMod");
 				PolymodHandler.loadMods();
+				NoteVariables.init();
+				Options.fixBinds();
 				FlxG.resetState();
 				if (FlxG.sound.music == null || FlxG.sound.music.playing != true)
 					TitleState.playTitleMusic();
 			}
-		}else {
+		} else {
 			alphabetText.alpha = 0.6;
 			modIcon.alpha = 0.6;
 		}
@@ -391,7 +400,7 @@ class DisplayFontOption extends StringSaveOption {
 /**
  * Very simple option that opens a webpage when selected
  */
- class OpenUrlOption extends Option {
+class OpenUrlOption extends Option {
 	// OPTIONS //
 	public var Title:String;
 	public var Url:String;

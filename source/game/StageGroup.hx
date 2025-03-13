@@ -63,6 +63,7 @@ class StageGroup extends FlxGroup {
 			stageData = cast Json.parse(Assets.getText(Paths.json("stage data/" + stage)).trim());
 		} else {
 			stageData = cast Json.parse(Assets.getText(Paths.json("stage data/stage")).trim());
+			stage = 'stage';
 		}
 
 		clear();
@@ -94,7 +95,6 @@ class StageGroup extends FlxGroup {
 							p2ZIndex = stageData.characterZIndices[1];
 							gfZIndex = stageData.characterZIndices[2];
 						}
-
 
 						var null_Object_Name_Loop:Int = 0;
 
@@ -175,13 +175,14 @@ class StageGroup extends FlxGroup {
 						stageData.scriptName = stage;
 					}
 					if (Assets.exists(Paths.hx('data/stage data/${stageData.scriptName}'))) {
-						stageScript = new HScript(Paths.hx('data/stage data/${stage}'));
+						stageScript = new HScript(Paths.hx('data/stage data/${stage}'), STAGE);
 						for (object in stageObjects) {
 							stageScript.set(object[0], object[1]);
 						}
 					} else if (Assets.exists(Paths.lua("stage data/" + stageData.scriptName))) {
-						stageScript = new LuaScript(#if MODDING_ALLOWED PolymodAssets #else Assets #end.getPath(Paths.lua("stage data/" +
-							stageData.scriptName)));
+						stageScript = new LuaScript(#if MODDING_ALLOWED PolymodAssets #else Assets #end
+							.getPath(Paths.lua("stage data/" + stageData.scriptName)));
+						stageScript.executeOn = STAGE;
 					}
 				}
 		}
@@ -205,11 +206,9 @@ class StageGroup extends FlxGroup {
 		p2.scrollFactor.set(p2_Scroll, p2_Scroll);
 		gf.scrollFactor.set(gf_Scroll, gf_Scroll);
 
-		
 		p1.zIndex = p1ZIndex;
 		p2.zIndex = p2ZIndex;
 		gf.zIndex = gfZIndex;
-
 
 		if (p2.curCharacter.startsWith("gf") && gf.curCharacter.startsWith("gf")) {
 			p2.setPosition(gf.x, gf.y);

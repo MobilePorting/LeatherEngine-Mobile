@@ -1,5 +1,6 @@
 package;
 
+import flixel.util.FlxSignal.FlxTypedSignal;
 import flixel.FlxG;
 import flixel.FlxGame;
 import flixel.FlxState;
@@ -27,6 +28,8 @@ class Main extends Sprite {
 	public static var logsOverlay:Logs;
 
 	public static var previousState:FlxState;
+
+	public static var onCrash(default, null):FlxTypedSignal<UncaughtErrorEvent -> Void> = new FlxTypedSignal<UncaughtErrorEvent -> Void>();
 
 	public function new() {
 		super();

@@ -1661,12 +1661,14 @@ class PlayState extends MusicBeatState {
 						+ (Conductor.stepCrochet / ((Options.getData("downscroll") || SONG.modchartingTools) ? 1 : FlxMath.roundDecimal(speed, 2))),
 						noteData, oldNote, true, char, songNotes[4], null, chars, gottaHitNote);
 					sustainNote.scrollFactor.set();
+					sustainNote.speed = oldNote.speed;
 					unspawnNotes.push(sustainNote);
 
 					sustainNote.mustPress = gottaHitNote;
 
 					sustainGroup.push(sustainNote);
 					sustainNote.sustains = sustainGroup;
+					
 				}
 
 				swagNote.sustains = sustainGroup;
@@ -2220,6 +2222,10 @@ class PlayState extends MusicBeatState {
 						note.arrow_Type,
 						note.isSustainNote
 					]);
+
+					// how was it THIS SIMPLE this WHOLE TIME??????
+					// this has been broken for who knows how long :sob:
+					note.wasGoodHit = true;
 
 					if (enemyStrumsGlow && enemyStrums.members.length - 1 == SONG.keyCount - 1) {
 						enemyStrums.forEach(function(spr:StrumNote) {

@@ -1,5 +1,6 @@
 package game;
 
+import modding.scripts.languages.LuaScript;
 import utilities.NoteVariables;
 import game.TimeBar;
 import flixel.graphics.FlxGraphic;
@@ -193,10 +194,20 @@ class EventHandeler {
 						game.stage.infrontOfGFSprites.visible = false;
 					}
 
+					if(game.scripts.exists(game.stage.stage)){
+						game.scripts.get(game.stage.stage).call("onDestroy", []);
+						game.scripts.remove(game.stage.stage);
+					}
+
 					if (!Options.getData("preloadChangeBGs"))
 						game.stage = new StageGroup(event[2]);
 					else
 						game.stage = game.stageMap.get(event[2]);
+
+					if (game.stage.stageScript != null) {
+						game.stage.stageScript.executeOn = STAGE;
+						game.scripts.set(game.stage.stage, game.stage.stageScript);
+					}
 
 					game.stage.visible = true;
 					game.stage.foregroundSprites.visible = true;
@@ -211,8 +222,10 @@ class EventHandeler {
 					game.call("createStage", [game.stage.stage]);
 
 					#if LUA_ALLOWED
-					if (game.stage.stageScript != null)
-						game.stage.stageScript.setup();
+					if (game.stage.stageScript != null){
+						if(game.stage.stageScript is LuaScript)
+							game.stage.stageScript.setup();
+					}
 					#end
 
 					game.call("start", [game.stage.stage], STAGE);

@@ -66,7 +66,6 @@ import polymod.backends.PolymodAssets;
 import hxvlc.flixel.FlxVideo;
 #end
 #if MODCHARTING_TOOLS
-import modcharting.ModchartEditorState;
 import modcharting.NoteMovement;
 import modcharting.PlayfieldRenderer;
 #end

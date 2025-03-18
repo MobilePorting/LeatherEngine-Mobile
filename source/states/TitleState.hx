@@ -304,26 +304,30 @@ class TitleState extends MusicBeatState {
 			transitioning = true;
 
 			call("checkForUpdate");
-			new FlxTimer().start(2, (tmr:FlxTimer) -> {
-				var http:Http = new Http("https://raw.githubusercontent.com/MobilePorting/LeatherEngine-Mobile/main/version.txt");
-				http.onData = (data:String) -> {
-					data = 'v' + data;
-					if (CoolUtil.getCurrentVersion() != data) {
-						trace('Outdated Version Detected! ' + data.trim() + ' != ' + CoolUtil.getCurrentVersion(), WARNING);
-						Main.display.version += ' - UPDATE AVALIABLE (${data.trim()})';
-						FlxG.switchState(() -> new OutdatedSubState(data.trim()));
-					} else {
-						FlxG.switchState(MainMenuState.new);
+			#if CHECK_FOR_UPDATES
+			if(Options.getData("checkForUpdates")){
+				new FlxTimer().start(2, (tmr:FlxTimer) -> {
+					var http:Http = new Http("https://raw.githubusercontent.com/MobilePorting/LeatherEngine-Mobile/main/version.txt");
+					http.onData = (data:String) -> {
+						data = 'v' + data;
+						if (CoolUtil.getCurrentVersion() != data) {
+							trace('Outdated Version Detected! ' + data.trim() + ' != ' + CoolUtil.getCurrentVersion(), WARNING);
+							Main.display.version += ' - UPDATE AVALIABLE (${data.trim()})';
+							FlxG.switchState(() -> new OutdatedSubState(data.trim()));
+						} else {
+							FlxG.switchState(MainMenuState.new);
+						}
 					}
-				}
 
-				http.onError = (error:String) -> {
-					trace('$error', ERROR);
-					FlxG.switchState(MainMenuState.new); // fail so we go anyway
-				}
+					http.onError = (error:String) -> {
+						trace('$error', ERROR);
+						FlxG.switchState(MainMenuState.new); // fail so we go anyway
+					}
 
-				http.request();
-			});
+					http.request();
+				});
+			}
+			#end
 		}
 
 		if (pressedEnter && !skippedIntro) {

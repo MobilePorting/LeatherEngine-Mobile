@@ -43,6 +43,7 @@
 	</section>
 
 	<define name="MODDING_ALLOWED" />
+	<define name="CHECK_FOR_UPDATES" />
 
 	<section if="MODDING_ALLOWED">
 		<assets path="mods" embed="false" />

@@ -1,5 +1,6 @@
 package toolbox;
 
+import ui.Popup;
 import flixel.text.FlxInputText;
 import flixel.addons.ui.FlxUINumericStepper;
 import flixel.addons.ui.FlxUITabMenu;
@@ -96,7 +97,6 @@ class StageMakingState extends MusicBeatState {
 	private var camHUD:FlxCamera;
 
 	private var camFollow:FlxObject;
-	
 
 	public function new(selectedStage:String) {
 		super();
@@ -130,7 +130,9 @@ class StageMakingState extends MusicBeatState {
 
 		dad = new Character(0, 0, dadChar);
 
-		UI_box = new FlxUITabMenu(null, [], false);
+		var tabs = [{name: 'Editor', label: 'Editor'}, {name: 'Object', label: 'Object'}];
+
+		UI_box = new FlxUITabMenu(null, /*tabs*/null, false);
 
 		UI_box.resize(300, 400);
 		UI_box.x = 10;
@@ -144,8 +146,19 @@ class StageMakingState extends MusicBeatState {
 
 		stage_Dropdown = new FlxScrollableDropDownMenu(20, stage_Label.y + stage_Label.height + 4, FlxUIDropDownMenu.makeStrIdLabelArray(stages, true),
 			function(stageName:String) {
-				stage_Name = stages[Std.parseInt(stageName)];
-				reloadStage();
+				var popup:Popup = null;
+				popup = new Popup(BOOL, [
+					() -> {
+						stage_Name = stages[Std.parseInt(stageName)];
+						reloadStage();
+						remove(popup);
+					},
+					() -> {
+						remove(popup);
+					}
+				], "This will clear all progress. Continue?");
+				popup.cameras = [camHUD];
+				add(popup);
 			});
 
 		stage_Dropdown.selectedLabel = stage_Name;
@@ -187,7 +200,7 @@ class StageMakingState extends MusicBeatState {
 		y_Label.scrollFactor.set();
 		y_Label.cameras = [camHUD];
 
-		scaleStepper = new FlxUINumericStepper(20, y_Label.y + y_Label.height + 4, 0.05, 0, 0.1, 100, 2);
+		scaleStepper = new FlxUINumericStepper(20, y_Label.y + y_Label.height + 4, 0.05, 0, 0.1, 999, 2);
 		scaleStepper.value = 0;
 		scaleStepper.name = "scale_stepper";
 		scaleStepper.scrollFactor.set();
@@ -516,7 +529,6 @@ class StageMakingState extends MusicBeatState {
 
 						for (Animation in Object.animations) {
 							var Anim_Name = Animation.name;
-
 							@:privateAccess
 							if (Animation.name == "beatHit")
 								stage.onBeatHit_Group.add(Sprite);
@@ -727,20 +739,20 @@ class StageMakingState extends MusicBeatState {
 		stageObjectPos = [];
 		selectedObject = 0;
 
-		if(stage != null) {
+		if (stage != null) {
 			remove(stage);
 		}
 		add(camFollow);
 
 		stage = new StageGroup(stage_Name);
 		add(stage);
-		
+
 		stageData = stage.stageData;
 
 		stage.setCharOffsets(bf, gf, dad);
 
 		if (gf.otherCharacters == null) {
-			if (gf.coolTrail != null){
+			if (gf.coolTrail != null) {
 				remove(gf.coolTrail);
 				add(gf.coolTrail);
 			}
@@ -749,7 +761,7 @@ class StageMakingState extends MusicBeatState {
 			add(gf);
 		} else {
 			for (character in gf.otherCharacters) {
-				if (character.coolTrail != null){
+				if (character.coolTrail != null) {
 					remove(character.coolTrail);
 					add(character.coolTrail);
 				}
@@ -763,7 +775,7 @@ class StageMakingState extends MusicBeatState {
 		add(stage.infrontOfGFSprites);
 
 		if (dad.otherCharacters == null) {
-			if (dad.coolTrail != null){
+			if (dad.coolTrail != null) {
 				remove(dad.coolTrail);
 				add(dad.coolTrail);
 			}
@@ -772,7 +784,7 @@ class StageMakingState extends MusicBeatState {
 			add(dad);
 		} else {
 			for (character in dad.otherCharacters) {
-				if (character.coolTrail != null){
+				if (character.coolTrail != null) {
 					remove(character.coolTrail);
 					add(character.coolTrail);
 				}
@@ -783,17 +795,16 @@ class StageMakingState extends MusicBeatState {
 		}
 
 		if (bf.otherCharacters == null) {
-			if (bf.coolTrail != null){
+			if (bf.coolTrail != null) {
 				remove(bf.coolTrail);
 				add(bf.coolTrail);
-
 			}
 
 			remove(bf);
 			add(bf);
 		} else {
 			for (character in bf.otherCharacters) {
-				if (character.coolTrail != null){
+				if (character.coolTrail != null) {
 					remove(character.coolTrail);
 					add(character.coolTrail);
 				}

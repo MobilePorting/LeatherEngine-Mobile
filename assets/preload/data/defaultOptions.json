@@ -317,6 +317,10 @@
       "value": "left"
     },
     {
+      "option": "checkForUpdates",
+      "value": true
+    },
+    {
       "option": "mobileCAlpha",
       "value": 0.6
     },

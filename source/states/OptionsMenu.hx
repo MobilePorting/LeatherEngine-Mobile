@@ -67,6 +67,9 @@ class OptionsMenu extends MusicBeatState {
 			new BoolOption("Load Asynchronously", "loadAsynchronously"),
 			new BoolOption("Flixel Splash Screen", "flixelStartupScreen"),
 			new BoolOption("Skip Results", "skipResultsScreen"),
+			#if CHECK_FOR_UPDATES
+			new BoolOption("Check For Updates", "checkForUpdates"),
+			#end
 			new BoolOption("Show Score", "showScore"),
 			new BoolOption("Dinnerbone Mode", "dinnerbone"),
 			new GameSubStateOption("Import Old Scores", substates.ImportHighscoresSubstate)

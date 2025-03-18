@@ -3,7 +3,6 @@ package toolbox;
 import states.MainMenuState;
 import states.MusicBeatState;
 import states.PlayState;
-import utilities.Options;
 import utilities.MusicUtilities;
 import ui.Option;
 import toolbox.ChartingState;
@@ -11,8 +10,6 @@ import toolbox.CharacterCreator;
 import flixel.FlxG;
 import flixel.FlxSprite;
 import flixel.group.FlxGroup.FlxTypedGroup;
-import flixel.util.FlxColor;
-import lime.utils.Assets;
 import toolbox.StageMakingState;
 import toolbox.util.NewModState;
 
